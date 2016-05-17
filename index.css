@@ -1,0 +1,96 @@
+html {
+	background-image: url("photo2.jpg");
+	background-size: 100%;
+	background-color: #333333;
+	background-attachment: fixed;
+	text-align: center;
+	font-family: "Palatino Linotype";
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:visited {
+	color: black;
+}
+
+h1 {
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+}
+
+ul {
+	line-height: 150%;
+	list-style-type: square;
+}
+
+li {
+	margin: 0px 0px 10px 0px;
+}
+
+.element {
+	background-color: #F5F5F5;
+	box-shadow: 5px 5px 10px #333333;
+	border-radius: 7px;
+	min-height: 95%;
+	height: auto;
+	position: relative;
+}
+
+.button {
+	height: 50px;
+	width: 150px;
+	display: inline-block;
+	margin-bottom: 10px;
+	transition: box-shadow 0s ease-out;
+	box-shadow: 5px 5px 10px #F5F5F5;
+}
+
+.button:hover {
+	box-shadow: 3px 3px 10px #999999;
+	border-radius: 3px;
+}
+
+#sidebar {
+	margin: 10px 10px 10px 10px;
+	width: 230px;
+	text-align: center;
+	padding: 15px 0px 0px 0px;
+	line-height: 300%;
+	float: left;
+}
+
+.content {
+	text-align: justify;
+	margin: 10px 10px 10px 255px;
+	padding: 15px 40px 0px 40px;
+	line-height: 150%;
+	max-width: 700px;
+}
+
+#main {
+	display: inline-block;
+	width: 67%;
+	background-color: #FF333333;
+}
+
+.photoRow {
+	position: relative;
+	width: 95%;
+	text-align: center;
+	margin:20px 0px 0px 0px;
+	display: inline-block;
+}
+
+.photo {
+	position: relative;
+	display: inline-block;
+	margin: 0px 20px 0px 20px;
+}
