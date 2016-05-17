@@ -81,6 +81,10 @@ li {
 	background-color: #FF333333;
 }
 
+#c5 {
+	line-height: 300%;
+}
+
 .photoRow {
 	position: relative;
 	width: 95%;
