@@ -98,3 +98,39 @@ li {
 	display: inline-block;
 	margin: 0px 20px 0px 20px;
 }
+
+table {
+	width: 100%;
+	position: relative;
+	padding: 20px 50px 20px 50px;
+}
+
+td {
+	padding-top: 20px;
+}
+
+.data2 {
+	text-align: right;
+}
+
+
+#slider {
+	text-align: center;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.unslider-arrow {
+	position: absolute;
+	padding-top: 27%;
+}
+
+.pic {
+	height: 350px;
+	max-width: 100%;
+	width: auto;
+}
+
+
+
+
