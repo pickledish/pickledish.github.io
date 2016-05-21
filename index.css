@@ -4,7 +4,7 @@ html {
 	background-color: #333333;
 	background-attachment: fixed;
 	text-align: center;
-	font-family: "Palatino Linotype";
+	font-family: 'Vollkorn', serif;
 }
 
 a {
@@ -22,7 +22,7 @@ a:visited {
 
 h1 {
 	text-align: center;
-	font-family: Verdana;
+	/* font-family: Verdana; */
 	font-weight: normal;
 }
 
