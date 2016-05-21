@@ -67,6 +67,10 @@ li {
 	float: left;
 }
 
+div #sidebar {
+	cursor: pointer;
+}
+
 .content {
 	text-align: justify;
 	margin: 10px 10px 10px 255px;
