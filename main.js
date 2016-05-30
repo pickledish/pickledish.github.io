@@ -33,15 +33,9 @@ $(document).ready(function() {
         $('#c6').show();
     });
 
-    $('#slider').unslider({
-
-        autoplay: true,
-        delay: 5000,
-        arrows: {prev: '<a class="unslider-arrow prev"> &#10094; </a>', next: '<a class="unslider-arrow next"> &#10095; </a>',}
-
+    $('.slider').slick({
+        dots: true
     });
-
-    $('.unslider-nav').hide();
 
 });
 

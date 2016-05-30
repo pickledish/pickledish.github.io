@@ -5,6 +5,12 @@ html {
 	background-attachment: fixed;
 	text-align: center;
 	font-family: 'Vollkorn', serif;
+	min-height: 90vh;
+}
+
+body {
+	text-align: center;
+	height:90vh;
 }
 
 a {
@@ -22,7 +28,6 @@ a:visited {
 
 h1 {
 	text-align: center;
-	/* font-family: Verdana; */
 	font-weight: normal;
 }
 
@@ -59,7 +64,7 @@ li {
 }
 
 #sidebar {
-	margin: 10px 10px 10px 10px;
+	margin: 10px 10px 0px 10px;
 	width: 230px;
 	text-align: center;
 	padding: 15px 0px 0px 0px;
@@ -67,13 +72,13 @@ li {
 	float: left;
 }
 
-div #sidebar {
+#sidebar div {
 	cursor: pointer;
 }
 
 .content {
 	text-align: justify;
-	margin: 10px 10px 10px 255px;
+	margin: 10px 10px 0px 255px;
 	padding: 15px 40px 0px 40px;
 	line-height: 150%;
 	max-width: 700px;
@@ -83,6 +88,7 @@ div #sidebar {
 	display: inline-block;
 	width: 67%;
 	background-color: #FF333333;
+	height: 99vh;
 }
 
 #c5 {
@@ -117,24 +123,9 @@ td {
 	text-align: right;
 }
 
-
-#slider {
-	text-align: center;
+.slider {
 	display: inline-block;
+	text-align: center;
 	margin-top: 20px;
 }
-
-.unslider-arrow {
-	position: absolute;
-	padding-top: 27%;
-}
-
-.pic {
-	height: 350px;
-	max-width: 100%;
-	width: auto;
-}
-
-
-
 
