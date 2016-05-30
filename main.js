@@ -34,9 +34,13 @@ $(document).ready(function() {
     });
 
     $('.slider').slick({
-        dots: true
+        dots: true,
+        autoplay: true,
+        autoplayspeed: 4000,
+        lazyLoad: 'ondemand',
+        speed: 700,
+        easing: 'ease-in',
     });
-
 });
 
 
