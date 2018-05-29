@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ page.title }} — willett dot io</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	<style>
+		{% include github-markdown.css %}
+		{% include post.css %}
+		{% include syntax.css %}
+	</style>
+
+	<script>
+		MathJax.Hub.Config({ tex2jax: {
+			inlineMath: [['$','$'], ['\\(','\\)']],
+			processEscapes: true
+		} });
+	</script>
+
+</head>
+
+<body class="Site">
+
+	<main class="Site-content">
+
+		<section class="hero is-white">
+
+			<!-- Hero header: will be at the top of the hero -->
+			<div class="hero-head">
+				<nav class="navbar"><div class="container">
+
+					<div class="navbar-brand">
+						<span class="navbar-item"><span class="is-size-4">brandon willett</span></span>
+						<span class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
+							<span></span>
+							<span></span>
+							<span></span>
+						</span>
+					</div>
+
+					<div id="navbarMenuHeroA" class="navbar-menu">
+						<div class="navbar-end">
+							<a href="/" class="navbar-item">Home</a>
+							<a href="/about/" class="navbar-item">About</a>
+							<a href="/contact/" class="navbar-item">Contact</a>
+							<a href="https://github.com/pickledish" class="navbar-item">
+								<span class="icon"><i class="fa fa-github fa-lg"></i></span>
+							</a>
+						</div>
+					</div>
+
+				</div></nav>
+			</div>
+
+			<!-- Hero content: will be in the middle -->
+			<div class="hero-body">
+				<div class="container has-text-centered">
+					<h1 class="light">
+						{{ page.title }}
+					</h1>
+				</div>
+			</div>
+
+		</section>
+
+		<section class="section">
+
+			<div class="columns is-centered">
+				<div class="column is-half">
+					{{ content }}
+				</div>
+			</div>
+
+		</section>
+
+	</main>
+
+	<footer class="footer">
+		<div class="container">
+			<div class="content has-text-centered">
+				<hr>
+				<div class="columns is-centered" style = "margin-right: 0">
+					<div class="column is-half is-marginless is-paddingless">
+						<br>
+						<p class="is-marginless has-text-right">
+							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated {{site.time | date_to_string }}
+						</p>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	</body>
+
+</html>

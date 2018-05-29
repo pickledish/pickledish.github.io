@@ -1,0 +1,12 @@
+---
+layout: post
+title: "writings"
+---
+<ul class="ul_posts">
+{%- for post in site.posts -%}
+	<li class="li_posts">
+		<h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
+		<span><b>{{ post.date | date_to_string }} &nbsp; \$</b> &nbsp; {{ post.content | strip_html | truncatewords: 50 }}</span>
+	</li>
+{%- endfor -%}
+</ul>
