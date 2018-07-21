@@ -7,13 +7,13 @@ permalink: /projects/
 I'm always working on a few personal projects, but here are a few of my favorites:
 
 ### Colors
-Answer a few questions about which colors you think look good together, and train your own little random-forest decision tree classifier to give you suggestions on new color pairings you'll probably like! Check out the source here.
+Answer a few questions about which colors you think look good together, and train your own little random-forest decision tree classifier to give you suggestions on new color pairings you'll probably like! [Source on Github](https://github.com/pickledish/Colors)
 
-### Traffic Lights
-Tries to algorithmically find an answer to the question, "What would be the ideal timings for this group of traffic signals?". Uses a Markov chain (the metropolis filter) to traverse the state space of light timings, always edging closer to the optimal configuration to let the most people get to work on time. Continuously under improvement!
+### Spellcheck
+A different kind of spelling corrector -- instead of choosing how to correct a word based on edit distance, how common the word is, or randomness, we instead try to find the English word with the smallest _keyboard_ distance to what you typed, as per a standard U.S. layout keyboard. Written in Haskell. [Source on Github](https://github.com/pickledish/spellcheck)
+
+### Healing Game
+An experiment in concurrent message-passing protocols I made while I was teaching myself Elixir! It's little CLI game modeled after World of Warcraft-style boss fights I would play in high school. It may not be fun or balanced, but at least it doesn't cost $15 a month! [Source on Github](https://github.com/pickledish/heal)
 
 ### Trashpad
-Attempts to do for notes what ShoutKey does for links -- makes it easy to create a collaborative note sheet and share it with people near you via word-of-mouth. Uses a peer-to-peer OT (operational transformation) library, in conjunction with a CodeMirror-based text editor called Firepad (with help from Firebase, both Google). Check out the source here.
-
-### Matrix Monte-Carlo
-(Research Project) Implementation of an algorithm based on an idea from a graduate student's thesis, which uses a Monte-Carlo annealing method to determine the most "important" rows and columns in a matrix. Note, the program only uses the "stock input" field to fetch data for testing -- invest at your own peril!
+Attempts to do for notes what ShoutKey does for links -- makes it easy to create a collaborative note sheet and share it with people near you via word-of-mouth. Uses a peer-to-peer OT (operational transformation) library, in conjunction with a CodeMirror-based text editor called Firepad (with help from Firebase, both Google). [Source on Github](https://github.com/pickledish/Synced)

@@ -324,6 +324,7 @@ pre {
 }
 
 .li_posts {
+	list-style: none;
 	margin-bottom: 2rem;
 }
 
@@ -341,12 +342,16 @@ body {
 	color: #3a3a3a;  }
 
 code, pre {
-	font-family: "Inconsolata", "Roboto Mono", "Consolas", monospace;
+	font-family: "Roboto Mono", "Consolas", monospace;
 	font-size: 10pt;
 }
 
 a {
 	color: #ba8c2a;
+}
+
+li {
+	list-style: initial;
 }
 
 h1 {
@@ -535,7 +540,7 @@ h6 {
 
 <h3 id="0th-order">0th Order</h3>
 
-<p>Just like order-0 functions, these are our <strong>constant</strong> types. They’re not parameterized on any other type, and are the most basic, everyday type we work with (and the first ones you’re introduced to when beginning a computer science curriculum). <code class="highlighter-rouge">String</code>, <code class="highlighter-rouge">Int</code>, and <code class="highlighter-rouge">Boolean</code> all fit into this category, along with any structs or classes you’ve defined yourself in most cases – so, <code class="highlighter-rouge">Professor</code> and <code class="highlighter-rouge">ServiceOrder</code> fit in here, too.</p>
+<p>Just like order-0 functions, these are our <strong>concrete</strong> types. They’re not parameterized on any other type, and are the most basic, everyday type we work with (and the first ones you’re introduced to when beginning a computer science curriculum). <code class="highlighter-rouge">String</code>, <code class="highlighter-rouge">Int</code>, and <code class="highlighter-rouge">Boolean</code> all fit into this category, along with any structs or classes you’ve defined yourself in most cases – so, <code class="highlighter-rouge">Professor</code> and <code class="highlighter-rouge">ServiceOrder</code> fit in here, too.</p>
 
 <p>Overall, one can think of a 0th order type as one that is able to “stand on its own”, without any help, which contrasts with higher-order types.</p>
 
@@ -543,7 +548,7 @@ h6 {
 
 <p>A first-order type is one that is <em>parameterized</em> on a 0th order type, i.e. they take a type parameter just like how we saw a first-order function had a constant-function parameter (or return type). Thus, they’re not constant anymore because the type can change based on what type parameter it’s given, so they can’t be order-0 types anymore; we must have gone up an order.</p>
 
-<p>Just like constant types, these come up very often in conventional programming, with one of the most common examples being <code class="highlighter-rouge">List</code>. In most languages, <code class="highlighter-rouge">List</code> is homogeneous – each instance of <code class="highlighter-rouge">List</code> can hold one and only one type of object – and in fact <code class="highlighter-rouge">List</code> is parameterized on that type, which is why you’ll see <code class="highlighter-rouge">List&lt;Int&gt;</code> in Java or <code class="highlighter-rouge">List String</code> in Haskell. More examples of first-order types include <code class="highlighter-rouge">Map</code>, <code class="highlighter-rouge">Option</code>, and <code class="highlighter-rouge">Set</code>, and we can write our own first-order classes using polymorphic constructs. It might be useful to think of these as “container types”, since in most cases they exist to “hold” instances of another type.</p>
+<p>Just like concrete types, these come up very often in conventional programming, with one of the most common examples being <code class="highlighter-rouge">List</code>. In most languages, <code class="highlighter-rouge">List</code> is homogeneous – each instance of <code class="highlighter-rouge">List</code> can hold one and only one type of object – and in fact <code class="highlighter-rouge">List</code> is parameterized on that type, which is why you’ll see <code class="highlighter-rouge">List&lt;Int&gt;</code> in Java or <code class="highlighter-rouge">[Int]</code> in Haskell. More examples of first-order types include <code class="highlighter-rouge">Map</code>, <code class="highlighter-rouge">Option</code>, and <code class="highlighter-rouge">Set</code>, and we can write our own first-order classes using polymorphic constructs. It might be useful to think of these as “container types”, since in most cases they exist to “hold” instances of another type.</p>
 
 <p>So, we see that there are actually infinitely many ways to make a <code class="highlighter-rouge">List</code>, based on what’s passed in as its type parameter – just as there are infinitely many outputs of <code class="highlighter-rouge">square</code> based on what integer is passed in as a value parameter.</p>
 
@@ -579,7 +584,7 @@ h6 {
 					<div class="column is-half is-marginless is-paddingless">
 						<br>
 						<p class="is-marginless has-text-right">
-							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated 28 May 2018
+							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated 21 Jul 2018
 						</p>
 						<br>
 					</div>

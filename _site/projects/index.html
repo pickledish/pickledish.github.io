@@ -324,6 +324,7 @@ pre {
 }
 
 .li_posts {
+	list-style: none;
 	margin-bottom: 2rem;
 }
 
@@ -341,12 +342,16 @@ body {
 	color: #3a3a3a;  }
 
 code, pre {
-	font-family: "Inconsolata", "Roboto Mono", "Consolas", monospace;
+	font-family: "Roboto Mono", "Consolas", monospace;
 	font-size: 10pt;
 }
 
 a {
 	color: #ba8c2a;
+}
+
+li {
+	list-style: initial;
 }
 
 h1 {
@@ -508,16 +513,16 @@ h6 {
 					<p>I’m always working on a few personal projects, but here are a few of my favorites:</p>
 
 <h3 id="colors">Colors</h3>
-<p>Answer a few questions about which colors you think look good together, and train your own little random-forest decision tree classifier to give you suggestions on new color pairings you’ll probably like! Check out the source here.</p>
+<p>Answer a few questions about which colors you think look good together, and train your own little random-forest decision tree classifier to give you suggestions on new color pairings you’ll probably like! <a href="https://github.com/pickledish/Colors">Source on Github</a></p>
 
-<h3 id="traffic-lights">Traffic Lights</h3>
-<p>Tries to algorithmically find an answer to the question, “What would be the ideal timings for this group of traffic signals?”. Uses a Markov chain (the metropolis filter) to traverse the state space of light timings, always edging closer to the optimal configuration to let the most people get to work on time. Continuously under improvement!</p>
+<h3 id="spellcheck">Spellcheck</h3>
+<p>A different kind of spelling corrector – instead of choosing how to correct a word based on edit distance, how common the word is, or randomness, we instead try to find the English word with the smallest <em>keyboard</em> distance to what you typed, as per a standard U.S. layout keyboard. Written in Haskell. <a href="https://github.com/pickledish/spellcheck">Source on Github</a></p>
+
+<h3 id="healing-game">Healing Game</h3>
+<p>An experiment in concurrent message-passing protocols I made while I was teaching myself Elixir! It’s little CLI game modeled after World of Warcraft-style boss fights I would play in high school. It may not be fun or balanced, but at least it doesn’t cost $15 a month! <a href="https://github.com/pickledish/heal">Source on Github</a></p>
 
 <h3 id="trashpad">Trashpad</h3>
-<p>Attempts to do for notes what ShoutKey does for links – makes it easy to create a collaborative note sheet and share it with people near you via word-of-mouth. Uses a peer-to-peer OT (operational transformation) library, in conjunction with a CodeMirror-based text editor called Firepad (with help from Firebase, both Google). Check out the source here.</p>
-
-<h3 id="matrix-monte-carlo">Matrix Monte-Carlo</h3>
-<p>(Research Project) Implementation of an algorithm based on an idea from a graduate student’s thesis, which uses a Monte-Carlo annealing method to determine the most “important” rows and columns in a matrix. Note, the program only uses the “stock input” field to fetch data for testing – invest at your own peril!</p>
+<p>Attempts to do for notes what ShoutKey does for links – makes it easy to create a collaborative note sheet and share it with people near you via word-of-mouth. Uses a peer-to-peer OT (operational transformation) library, in conjunction with a CodeMirror-based text editor called Firepad (with help from Firebase, both Google). <a href="https://github.com/pickledish/Synced">Source on Github</a></p>
 
 				</div>
 			</div>
@@ -534,7 +539,7 @@ h6 {
 					<div class="column is-half is-marginless is-paddingless">
 						<br>
 						<p class="is-marginless has-text-right">
-							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated 28 May 2018
+							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated 21 Jul 2018
 						</p>
 						<br>
 					</div>
