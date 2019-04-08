@@ -6,7 +6,7 @@ permalink: /posts/function-syntax/
 
 One part of a programming language that doesn't get a lot of attention (in my opinion) is the syntax of a function declaration -- how many parameters the function takes, what types they are, what it returns, and so on. It's vitally important information (as I continue to pretend that dynamically-typed languages don't exist), and it's remarkable how each different programming language has an entirely unique way to represent it.
 
-Which of these ways is the most concise, to prevent going over an 80 or 100 character limit? More importantly, which one is the most readable? And do these two properties have to be inversely correlated?
+Which of these ways is the most concise, to prevent going over an 80 or 100 character limit and needing to break the definition onto multiple lines? More importantly, which one is the most readable? And do these two properties have to be inversely correlated?
 
 So, in order to compare them all, I've decided to write the declaration for a simple(ish) function in 5 different languages: C++, Java, Scala, Haskell, and OCaml. Let's see how they stack up:
 
@@ -15,10 +15,10 @@ So, in order to compare them all, I've decided to write the declaration for a si
 The function we'll be using is pretty simple: it takes two parameters, an array of objects belonging to an ordered set and an integer, and returns an array of something comparable (maybe it sorts the array, and then returns a smaller array of the biggest ones, based on the second parameter). Even though this "comparable" property has different names in different languages (`Comparable` in Java, `Ord` in Haskell, etc), but I'll be using `Ord` in each example anyway, for the sake of keeping the comparison just to syntactic overhead.
 
 ```scala
-def topn_sort[A : Ord](objects: Array[A], topn: Int): Array[A] = 
+def topn_sort[A <: Ord](objects: Array[A], topn: Int): Array[A] = 
 ```
 
-I feel like Scala is good to start with, because it provides a good baseline in all areas -- not too long (64 characters), and easy enough to read, as the type of each parameter is noted right next to the name of the parameter, with the result type at the end. Interestingly, this short-and-sweet Scala function declaration is (like many things in Scala) syntactic sugar for a slightly uglier (but more true to Scala's actual implementation of generic type constraints) syntax:
+I feel like Scala is good to start with, because it provides a good baseline in all areas -- not too long (65 characters), and easy enough to read, as the type of each parameter is noted right next to the name of the parameter, with the result type at the end. Interestingly, this short-and-sweet Scala function declaration is (like many things in Scala) syntactic sugar for a slightly uglier (but more true to Scala's actual implementation of generic type constraints) syntax:
 
 ```scala
 def topn_sort[A](objects: Array[A], topn: Int)(implicit ev: Ord[A]): Array[A] = 
