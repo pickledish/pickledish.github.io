@@ -24,6 +24,10 @@ body {
 	flex: 1;
 }
 
+.main-content {
+	max-width: 720px;
+}
+
 /* Fixes footer spacing */
 .Site-content > section {
 	padding-bottom: 1.5rem;
@@ -50,8 +54,8 @@ body {
 	font-weight: 300; }
 
 body {
-	font-size: 12pt; 
-	color: #3a3a3a;  }
+	font-size: 12pt;
+	color: #363636;  }
 
 code, pre {
 	font-family: "Roboto Mono", "Consolas", monospace;

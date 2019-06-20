@@ -3,14 +3,14 @@ layout: post
 title: "writings"
 ---
 <ul class="ul_posts">
-	<li class="li_posts">
-		<h3><a href="https://medium.com/actioniq-tech/an-infinite-fleet-of-plumbers-a56611ec10fb">An Infinite Fleet of Plumbers (Medium)</a></h3>
-		<span><b>7 Mar 2019 &nbsp; \$</b> &nbsp; Here at ActionIQ, we have to ingest a lot of data — thousands of terabytes, across dozens of data sources, for many clients, in several formats, multiple times per day. Dealing with enterprise-scale data processing could get overwhelming...</span>
-</li>
 	{%- for post in site.posts -%}
 	<li class="li_posts">
 		<h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3>
 		<span><b>{{ post.date | date_to_string }} &nbsp; \$</b> &nbsp; {{ post.content | strip_html | truncatewords: 50 }}</span>
 	</li>
 	{%- endfor -%}
+	<li class="li_posts">
+		<h3><a href="https://medium.com/actioniq-tech/an-infinite-fleet-of-plumbers-a56611ec10fb">An Infinite Fleet of Plumbers (Medium)</a></h3>
+		<span><b>7 Mar 2019 &nbsp; \$</b> &nbsp; Here at ActionIQ, we have to ingest a lot of data — thousands of terabytes, across dozens of data sources, for many clients, in several formats, multiple times per day. Dealing with enterprise-scale data processing could get overwhelming...</span>
+	</li>
 </ul>
