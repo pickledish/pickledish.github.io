@@ -22,6 +22,10 @@ url: "https://epic-heisenberg-527e99.netlify.com" # the base hostname & protocol
 twitter_username: null
 github_username:  pickledish
 
+author:
+  github: pickledish
+  linkedin: brandonwillett
+
 # Build settings
 markdown: kramdown
 highlighter: rouge
