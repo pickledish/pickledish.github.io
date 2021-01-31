@@ -16,7 +16,7 @@ Each of those 100 hats taught me something new about what it means to make chang
 
 This desire led me to SRE, which led me to Datadog, and now I'm now working on just those kinds of solutions.
 
-And, outside of the black hole that is tech, I like to make lists, lists of lists, and very mediocre cups of coffee (given how much effort I put into it). In terms of actual hobbies, my favorite way to unwind is to get on my road bike (a beautiful steel [All City Mr. Pink](/assets/bike.jpg)) and push out a few miles on a Sunday morning before things get too busy. Definitely harder to pull off since moving to NYC (Rochester was amazing for this), but I'm doing my best! I've also recently been getting more into all things small, sustainable, independent, and local. To get a taste of what I mean by that, here are a few things I'm enjoying reading about or being involved with:
+And, outside of the black hole that is tech, I like to make lists, lists of lists, and very mediocre cups of coffee (given how much effort I put into it). In terms of actual hobbies, my favorite way to unwind is to get on my bike (a beautiful steel [All City Mr. Pink](/assets/bike.jpg)) and push out a few miles on a Sunday morning before things get too busy. I've also recently been getting into all things small, sustainable, independent, and local. To get a taste of what I mean, here are a few things I'm enjoying reading about or being involved with:
 
 - [A self-sustained fridge (with _excellent_ monitoring)](https://joeyh.name/blog/entry/fridge_0.2/)
 - [A website powered by the sun](https://solar.lowtechmagazine.com/power.html)

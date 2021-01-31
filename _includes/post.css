@@ -33,6 +33,10 @@ body {
 	padding-bottom: 1.5rem;
 }
 
+.Site-content > section.hero {
+    padding-bottom: 0rem;
+}
+
 /* Spacing for the list in post-list */
 .ul_posts {
 	list-style: none;
@@ -55,7 +59,7 @@ body {
 
 body {
 	font-size: 12pt;
-	color: #363636;  }
+	color: #161616;  }
 
 code, pre {
 	font-family: "Roboto Mono", "Consolas", monospace;
