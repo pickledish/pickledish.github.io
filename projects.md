@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: "my free time"
 permalink: /projects/
 ---
