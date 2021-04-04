@@ -55,11 +55,13 @@ body {
 /* The rest! */
 
 .light {
-	font-weight: 300; }
+	font-weight: 300;
+}
 
 body {
-	font-size: 12pt;
-	color: #161616;  }
+	font-size: 13.5pt;
+	color: #080808;
+}
 
 code, pre {
 	font-family: "Roboto Mono", "Consolas", monospace;
