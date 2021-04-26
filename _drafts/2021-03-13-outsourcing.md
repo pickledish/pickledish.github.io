@@ -34,9 +34,9 @@ What I'm getting at is, if you don't know where it came from, how it got to you,
 
 ## A Few Examples
 
-To help make the point a little more real, let's look at a few examples that most folks come acros often in everyday life. Some of these you might have encountered before, others might be new to you.
+To help make the point a little more real, let's look at a few examples that most folks come across often in everyday life. Some of these you might have encountered before, others might be new to you.
 
-- **Clothing**. Most people are aware now that all the larger retailers outsourced the sewing of their clothes decades ago to abused adults (and children) in developing countries. What might not be as known is how rapidly this shift away from buying local happened. In 2020, the amount of American-made clothing made up just 2 percent of what was purchased by American consumers, down from [_95 percent_ in 1960](https://www.kqed.org/lowdown/7939/madeinamerica). <br/>
+- **Clothing**. Most people are aware now that all the larger retailers outsourced the sewing of their clothes decades ago to abused adults and children in developing countries. What might not be as known is how rapidly this shift away from buying local happened. In 2020, the amount of American-made clothing made up just 2 percent of what was purchased by American consumers, down from [_95 percent_ in 1960](https://www.kqed.org/lowdown/7939/madeinamerica). <br/>
 <br/>
 
 - **Trash**. The fact that we can produce any amount of household waste, of any variety, and have it whisked away from the curb every week certainly falls into the "feels like magic" category. Of course, the reality is that most of this trash is just wrapped in plastic and thrown in a landfill, never to biodegrade. And while you may think you're helping by cleaning and recycling your cans and bottles, there too they're taking advantage of you not seeing [where it all goes](https://www.cbc.ca/documentaries/the-passionate-eye/recycling-was-a-lie-a-big-lie-to-sell-more-plastic-industry-experts-say-1.5735618). <br/>
@@ -45,25 +45,27 @@ To help make the point a little more real, let's look at a few examples that mos
 - **Meat**. This one's been getting a lot of press recently, and for good reason. You could already be concerned about the proven destructive effects of non-local factory farming on the animals, the environment, and your own health, but as is the way of \_\_\_(big business), it's also [destroying family businesses](https://abevoelker.com/2019-03-06/on-the-death-of-my-familys-dairy-farm). <br/>
 <br/>
 
-- **Investing**. Congratulations, you're making enough money to start socking some away for your retirement! Will you follow the [modern personal finance advice](https://www.bogleheads.org/wiki/Three-fund_portfolio) and put it into a whole-market index fund, where you won't need to worry about it much? It's one of the most sensible options... and if you do, be aware that you're largely supporting (and hinging your life's savings on, even) the slave labor of Apple, the dystopian spying of Facebook, and the worker exploitation of Amazon, [to name a few](https://investor.vanguard.com/mutual-funds/profile/overview/VTSAX/portfolio-holdings). <br/>
+- **Investing**. Congratulations, you're making enough money to start socking some away for your retirement! Will you follow the [modern personal finance advice](https://www.bogleheads.org/wiki/Three-fund_portfolio) and put it into a whole-market index fund, where you won't need to worry much about its growth? It's one of the most sensible options... and if you do, be aware that you're largely supporting (hinging your life's savings on, even) the slave labor of Apple, the dystopian spying of Facebook, and the worker exploitation of Amazon, [to name a few](https://investor.vanguard.com/mutual-funds/profile/overview/VTSAX/portfolio-holdings). <br/>
 <br/>
 
-- **Politics**. In _abstract_, this concept of "electing representatives" sounds like such a good idea! Average people don't have enough time or context to be up-to-date on every issue, so we can just outsource it, hire smart folks that we agree with to handle it for us. In _reality_, [countless]() [books]() [have]() [been]() [written]() about the XYZ
+- **Politics**. In _abstract_, this concept of "electing representatives" sounds like a great idea; average people don't have enough time or context to be up-to-date on every issue that comes up, so we can just outsource it, hire smart folks that we agree with to handle it for us. In _reality_, that "handling" is usually some combination of ["bribery, lobbying, extortion, cronyism, nepotism, parochialism, patronage, influence peddling, graft, and embezzlement"](https://en.wikipedia.org/wiki/Political_corruption).
 
-[COP OUT] I don't think any one link would suffice for the ceaseless cruelty and exploitation these people have wrought using the power of their offices.
+## Moving Mountains
 
-## What I'm Trying
+If you're thinking to yourself "hey, this all sounds very Season 3 of The Good Place", you'd be right!
 
-As you can see, the above categories make up some of the most fundamental pillars of life in our society. In effect, there's no escaping it
+It's the same principle, but sadly, the TV show's goal of "entertain or intrigue an audience" is a bit easier to tackle than my own goal of "figure out what on earth to do with my life in the face of all this". The above categories make up some of the most fundamental pillars of life and social norms in our first-world society, so it's no small task to confront. In effect, the exploitation is so pervasive that there's no escaping it at all, which (spoiler alert) is the same conclusion reached by [Michael Schur](https://en.wikipedia.org/wiki/The_Good_Place) near the end of that season.
 
-If you're thinking to yourself "hey, this all sounds very Season 3 of The Good Place" you'd be right!
+So, here's what I'm trying to do to escape it anyway:
 
-- buy vegetables
-- buy local
-- buy used
-- don't buy at all
+- Buy meat-free (I've been vegetarian for about 5 years now)
+- Buy local (avoid Amazon like the plague)
+- Buy used (it's better for the world and for your wallet)
+- Just don't buy at all
 
-To be honest, it still feels like fighting a losing battle most of the time, but I try to celebrate the victories where I can. It's better than not fighting at all.
+(You'll notice all of them have to do with consumption; most of the abuse mentioned above is undertaken with the goal of making a buck, so I've found the most effective ways to combat it involve not rewarding the behavior with a purchase.)
+
+It's not a very big list right now, but I'm always trying to find ways to add to it which don't reqiure denouncing humankind, moving to Calgary and becoming a hermit. To be honest, it still feels like fighting a losing battle most of the time, but I try to celebrate the victories where I can. It's better than not fighting at all.
 
 ## TRASH BELOW THIS LINE
 
