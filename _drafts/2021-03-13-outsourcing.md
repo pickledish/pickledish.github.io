@@ -48,13 +48,13 @@ To help make the point a little more real, let's look at a few examples that mos
 - **Investing**. Congratulations, you're making enough money to start socking some away for your retirement! Will you follow the [modern personal finance advice](https://www.bogleheads.org/wiki/Three-fund_portfolio) and put it into a whole-market index fund, where you won't need to worry much about its growth? It's one of the most sensible options... and if you do, be aware that you're largely supporting (hinging your life's savings on, even) the slave labor of Apple, the dystopian spying of Facebook, and the worker exploitation of Amazon, [to name a few](https://investor.vanguard.com/mutual-funds/profile/overview/VTSAX/portfolio-holdings). <br/>
 <br/>
 
-- **Politics**. In _abstract_, this concept of "electing representatives" sounds like a great idea; average people don't have enough time or context to be up-to-date on every issue that comes up, so we can just outsource it, hire smart folks that we agree with to handle it for us. In _reality_, that "handling" is usually some combination of ["bribery, lobbying, extortion, cronyism, nepotism, parochialism, patronage, influence peddling, graft, and embezzlement"](https://en.wikipedia.org/wiki/Political_corruption).
+- **Politics**. In _abstract_, this concept of "electing representatives" sounds like a great idea; average people don't have enough time or context to be up-to-date on every issue that comes up, so we can just outsource it, hire smart folks that we agree with to handle it for us. In _reality_, that "handling" is usually some combination of ["bribery, lobbying, extortion, cronyism, nepotism, parochialism, patronage, graft, and embezzlement"](https://en.wikipedia.org/wiki/Political_corruption).
 
 ## Moving Mountains
 
-If you're thinking to yourself "hey, this all sounds very Season 3 of The Good Place", you'd be right!
+If you're now thinking "hey, this all sounds very Season 3 of The Good Place", you'd be right!
 
-It's the same principle, but sadly, the TV show's goal of "entertain or intrigue an audience" is a bit easier to tackle than my own goal of "figure out what on earth to do with my life in the face of all this". The above categories make up some of the most fundamental pillars of life and social norms in our first-world society, so it's no small task to confront. In effect, the exploitation is so pervasive that there's no escaping it at all, which (spoiler alert) is the same conclusion reached by [Michael Schur](https://en.wikipedia.org/wiki/The_Good_Place) near the end of that season.
+It's the same principle, but sadly, the TV show's goal of "entertain an audience" is a bit easier to tackle than my own goal of "figure out what on earth to do with my life in the face of all this". The above categories make up some of the most fundamental pillars of life and social norms in our first-world society, so it's no small task to confront. In effect, the exploitation is so pervasive that there's no escaping it at all, which (spoiler alert) is the same conclusion reached by [Michael Schur](https://en.wikipedia.org/wiki/The_Good_Place) near the end of that season of the show.
 
 So, here's what I'm trying to do to escape it anyway:
 
