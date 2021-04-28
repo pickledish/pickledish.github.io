@@ -2,110 +2,81 @@
 <html>
 
 <head>
-
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{{ page.title }} — willett dot io</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-	<style>
-		{% include fonts.css %}
-		{% include github-markdown.css %}
-		{% include post.css %}
-		{% include syntax.css %}
-	</style>
-
-	<script>
-		MathJax.Hub.Config({ tex2jax: {
-			inlineMath: [['$','$'], ['\\(','\\)']],
-			processEscapes: true
-		} });
-	</script>
-
-	{% seo %}
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }} — willett dot io</title>
+  <link rel="stylesheet" href="/assets/css/bulma.min.css">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/github-markdown.css">
+  <link rel="stylesheet" href="/assets/css/post.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
+  {% seo %}
 </head>
 
 <body class="Site">
-
-	<main class="Site-content">
-
-		<section class="hero is-white">
-
-			<!-- Hero header: will be at the top of the hero -->
-			<div class="hero-head">
-				<nav class="navbar"><div class="container">
-
-					<div class="navbar-brand">
-						<span class="navbar-item"><span class="is-size-4">brandon willett</span></span>
-						<span class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
-							<span></span>
-							<span></span>
-							<span></span>
-						</span>
-					</div>
-
-					<div id="navbarMenuHeroA" class="navbar-menu">
-						<div class="navbar-end">
-							<a href="/" class="navbar-item">Home</a>
-							<a href="/about/" class="navbar-item">About</a>
-							<a href="/contact/" class="navbar-item">Contact</a>
-							<a href="https://github.com/pickledish" class="navbar-item">
-								<span class="icon"><i class="fa fa-github fa-lg"></i></span>
-							</a>
-						</div>
-					</div>
-
-				</div></nav>
-			</div>
-
-			<!-- Hero content: will be in the middle -->
-			<div class="hero-body">
-				<div class="container has-text-centered">
-					<h1 class="light">
-						{{ page.title }}
-					</h1>
-					{% if page.date %}
-					<h4 class="light" style="margin-top:0;margin-bottom:0">
-						{{ page.date | date: "%B %-d, %Y" }}
-					</h4>
-					{% endif %}
-				</div>
-			</div>
-
-		</section>
-
-		<section class="section">
-
-			<div class="columns is-centered">
-				<div class="main-content column is-two-thirds">
-					{{ content }}
-				</div>
-			</div>
-
-		</section>
-
-	</main>
-
-	<footer class="footer">
-		<div class="container">
-			<div class="content has-text-centered">
-				<hr>
-				<div class="columns is-centered" style = "margin-right: 0">
-					<div class="column is-half is-marginless is-paddingless">
-						<br>
-						<p class="is-marginless has-text-right">
-							Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated {{site.time | date_to_string }}
-						</p>
-						<br>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
-
-	</body>
+  <main class="Site-content">
+    <section class="hero is-white">
+      <!-- Hero header: will be at the top of the hero -->
+      <div class="hero-head">
+        <nav class="navbar"><div class="container">
+          <div class="navbar-brand">
+            <span class="navbar-item"><span class="is-size-4">brandon willett</span></span>
+            <span class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+          <div id="navbarMenuHeroA" class="navbar-menu">
+            <div class="navbar-end">
+              <a href="/" class="navbar-item">Home</a>
+              <a href="/about/" class="navbar-item">About</a>
+              <a href="/contact/" class="navbar-item">Contact</a>
+              <a href="https://github.com/pickledish" class="navbar-item">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMGMtNi42MjYgMC0xMiA1LjM3My0xMiAxMiAwIDUuMzAyIDMuNDM4IDkuOCA4LjIwNyAxMS4zODcuNTk5LjExMS43OTMtLjI2MS43OTMtLjU3N3YtMi4yMzRjLTMuMzM4LjcyNi00LjAzMy0xLjQxNi00LjAzMy0xLjQxNi0uNTQ2LTEuMzg3LTEuMzMzLTEuNzU2LTEuMzMzLTEuNzU2LTEuMDg5LS43NDUuMDgzLS43MjkuMDgzLS43MjkgMS4yMDUuMDg0IDEuODM5IDEuMjM3IDEuODM5IDEuMjM3IDEuMDcgMS44MzQgMi44MDcgMS4zMDQgMy40OTIuOTk3LjEwNy0uNzc1LjQxOC0xLjMwNS43NjItMS42MDQtMi42NjUtLjMwNS01LjQ2Ny0xLjMzNC01LjQ2Ny01LjkzMSAwLTEuMzExLjQ2OS0yLjM4MSAxLjIzNi0zLjIyMS0uMTI0LS4zMDMtLjUzNS0xLjUyNC4xMTctMy4xNzYgMCAwIDEuMDA4LS4zMjIgMy4zMDEgMS4yMy45NTctLjI2NiAxLjk4My0uMzk5IDMuMDAzLS40MDQgMS4wMi4wMDUgMi4wNDcuMTM4IDMuMDA2LjQwNCAyLjI5MS0xLjU1MiAzLjI5Ny0xLjIzIDMuMjk3LTEuMjMuNjUzIDEuNjUzLjI0MiAyLjg3NC4xMTggMy4xNzYuNzcuODQgMS4yMzUgMS45MTEgMS4yMzUgMy4yMjEgMCA0LjYwOS0yLjgwNyA1LjYyNC01LjQ3OSA1LjkyMS40My4zNzIuODIzIDEuMTAyLjgyMyAyLjIyMnYzLjI5M2MwIC4zMTkuMTkyLjY5NC44MDEuNTc2IDQuNzY1LTEuNTg5IDguMTk5LTYuMDg2IDguMTk5LTExLjM4NiAwLTYuNjI3LTUuMzczLTEyLTEyLTEyeiIvPjwvc3ZnPg==">
+              </a>
+            </div>
+          </div>
+        </div></nav>
+      </div>
+      <!-- Hero content: will be in the middle -->
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="light">
+            {{ page.title }}
+          </h1>
+          {% if page.date %}
+          <h4 class="light" style="margin-top:0;margin-bottom:0">
+            {{ page.date | date: "%B %-d, %Y" }}
+          </h4>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="columns is-centered">
+        <div class="main-content column is-two-thirds">
+          {{ content }}
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <hr>
+        <div class="columns is-centered" style = "margin-right: 0">
+          <div class="column is-half is-marginless is-paddingless">
+            <br>
+            <p class="is-marginless has-text-right">
+              Made with <a href="https://bulma.io">Bulma</a> &nbsp; | &nbsp; Last updated {{ site.time | date_to_string }}
+            </p>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </body>
 
 </html>
