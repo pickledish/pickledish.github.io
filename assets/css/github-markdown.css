@@ -80,7 +80,7 @@ p, blockquote, ul, ol, dl, table, pre {
 hr {
   border: 0 none;
   color: #cccccc;
-  height: 2px;
+  height: 1px;
   padding: 0; }
 
 body > h2:first-child {
