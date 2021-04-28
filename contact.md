@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: "online"
 permalink: /contact/
 ---

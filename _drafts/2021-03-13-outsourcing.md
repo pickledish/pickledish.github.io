@@ -12,7 +12,7 @@ So many things that would take hours of effort in a previous life, like washing 
 
 Much of this sharp upward curve in lifestyle efficiency happened within the last 100 years or so, thanks to advances like the telephone, the automobile, and believe it or not, barges (a huge factor in [the ease of international shipping](https://www.youtube.com/watch?v=FN3VFgG922A)). The first-world human condition transformed by modern technology!
 
-In a blink of a generational eye, the everyday elements of \_\_\_ (living life) started to take a lot less time. A trip \_\_\_. The same goes for \_\_\_. You now do all of your banking, investing, and taxes online. You don't even need to leave your _house_ anymore for most things; you just spend a couple of minutes picking out what you need on Amazon, wait two days, and then it appears like magic on your doorstep.
+In a blink of a generational eye, the everyday elements of life started to take a lot less time. A trip \_\_\_ was replaced with a quick drive to the Walmart ten minutes down the road. The same goes for \_\_\_. You now do all of your banking, investing, and taxes online. You don't even need to leave your _house_ anymore for most things; you just spend a couple of minutes picking out what you need on Amazon, wait two days, and then it appears like magic on your doorstep.
 
 The total and complete abstraction of the "where did this stuff come from?" question is, historically speaking, a _pretty new thing_ for humanity. This ultimate efficiency we've managed to achieve, this frictionless and totally opaque exchange of goods and services, has been known in only the most recent fraction of a percent of recorded human history. \_\_\_ (some reference to spending, for below?).
 
@@ -26,7 +26,7 @@ The magic we're experiencing is the magic of **outsourcing**, of geographical [a
 
 And, what a happy coincidence, really! As long as Joe is never directly faced with the full end-to-end impact of his buying a [diamond ring for his wife](https://www.miadonna.com/blogs/news/blood-diamonds-in-2020-what-most-jewelers-dont-want-you-to-know), well, then everyone comes out better off -- De Beers makes a few extra percent on the stone by "virtue" of skirting first-world labor laws, and Joe (kept in the dark about all this, of course) gets to marvel at the convenience of being able to pick up such a beautiful object just a few blocks away from his house, not knowing a single minute of its history.
 
-The fact that it's so easy to not look behind the curtain, to remain blissfully unaware of what you're really paying for, is _no mere accident_. Large corporations, the kind that are big enough to start wondering how they can be shaping the opinion of the American public themselves, have been putting effort into exactly \_\_\_ [for decades](https://www.cbc.ca/documentaries/the-passionate-eye/recycling-was-a-lie-a-big-lie-to-sell-more-plastic-industry-experts-say-1.5735618).
+The fact that it's so easy to not look behind the curtain, to remain blissfully unaware of what you're really paying for, is _no mere accident_. Large corporations, the kind that are big enough to start wondering how they can be shaping the opinion of the American public themselves, have been putting effort into exactly that [for decades now](https://www.cbc.ca/documentaries/the-passionate-eye/recycling-was-a-lie-a-big-lie-to-sell-more-plastic-industry-experts-say-1.5735618).
 
 We're now living in a society that not only forces unethical goods and services upon us as often the only (practical) option, but one that also has incentivized lots of well-funded entities to work as hard as they can making sure we don't even know about it.
 
@@ -34,7 +34,7 @@ What I'm getting at is, if you don't know where it came from, how it got to you,
 
 ## A Few Examples
 
-To help make the point a little more real, let's look at a few examples that most folks come across often in everyday life. Some of these you might have encountered before, others might be new to you.
+To help make the point a little more real, let's look at a few examples that most folks come across often in everyday life. Some of these instances you might have encountered before, others might be new to you.
 
 - **Clothing**. Most people are aware now that all the larger retailers outsourced the sewing of their clothes decades ago to abused adults and children in developing countries. What might not be as known is how rapidly this shift away from buying local happened. In 2020, the amount of American-made clothing made up just 2 percent of what was purchased by American consumers, down from [_95 percent_ in 1960](https://www.kqed.org/lowdown/7939/madeinamerica). <br/>
 <br/>
@@ -52,13 +52,13 @@ To help make the point a little more real, let's look at a few examples that mos
 
 ## Moving Mountains
 
-If you're now thinking "hey, this all sounds very Season 3 of The Good Place", you'd be right!
+If you're thinking "hey, this all sounds very Season 3 of The Good Place", you'd be right!
 
 It's the same principle, but sadly, the TV show's goal of "entertain an audience" is a bit easier to tackle than my own goal of "figure out what on earth to do with my life in the face of all this". The above categories make up some of the most fundamental pillars of life and social norms in our first-world society, so it's no small task to confront. In effect, the exploitation is so pervasive that there's no escaping it at all, which (spoiler alert) is the same conclusion reached by [Michael Schur](https://en.wikipedia.org/wiki/The_Good_Place) near the end of that season of the show.
 
 So, here's what I'm trying to do to escape it anyway:
 
-- Buy meat-free (I've been vegetarian for about 5 years now)
+- Buy meat-free (have been vegetarian for about 5 years now)
 - Buy local (avoid Amazon like the plague)
 - Buy used (it's better for the world and for your wallet)
 - Just don't buy at all
