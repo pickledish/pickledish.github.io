@@ -34,7 +34,7 @@ body {
 }
 
 .Site-content > section.hero {
-    padding-bottom: 0rem;
+	padding-bottom: 0rem;
 }
 
 /* Spacing for the list in post-list */
@@ -59,8 +59,15 @@ body {
 }
 
 body {
-	font-size: 14.5pt;
+	background-color: #ffffff;
+	font-size: 19px;
 	color: #080808;
+	line-height: 1.55;
+}
+
+/* For some reason, bold forces a taller line height? */
+strong {
+    line-height: 1em;
 }
 
 code, pre {

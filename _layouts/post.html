@@ -15,7 +15,7 @@
 
 <body class="Site">
   <main class="Site-content">
-    <section class="hero is-white">
+    <section class="hero">
       <!-- Hero header: will be at the top of the hero -->
       <div class="hero-head">
         <nav class="navbar"><div class="container">
@@ -47,7 +47,7 @@
           </h1>
           {% if page.date %}
           <h4 class="light" style="margin-top:0;margin-bottom:0">
-            {{ page.date | date: "%B %-d, %Y" }}
+            {{ page.date | date: "%B %-d, %Y" }} &nbsp;∙&nbsp; {{ content | number_of_words | divided_by:180 }} minutes
           </h4>
           {% endif %}
         </div>
