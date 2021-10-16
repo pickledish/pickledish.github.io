@@ -109,3 +109,14 @@ h6 {
   font-weight: 600;
   color: #777777;
   font-size: 14px; }
+
+.pxl {
+	width: 67%;
+	image-rendering: pixelated;
+}
+
+@media only screen and (min-width: 600px) {
+	.pxl {
+		width: 50%;
+	}
+}
