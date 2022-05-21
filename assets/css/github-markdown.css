@@ -3,10 +3,6 @@ body > *:first-child {
 body > *:last-child {
   margin-bottom: 0 !important; }
 
-a {
-  color: #4183C4; }
-a.absent {
-  color: #cc0000; }
 a.anchor {
   display: block;
   padding-left: 30px;
@@ -49,32 +45,33 @@ h6 tt, h6 code {
 
 h1 {
   font-size: 28px;
-  color: black; }
+}
 
 h2 {
   font-size: 24px;
-  border-bottom: 1px solid #cccccc;
-  color: black; }
+}
 
 h3 {
-  font-size: 18px; }
+  font-size: 18px;
+}
 
 h4 {
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 h5 {
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 h6 {
-  color: #777777;
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 p, blockquote, ul, ol, dl, table, pre {
   margin: 12px 0 18px 0; }
 
 hr {
   border: 0 none;
-  color: #cccccc;
   height: 1px;
   padding: 0; }
 

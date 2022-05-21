@@ -1,5 +1,5 @@
 body {
-	font-family: "Crimson Text", Georgia, serif;
+	font-family: "wotfardregular", Helvetica, sans-serif;
 }
 
 .section {
@@ -8,10 +8,9 @@ body {
 
 .footer {
 	padding-top: 0rem;
-	background-color: white;
 	padding-bottom: 1.5rem;
-	line-height: 1.5;
-	color: #999999;
+	line-height: 1.65;
+	background-color: var(--background-color);
 }
 
 /* Makes the footer stick to the bottom of the page */
@@ -20,12 +19,13 @@ body {
 	min-height: 100vh;
 	flex-direction: column;
 }
+
 .Site-content {
 	flex: 1;
 }
 
 .main-content {
-	max-width: 720px;
+	max-width: 716px;
 }
 
 /* Fixes footer spacing */
@@ -54,15 +54,29 @@ body {
 
 /* The rest! */
 
-.light {
-	font-weight: 300;
+:root {
+    --text-color: #111111;
+    --text-color-light: #444444;
+    --text-color-faded: #cccccc;
+    --background-color: #ffffff;
 }
 
-body {
-	background-color: #ffffff;
-	font-size: 19px;
-	color: #080808;
-	line-height: 1.5;
+#themeSwitch:checked~#content {
+    --text-color: #eeeeee;
+    --text-color-light: #cccccc;
+    --text-color-faded: #666666;
+    --background-color: #05162e;
+}
+
+.light {
+    font-weight: 300;
+}
+
+#content {
+    color: var(--text-color);
+    background-color: var(--background-color);
+	font-size: 16px;
+	line-height: 1.65;
 }
 
 /* For some reason, bold forces a taller line height? */
@@ -86,29 +100,34 @@ li {
 h1 {
   font-weight: 600;
   font-size: 48px;
-  margin: 0; }
+  margin: 0;
+}
 
 h2 {
   font-weight: 600;
   font-size: 32px;
-  border-bottom: 1px solid #cccccc; }
+  border-bottom: 1px solid var(--text-color-faded);
+}
 
 h3 {
   font-weight: 600;
-  font-size: 24px; }
+  font-size: 24px;
+}
 
 h4 {
   font-weight: 600;
-  font-size: 18px; }
+  font-size: 18px;
+}
 
 h5 {
   font-weight: 600;
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 h6 {
   font-weight: 600;
-  color: #777777;
-  font-size: 14px; }
+  font-size: 14px;
+}
 
 .pxl {
 	width: 67%;
@@ -119,4 +138,18 @@ h6 {
 	.pxl {
 		width: 50%;
 	}
+}
+
+/* override bulma's assumes-light colors */
+.navbar-item {
+    color: var(--text-color-light);
+}
+
+strong {
+    color: var(--text-color);
+}
+
+/* we want this to look like a button */
+label {
+  cursor: pointer;
 }
