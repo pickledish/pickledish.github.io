@@ -76,7 +76,7 @@ body {
     color: var(--text-color);
     background-color: var(--background-color);
 	font-size: 16px;
-	line-height: 1.65;
+	line-height: 1.6;
 }
 
 /* For some reason, bold forces a taller line height? */
@@ -86,7 +86,7 @@ strong {
 
 code, pre {
 	font-family: "Roboto Mono", "Consolas", monospace;
-	font-size: 10pt;
+	font-size: 12px;
 }
 
 a {
@@ -105,8 +105,10 @@ h1 {
 
 h2 {
   font-weight: 600;
-  font-size: 32px;
+  font-size: 28px;
   border-bottom: 1px solid var(--text-color-faded);
+  padding-bottom: 6px;
+  margin-bottom: 18px;
 }
 
 h3 {
@@ -121,7 +123,7 @@ h4 {
 
 h5 {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 h6 {
