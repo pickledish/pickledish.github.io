@@ -18,7 +18,7 @@ email: brandon@willett.io
 description: >- # this means to ignore newlines until "baseurl:"
   Brandon Willett software developer guy! I like bicycles!
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://epic-heisenberg-527e99.netlify.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://www.willett.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: null
 github_username:  pickledish
 
