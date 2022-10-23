@@ -4,7 +4,7 @@ title: "online"
 permalink: /contact/
 ---
 
-### [brandon [at] willett.io](mailto://brandon@willett.io)
+### [brandon [at] willett.io](mailto:brandon@willett.io)
 
 Email will always be the best way to contact me -- I view it as a big to-do list, and it stares me right in the face every morning, which makes it hard for me to forget about.
 
