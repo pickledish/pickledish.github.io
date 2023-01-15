@@ -97,7 +97,9 @@
         </div>
       </div>
     </footer>
+    {% if site.analytics %}
     <img style="display: none;" src="https://willettio.goatcounter.com/count?t={{ page.title | url_encode }}&p={{ page.url }}">
+    {% endif %}
   </div>
 </body>
 
