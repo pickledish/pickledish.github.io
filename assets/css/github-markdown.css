@@ -67,7 +67,7 @@ h6 {
   font-size: 14px;
 }
 
-p, blockquote, ul, ol, dl, table, pre {
+p, blockquote, ul, ol, dl, table, pre, article {
   margin: 12px 0 18px 0; }
 
 hr {

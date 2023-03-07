@@ -155,3 +155,8 @@ strong {
 label {
   cursor: pointer;
 }
+
+/* this overrides a bulma default I don't like */
+.message:not(:last-child) {
+    margin-bottom: 1rem;
+}
