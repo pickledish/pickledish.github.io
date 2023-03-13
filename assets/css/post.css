@@ -158,5 +158,9 @@ label {
 
 /* this overrides a bulma default I don't like */
 .message:not(:last-child) {
-    margin-bottom: 1rem;
+    margin: 1.75rem 0rem;
+}
+
+.message-body > p {
+  margin: 0;
 }

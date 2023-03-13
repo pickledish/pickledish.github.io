@@ -1,8 +1,8 @@
-<article class="message is-info">
+<article class="message is-warning">
   <div class="message-header">
-    <span>Disclaimer</span>
+    <span><b>Disclaimer</b></span>
   </div>
   <div class="message-body">
-    {{ include.content }}
+    {{ include.content | markdownify }}
   </div>
 </article>
