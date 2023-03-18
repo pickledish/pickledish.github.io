@@ -1,5 +1,5 @@
 body {
-	font-family: "Wotfard", "Avenir Next Medium", "Avenir Medium", "Avenir Next LT Pro", "Montserrat", sans-serif;
+	font-family: "Wotfard", "Avenir Medium", "Avenir Next Medium", "Avenir Next LT Pro", "Montserrat", sans-serif;
 }
 
 .section {
@@ -58,14 +58,14 @@ body {
     --text-color: #111111;
     --text-color-light: #444444;
     --text-color-faded: #cccccc;
-    --background-color: #ffffff;
+    --background-color: #fefcfa;
 }
 
 #themeSwitch:checked~#content {
     --text-color: #eeeeee;
     --text-color-light: #cccccc;
     --text-color-faded: #666666;
-    --background-color: #05162e;
+    --background-color: #181410;
 }
 
 .light {

@@ -52,24 +52,18 @@
         <!-- Hero content: will be in the middle -->
         <div class="hero-body" style="padding-bottom: 0.5rem;">
           <div class="container has-text-centered">
-            <h1 class="light">
-              {{ page.title }}
-            </h1>
+            <h1 class="light">{{ page.title }}</h1>
             {% if page.subtitle %}
-            <p>
-              {{ page.subtitle }}
-            </p>
+            <p>{{ page.subtitle }}</p>
             {% endif %}
             {% if page.date %}
-            <p style="font-size: 12px;">
-              {{ page.date | date: "%B %-d, %Y" }} &nbsp;--&nbsp; {{ content | number_of_words | divided_by:180 }} minutes
-            </p>
+            <p style="font-size: 12px;">{{ page.date | date: "%B %-d, %Y" }} &nbsp;--&nbsp; {{ content | number_of_words | divided_by:180 }} minutes</p>
             {% endif %}
           </div>
         </div>
         <div class="hero-body" style="padding: 0;">
           <div class="container has-text-centered">
-            <p><b> · · · </b></p>
+            <p><b>· · ·</b></p>
           </div>
         </div>
       </section>
