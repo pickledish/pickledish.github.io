@@ -93,7 +93,7 @@ a {
 	color: #ba8c2a;
 }
 
-li {
+ul > li {
 	list-style: initial;
 }
 

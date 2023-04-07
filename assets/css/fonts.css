@@ -22,7 +22,6 @@
     font-display: fallback;
 }
 
-
 @font-face {
     font-family: 'Wotfard';
     src: url('/assets/fonts/wotfard-regularitalic.woff2') format('woff2');
@@ -38,7 +37,6 @@
     font-style: normal;
     font-display: fallback;
 }
-
 
 @font-face {
     font-family: 'Wotfard';
