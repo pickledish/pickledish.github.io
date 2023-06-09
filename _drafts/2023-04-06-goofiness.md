@@ -27,7 +27,7 @@ Another way to phrase it is that it doesn't feel "safe".
 
 ---
 
-To dig up the lede the rest of the way, I'm talking about the effect of a lack of psychological safety. For me, that "belief you won't be humiliated" translates directly into ____.
+To dig up the lede the rest of the way, I'm talking about the effect of a lack of psychological safety. For me, that "belief you won't be humiliated" translates directly into "belief that it's OK to be yourself".
 
 To reuse the earlier examples:
 
