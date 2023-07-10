@@ -14,5 +14,4 @@ No, what I'm bitter about are bad decisions made from bad reasoning -- logical f
 
 - **The evidence doesn't matter**: You know how a lot of people talk about wanting to make "data-driven" decisions? And yet how, when actually presented with that data, they just so happen to manage to interpret it in a way which supports the thing they had already wanted to do in the first place? Yeah, that's this one, also known as "____"[cheeky]. Real evidence-based decisionmaking can only occur when you’re not walking in with a massive bias beforehand.
 
-- **Foo**
-
+- **You're never going to have lassie** (a type of black and white maybe)
