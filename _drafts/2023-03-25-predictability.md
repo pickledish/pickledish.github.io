@@ -6,14 +6,14 @@ permalink: /posts/predictability/
 
 Good news, the investors liked our idea and we're starting a company! First things first, we need ____. There are two options on the table:
 
-* A database that's clearly what the future will be built on -- it's written in Rust, is wire-compatible with the old Java DB it's competing against (but blows it out of the water on performance), includes an intelligent sharding setup out of the box for balanced load distribution and uses Raft for consensus across replicas... or,
+* A database that's clearly what the future will be built on -- it's written in Rust, is wire-compatible with the old Java DB it's competing against (but blows it out of the water on performance), includes an intelligent sharding setup out of the box for balanced load distribution and uses Raft for consensus across replicas
 * A database that does what I expect it to and doesn't often surprise me
 
 And I'll pick the latter every single time, given almost any requirements. No hesitation.
 
 ---
 
-I think everybody likes predictable software. It's clearly a good trait for tech to have, right? But the problem comes when, comparared to other more flashy adjectives, it seems to get benched almost immediately. You value predictability... but you chose a NoSQL backend despite never having used one before, because you heard they are more scalable. You want your team's on-call shifts to be uneventful... but you chose to use a brand-new CRDT-based approach because you thought you might want your app to be collaborative someday, and their website says it's good for multi-user data sync.
+I think everybody likes predictable software. It's clearly a good trait for tech to have, right? But the problem comes when, comparared to other more flashy adjectives, it seems to get benched almost immediately. You value predictability... but you chose a NoSQL backend despite never having used one before, because you heard they are more scalable. You want your team's on-call shifts to be uneventful... but you chose to use a brand-new CRDT-based approach because you thought you might want your app to be collaborative someday, and the website says it's good for multi-user data sync.
 
 Cut it out!
 
