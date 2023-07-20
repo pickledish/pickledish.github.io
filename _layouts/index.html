@@ -5,30 +5,24 @@
   <meta charset='utf-8'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <title>willett dot io</title>
-  <link rel="stylesheet" href="/assets/css/bulma.min.css">
+  <link rel="stylesheet" href="/assets/css/tailwind.css">
   <link rel="stylesheet" href="/assets/css/fonts.css">
-  <link rel="stylesheet" href="/assets/css/github-markdown.css">
-  <link rel="stylesheet" href="/assets/css/post.css">
-  <link rel="stylesheet" href="/assets/css/syntax.css">
   <link rel="alternate" href="/feed.xml" type="application/rss+xml">
 </head>
 
 <body>
-  <section class="hero is-white is-fullheight">
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <h1 class="has-text-weight-light">brandon willett</h1>
-        <hr>
-        <div class="columns is-variable is-6 is-centered">
-          <div class="column is-2"><a href="/about/">about</a></div>
-          <div class="column is-2"><a href="/posts/">writing</a></div>
-          <div class="column is-2"><a href="/projects/">stuff</a></div>
-          <div class="column is-2"><a href="/contact/">contact</a></div>
-          <div class="column is-2"><a href="/assets/Resume.pdf">resume</a></div>
-        </div>
+  <div class="h-screen w-screen flex justify-center">
+    <div class="w-5/6 flex flex-col justify-center">
+      <span class="text-5xl font-light text-center text-slate-700 pb-6 border-b">brandon willett</span>
+      <div class="flex flex-col md:flex-row items-center justify-around pt-4">
+        <div class="text-slate-700 py-2"><a href="/about/">about</a></div>
+        <div class="text-slate-700 py-2"><a href="/posts/">writing</a></div>
+        <div class="text-slate-700 py-2"><a href="/projects/">stuff</a></div>
+        <div class="text-slate-700 py-2"><a href="/contact/">contact</a></div>
+        <div class="text-slate-700 py-2"><a href="/assets/Resume.pdf">resume</a></div>
       </div>
     </div>
-  </section>
+  </div>
   {% if site.analytics %}
   <img style="display: none;" src="https://willettio.goatcounter.com/count?t=index&p=/">
   {% endif %}

@@ -1,3 +1,7 @@
+body {
+    font-family: "Wotfard", "Avenir Medium", "Avenir Next Medium", "Avenir Next LT Pro", "Montserrat", sans-serif;
+}
+
 @font-face {
     font-family: 'Wotfard';
     src: url('/assets/fonts/wotfard-extralight.woff2') format('woff2');
