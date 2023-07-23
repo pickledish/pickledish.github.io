@@ -53,6 +53,12 @@ hr {
   margin: 24px 0 24px 0;
 }
 
+blockquote {
+  padding-left: 14px;
+  margin-left: 10px;
+  border-left: 2px solid #d6d3d1;
+}
+
 img {
   margin: 32px auto 32px auto;
 }
