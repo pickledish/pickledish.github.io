@@ -2,29 +2,30 @@
 <html>
 
 <head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>willett dot io</title>
   <link rel="stylesheet" href="/assets/css/tailwind.css">
   <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/markdown.css">
   <link rel="alternate" href="/feed.xml" type="application/rss+xml">
 </head>
 
-<body>
+<body class="text-stone-900 bg-[#fefcfa] dark:text-stone-100 dark:bg-[#181410] antialiased">
   <div class="h-screen w-screen flex justify-center">
     <div class="w-5/6 flex flex-col justify-center">
-      <span class="text-5xl font-light text-center text-slate-700 pb-6 border-b">brandon willett</span>
+      <div class="text-5xl font-light text-center pb-6 border-b">brandon willett</div>
       <div class="flex flex-col md:flex-row items-center justify-around pt-4">
-        <div class="text-slate-700 py-2"><a href="/about/">about</a></div>
-        <div class="text-slate-700 py-2"><a href="/posts/">writing</a></div>
-        <div class="text-slate-700 py-2"><a href="/projects/">stuff</a></div>
-        <div class="text-slate-700 py-2"><a href="/contact/">contact</a></div>
-        <div class="text-slate-700 py-2"><a href="/assets/Resume.pdf">resume</a></div>
+        <div class="py-2"><a href="/about/">about</a></div>
+        <div class="py-2"><a href="/posts/">writing</a></div>
+        <div class="py-2"><a href="/projects/">stuff</a></div>
+        <div class="py-2"><a href="/contact/">contact</a></div>
+        <div class="py-2"><a href="/assets/Resume.pdf">resume</a></div>
       </div>
     </div>
   </div>
   {% if site.analytics %}
-  <img style="display: none;" src="https://willettio.goatcounter.com/count?t=index&p=/">
+  <img class="hidden" src="https://willettio.goatcounter.com/count?t=index&p=/">
   {% endif %}
 </body>
 
