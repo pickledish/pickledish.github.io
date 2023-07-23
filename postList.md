@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "articles"
+title: "blog"
 permalink: /posts/
 ---
 {%- for post in site.posts -%}
