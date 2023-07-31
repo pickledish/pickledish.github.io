@@ -7,7 +7,16 @@ body {
 
 code, pre {
   font-family: "Roboto Mono", "Consolas", monospace;
-  font-size: 12px;
+  font-size: 14px;
+  background-color: #e5e5e5;
+  border-radius: 4px;
+  padding: 1px 3px 1px 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  code, pre {
+    background-color: #525252;
+  }
 }
 
 #content a {
