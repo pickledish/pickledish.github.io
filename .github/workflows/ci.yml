@@ -5,4 +5,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: stepchowfun/toast/.github/actions/toast@206213d
+    - uses: stepchowfun/toast/.github/actions/toast@v0.47.5
