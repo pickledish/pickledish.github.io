@@ -1,0 +1,39 @@
+image: ubuntu
+command_prefix: set -euxo pipefail
+tasks:
+  apt:
+    command: |
+      apt-get update
+      apt-get install ruby-full build-essential zlib1g-dev curl --yes
+  tailwindcss:
+    dependencies:
+    - apt
+    command: |
+      cd /usr/local/bin
+      curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.3.3/tailwindcss-linux-x64
+      chmod +x tailwindcss-linux-x64
+      mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
+  ruby:
+    dependencies:
+    - apt
+    command: |
+      gem install jekyll bundler
+  bundle:
+    dependencies:
+    - ruby
+    input_paths:
+    - Gemfile
+    - Gemfile.lock
+    command: |
+      bundle install
+  build:
+    dependencies:
+    - bundle
+    - tailwindcss
+    input_paths:
+    - .
+    output_paths:
+    - _site/
+    command: |
+      tailwindcss -o assets/css/tailwind.css
+      bundle exec jekyll build
