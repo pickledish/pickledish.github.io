@@ -72,6 +72,12 @@ img {
   margin: 32px auto 32px auto;
 }
 
+@media only screen and (min-width: 600px) {
+  .halfwidthimage {
+    max-width: 50%;
+  }
+}
+
 .pxl {
   width: 67%;
   image-rendering: pixelated;
@@ -82,3 +88,18 @@ img {
     width: 50%;
   }
 }
+
+table {
+  width:100%;
+}
+
+/*
+tr:nth-of-type(even) {
+  background-color:#ccc;
+}
+
+@media (prefers-color-scheme: dark) {
+  code, pre {
+    background-color: #525252;
+  }
+}*/
