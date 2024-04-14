@@ -1,26 +1,13 @@
-image: ubuntu
+image: ruby:3.2-bookworm
 command_prefix: set -euxo pipefail
 tasks:
-  apt:
-    command: |
-      apt-get update
-      apt-get install ruby-full build-essential zlib1g-dev curl --yes
   tailwindcss:
-    dependencies:
-    - apt
     command: |
       cd /usr/local/bin
       curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.3.3/tailwindcss-linux-x64
       chmod +x tailwindcss-linux-x64
       mv tailwindcss-linux-x64 /usr/local/bin/tailwindcss
-  ruby:
-    dependencies:
-    - apt
-    command: |
-      gem install jekyll bundler
   bundle:
-    dependencies:
-    - ruby
     input_paths:
     - Gemfile
     - Gemfile.lock
