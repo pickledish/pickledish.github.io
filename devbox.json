@@ -1,0 +1,24 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.12.0/.schema/devbox.schema.json",
+  "packages": [
+    "ruby@3.2",
+    "tailwindcss@3.4.4"
+  ],
+  "shell": {
+    "init_hook": [
+      "echo 'Welcome to devbox!' > /dev/null"
+    ],
+    "scripts": {
+      "install": [
+        "bundle install"
+      ],
+      "dev": [
+        "git ls-files | entr -c -r -s 'tailwindcss -o assets/css/tailwind.css && bundle exec jekyll serve --no-watch --drafts'"
+      ],
+      "build": [
+        "tailwindcss -o assets/css/tailwind.css",
+        "bundle exec jekyll build",
+      ]
+    }
+  }
+}

@@ -35,8 +35,8 @@ plugins:
 
 permalink: pretty
 
-# By default, include goatcounter
-analytics: true
+# By default, no longer include goatcounter
+analytics: false
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

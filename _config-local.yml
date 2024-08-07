@@ -1,2 +1,0 @@
-# When run from the Makefile, don't include goatcounter
-analytics: false

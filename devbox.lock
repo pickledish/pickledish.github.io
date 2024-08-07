@@ -1,0 +1,118 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "ruby@3.2": {
+      "last_modified": "2024-07-07T16:08:25Z",
+      "plugin_version": "0.0.2",
+      "resolved": "github:NixOS/nixpkgs/ab82a9612aa45284d4adf69ee81871a389669a9e#ruby_3_2",
+      "source": "devbox-search",
+      "version": "3.2.4",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cvwv2rkas498bv81lrd2wxdr50kfkqhv-ruby-3.2.4",
+              "default": true
+            },
+            {
+              "name": "devdoc",
+              "path": "/nix/store/p57m7hgp6hfgnw251y0j2hkdf7f9b35g-ruby-3.2.4-devdoc"
+            }
+          ],
+          "store_path": "/nix/store/cvwv2rkas498bv81lrd2wxdr50kfkqhv-ruby-3.2.4"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hgscb9gvzp38b5nsq7063fcf6jkf0bam-ruby-3.2.4",
+              "default": true
+            },
+            {
+              "name": "devdoc",
+              "path": "/nix/store/y5ai3cg52yp05jasdjr59bpkhl178wyc-ruby-3.2.4-devdoc"
+            }
+          ],
+          "store_path": "/nix/store/hgscb9gvzp38b5nsq7063fcf6jkf0bam-ruby-3.2.4"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/g8mvdsvzp85g42y0ggp8bxz565x645pq-ruby-3.2.4",
+              "default": true
+            },
+            {
+              "name": "devdoc",
+              "path": "/nix/store/5xfka274jrsaz1523mg29vdz38ngbijj-ruby-3.2.4-devdoc"
+            }
+          ],
+          "store_path": "/nix/store/g8mvdsvzp85g42y0ggp8bxz565x645pq-ruby-3.2.4"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8wf97f3q67w3sh1b8nzxf7xg2mlj3md1-ruby-3.2.4",
+              "default": true
+            },
+            {
+              "name": "devdoc",
+              "path": "/nix/store/yylw5smyijlhbh3mpi0by4c0b30xq7rc-ruby-3.2.4-devdoc"
+            }
+          ],
+          "store_path": "/nix/store/8wf97f3q67w3sh1b8nzxf7xg2mlj3md1-ruby-3.2.4"
+        }
+      }
+    },
+    "tailwindcss@3.4.4": {
+      "last_modified": "2024-07-07T16:08:25Z",
+      "resolved": "github:NixOS/nixpkgs/ab82a9612aa45284d4adf69ee81871a389669a9e#tailwindcss",
+      "source": "devbox-search",
+      "version": "3.4.4",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/c715v89vsarmp1p4zxq11mrlv3zbsmg3-tailwindcss-3.4.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/c715v89vsarmp1p4zxq11mrlv3zbsmg3-tailwindcss-3.4.4"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/z647zmr0icc9nni8s83f47a7qcayjc35-tailwindcss-3.4.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/z647zmr0icc9nni8s83f47a7qcayjc35-tailwindcss-3.4.4"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ychj6bq582kmsqd03ihdy287m4cr9n6a-tailwindcss-3.4.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ychj6bq582kmsqd03ihdy287m4cr9n6a-tailwindcss-3.4.4"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/097pi76wag81zbwq54r03l77nfhhpvva-tailwindcss-3.4.4",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/097pi76wag81zbwq54r03l77nfhhpvva-tailwindcss-3.4.4"
+        }
+      }
+    }
+  }
+}
