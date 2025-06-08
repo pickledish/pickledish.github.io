@@ -654,6 +654,11 @@ video {
   margin-bottom: 3rem;
 }
 
+.my-\[28px\] {
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
 .-mb-2 {
   margin-bottom: -0.5rem;
 }
@@ -680,10 +685,6 @@ video {
 
 .mb-8 {
   margin-bottom: 2rem;
-}
-
-.mb-\[18px\] {
-  margin-bottom: 18px;
 }
 
 .mr-2 {
