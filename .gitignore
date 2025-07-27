@@ -5,5 +5,5 @@ _site/
 .jekyll-metadata
 .DS_STORE
 
-# tailwind
-assets/tailwind/tailwind.css
+# tailwind (generated)
+assets/css/tailwind.css
