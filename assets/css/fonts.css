@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'Wotfard';
-    src: url('/assets/fonts/wotfard-extralight.woff2') format('woff2');
+    src: url('/assets/fonts/wotfard-extralight-subset.woff2') format('woff2');
     font-weight: 300;
     font-style: normal;
-    font-display: fallback;
+    font-display: block;
 }
 
 @font-face {
@@ -16,10 +16,10 @@
 
 @font-face {
     font-family: 'Wotfard';
-    src: url('/assets/fonts/wotfard-regular.woff2') format('woff2');
+    src: url('/assets/fonts/wotfard-regular-subset.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
-    font-display: fallback;
+    font-display: block;
 }
 
 @font-face {
@@ -32,10 +32,10 @@
 
 @font-face {
     font-family: 'Wotfard';
-    src: url('/assets/fonts/wotfard-semibold.woff2') format('woff2');
+    src: url('/assets/fonts/wotfard-semibold-subset.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
-    font-display: fallback;
+    font-display: block;
 }
 
 @font-face {
