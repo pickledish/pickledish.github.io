@@ -28,7 +28,11 @@ Then, run the following to generate the list of glyphs actually necessary:
 $ glyphhanger 'http://127.0.0.1:4000/' --spider --spider-limit=5 --onlyVisible
 ```
 
-And then, cd'd to `assets/fonts/`:
+This site was useful for interpreting the ranges output by the above:
+
+* https://www.zachleat.com/unicode-range-interchange/
+
+Anyway, then, cd'd to `assets/fonts/`:
 
 ```bash
 $ glyphhanger --whitelist='ABOVE OUTPUT' --subset=wotfard-extralight.woff2
