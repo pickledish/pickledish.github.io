@@ -6,9 +6,11 @@ permalink: /about/
 
 **The short version**:
 
-* 2014 to 2018, studied (degrees in math and CS) at [University of Rochester](https://www.rochester.edu)
-* 2018 to 2020, worked on distributed query execution at [ActionIQ](https://www.actioniq.com) in Manhattan
-* 2020 to 2023, worked on site reliability at [Datadog](https://www.datadoghq.com) in Manhattan
+* 2014 to 2018, studied (degrees in math and CS) at [University of Rochester](https://www.rochester.edu/)
+* 2018 to 2020, worked on distributed query execution at [ActionIQ](https://www.actioniq.com/) in Manhattan
+* 2020 to 2023, worked on site reliability at [Datadog](https://www.datadoghq.com/) in Manhattan
+* 2024 to 2025, worked on the Python backend at [Doist](https://doist.com/) remote
+* 2025 to now, working on infra and reliability at [Graphite](https://graphite.dev/) in Manhattan
 
 **A few paragraphs more**:
 
