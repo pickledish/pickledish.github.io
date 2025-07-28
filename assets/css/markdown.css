@@ -103,3 +103,39 @@ tr:nth-of-type(even) {
     background-color: #525252;
   }
 }*/
+
+
+/* adds a nice little fade between screens */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* uncomment below for customizations?
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+::view-transition-old(root) {
+  animation: 0.2s linear both fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 0.2s linear both fade-in;
+  animation-delay: 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+*/
