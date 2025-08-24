@@ -13,7 +13,7 @@
         "bundle install",
       ],
       "dev": [
-        "tailwindcss -o assets/css/tailwind.css && bundle exec jekyll serve --no-watch --drafts",
+        "tailwindcss -o assets/css/tailwind.css && bundle exec jekyll serve --drafts",
       ],
       "build": [
         "tailwindcss -o assets/css/tailwind.css --minify",
