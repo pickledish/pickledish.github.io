@@ -70,9 +70,11 @@ blockquote {
 
 img {
   margin: 28px auto 28px auto;
-  filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.8));
 }
 
+.shadow {
+  filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.8));
+}
 
 @media only screen and (min-width: 600px) {
   .halfwidthimage {
