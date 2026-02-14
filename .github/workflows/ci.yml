@@ -7,7 +7,7 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v2
     - name: Install devbox
-      uses: jetify-com/devbox-install-action@v0.11.0
+      uses: jetify-com/devbox-install-action@v0.14.0
     - name: Ruby install
       run: devbox install
     - name: Bundle install
