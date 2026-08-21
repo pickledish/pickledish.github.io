@@ -12,7 +12,7 @@ I built it for me, but it wasn't very much work to also build it for you, so I a
 
 You visit once a month with statements from all your bank accounts, and Cheapskate parses the individual investments from each one to track your holdings over time. More importantly, you assign an asset class to each, and define a target portfolio composition, so the tool can help you diversify according to your own unique goals.
 
-I'm proud of it, and so I wanted to share a little here about how it came to be, what it is today, and where it's going soon!
+I'm proud of it, and so I wanted to share a little here about how it came to be, what it is today, and where it's going next!
 
 ## Origin Story
 
@@ -22,21 +22,25 @@ Turns out, that's easier in theory than in practice. What happens when you have 
 
 I think this is the point some people might get a money-manager. But not this guy!
 
-I just in general dislike outsourcing problems like this, and besides, this concept isn't _difficult_, just the math is. foo
+I just in general dislike outsourcing problems like this, and besides, this _concept_ isn't difficult, just the math is. Software is great at doing hard math. I'm a software developer. I think we can make something happen here?
+
+My original concept was quite different from where we ended up, and quite simpler -- just use [Plaid](https://plaid.com/) or something to connect to a user's accounts and pull holdings for each, then aggregate with a few pie charts to help them make rebalancing decisions. Easy! But, apparently the "pull holdings" part is... special? And really expensive? Like, the "contact sales" kind of expensive; I saw reports of minimums being in the hundreds of dollars per month, of course an outlandish sum for an open-source app I wanted to offer for free.
+
+So, I had to do something different, and the current Cheapskate was born!
 
 ## Architecture
 
 The Cheapskate architecture is super simple, and (not coincidentally) also my favorite format for software :)
 
-It's a "backend-free" web app, which means it is just a static bundle thrown onto Bunny CDN (though any web host will work fine here), plus a database that the frontend talks with directly via e.g. PostgREST (Firebase and Supabase are the main picks here, and Cheapskate uses the latter one).
+It's a "backend-free" web app, which means it is just a static bundle thrown onto Bunny CDN (though any web host will work fine here), plus a database that the frontend talks with directly via e.g. PostgREST (Firebase and Supabase are the usual picks here, and Cheapskate uses the latter one).
 
 I've always felt this is the ideal shape for a one-person software project to take:
 
-* It is extremely cheap, since static site hosting is pennies and Firebase/Supabase both have generous free tiers
-* The codebase stays small and easy to work on, since [all of the boilerplate / fiddly parts (all auth, request/response lifecycles) are abstracted away]
-* It is zero operational burden, since there are no servers, no Docker images, no blue/green deployments, stuff like that
+* It is extremely cheap, since static site hosting costs pennies, and Firebase/Supabase both have generous free tiers for their DBs
+* The codebase stays small and focused, since all that fiddly unrelated-to-my-app-but-must-be-set-up-perfectly stuff (like auth, CORS, load balancer health checks, Helm charts, etc) simply doesn't exist
+* It is zero operational burden, since there are no servers to manage, no Docker images to build, no blue/green deployments to watch, stuff like that
 
-There is some functionality already that can't fit into this simplistic model. For example, both the PDF-parsing and account-deletion bits require secret credentials (an OpenRouter API key and the Supabase service key respectively) that can't be published, and so Cheapskate uses a couple of edge functions for those. Future functionality might lean on more of them.
+There is some functionality already that can't fit into this simplistic model. For example, both the PDF-parsing and account-deletion bits require secret credentials (an OpenRouter API key and the Supabase service key respectively) that can't be published, and so Cheapskate uses a couple of [Edge Functions](https://supabase.com/docs/guides/functions) for those. Future functionality might lean on more of them.
 
 Still, the system has been very pleasant and functional to develop so far!
 
@@ -58,14 +62,21 @@ It isn't truly append-only (Cheapskate does support deleting an update as a mean
 
 ## LLM Stuff
 
-The coolest part of Cheapskate, to me, is its integration with LLMs -- and in particular, how small LLMs have gotten smart enough that
+The most interesting part of Cheapskate, to me, is how it leverages LLMs, turning a task that would've been difficult-to-impossible a few years ago into something that can be done on a mid-spec laptop today.
 
-The upload-statement flow leverages LLMs in structured-output mode to parse holdings from arbitrary statements. This means we don't need to know anything in advance about the format or ____ of your bank statement to pull out JSON with the data we need, and it should work for (ideally) statements from any institution. This is all still kind of miraculous to me, and I imagine the recency at which this became possible is why (at least as far as I'm aware) we haven't seen anything like Cheapskate yet.
+The LLM integration is what enables the app to parse any statement, from any bank, into a list of investment holdings. For this, the "upload statement" flow uses the structured-output mode that's provided by any OpenAI-compatible LLM API (and has actually existed for a pretty long time, [over 2 years](https://openai.com/index/introducing-structured-outputs-in-the-api/) now). It's a great feature for incorporating isolated bits of AI magic in more "normal" applications, and I wish it got more love!
+
+(image)
 
 This did take some experimentation to get right. For example:
 
-* trying with (a "vision language model", just an LLM with an image encoder), 
-* thinking vs structured output
+* Did you know LLMs can't actually read PDFs? They can read text and sometimes images, and a PDF is neither, so when you upload one to ChatGPT or whatever, they're converting it behind the scenes. Cheapskate v0.1 converted the PDF to an image (and thus required a VLM, a "vision language model", just an LLM with image encoder), under the impression that statements often include weirdness like graphs and multi-column layouts which would be better understood as an image. Totally wrong! It turns out `getTextContent` from [pdf.js](https://mozilla.github.io/pdf.js/) giving extracted text + coordinates from the PDF, while inscrutable to a human, ends up both more accurate and more token-efficient for an LLM.
+
+* There's also a snag using structured output here, in that it's incompatible with reasoning, at least today. This kind of makes sense; from what I understand, structured-output mode constrains the tokens the LLM is able to predict to those which are valid JSON + match the provided schema, right? And a reasoning block is just prose, not JSON, and so can't be generated. Still, this feels like a bug to me, and I hope it's fixed! In the meantime its effect on Cheapskate wasn't great; while large LLMs are smart enough to figure out the answer entirely in [latent reasoning](https://arxiv.org/abs/2507.06203) / "[J-space](https://www.anthropic.com/research/global-workspace)", laptop-scale ones kinda need the help from a little thinking time!
+
+I was able to sort out the latter issue above with a two-step approach -- in one prompt, include the PDF and just ask the LLM to extract the information as regular text, and then a follow-up prompt to ask it to render that same information as JSON in structured-output mode -- which works well (and doesn't incur much latency thanks to the prompt cache).
+
+In the end, we have an approach where a model as small as 4B params can accurately process a 10-page statement (a task that takes under 30 seconds on my base M5 Macbook), which I'm really happy with!
 
 ## Sharing and Security
 
