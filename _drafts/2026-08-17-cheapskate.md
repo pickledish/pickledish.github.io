@@ -76,6 +76,43 @@ This did take some experimentation to get right. For example:
 
 I was able to sort out the latter issue above with a two-step approach -- in one prompt, include the PDF and just ask the LLM to extract the information as regular text, and then a follow-up prompt to ask it to render that same information as JSON in structured-output mode -- which works well (and doesn't incur much latency thanks to the prompt cache).
 
+```sh
+0.10.670.730 | task -1 | selected slot by LRU, t_last = -1
+0.10.670.803 | task 0 | processing task, is_child = 0
+0.14.498.893 | task 0 | prompt processing, n_tokens =   4096, progress = 0.37, t =   3.83 s / 1070.16 tokens per second
+0.16.809.878 | task 0 | prompt processing, n_tokens =   6144, progress = 0.55, t =   6.14 s / 1000.91 tokens per second
+0.19.321.574 | task 0 | prompt processing, n_tokens =   8192, progress = 0.73, t =   8.65 s / 947.04 tokens per second
+0.22.040.675 | task 0 | prompt processing, n_tokens =  10240, progress = 0.92, t =  11.37 s / 900.68 tokens per second
+0.22.759.556 | task 0 | prompt processing, n_tokens =  10666, progress = 0.95, t =  12.09 s / 882.35 tokens per second
+0.23.435.485 | task 0 | prompt processing, n_tokens =  11178, progress = 1.00, t =  12.76 s / 875.74 tokens per second
+0.27.549.492 | task 0 | n_decoded =    100, tg =  30.09 t/s, tg_3s =  30.09 t/s
+0.30.568.207 | task 0 | n_decoded =    190, tg =  29.96 t/s, tg_3s =  29.81 t/s
+0.33.592.257 | task 0 | n_decoded =    280, tg =  29.89 t/s, tg_3s =  29.76 t/s
+0.36.620.529 | task 0 | n_decoded =    370, tg =  29.85 t/s, tg_3s =  29.72 t/s
+0.39.651.894 | task 0 | n_decoded =    460, tg =  29.82 t/s, tg_3s =  29.69 t/s
+0.42.660.432 | task 0 | n_decoded =    549, tg =  29.78 t/s, tg_3s =  29.58 t/s
+0.45.691.565 | task 0 | n_decoded =    639, tg =  29.77 t/s, tg_3s =  29.69 t/s
+0.48.697.697 | task 0 | n_decoded =    728, tg =  29.75 t/s, tg_3s =  29.61 t/s
+0.51.713.755 | task 0 | n_decoded =    817, tg =  29.72 t/s, tg_3s =  29.51 t/s
+0.52.834.432 | task 0 | prompt eval time =   13554.50 ms / 11182 tokens (    1.21 ms per token,   824.97 tokens per second)
+0.52.834.434 | task 0 |        eval time =   28608.49 ms /   850 tokens (   33.66 ms per token,    29.71 tokens per second)
+0.52.834.434 | task 0 |       total time =   42162.99 ms / 12032 tokens
+0.52.834.435 | task 0 |    graphs reused =        846
+0.52.834.974 | task 0 | stop processing: n_tokens = 12031, truncated = 0
+0.52.860.873 | task -1 | selected slot by LCP similarity, f_sim_best = 0.928 (> 0.100 thold), f_keep = 0.929
+0.52.861.010 | task 858 | processing task, is_child = 0
+0.57.776.019 | task 858 | n_decoded =    100, tg =  29.08 t/s, tg_3s =  29.08 t/s
+1.00.790.127 | task 858 | n_decoded =    188, tg =  29.14 t/s, tg_3s =  29.20 t/s
+1.03.802.116 | task 858 | n_decoded =    276, tg =  29.16 t/s, tg_3s =  29.22 t/s
+1.06.816.155 | task 858 | n_decoded =    364, tg =  29.17 t/s, tg_3s =  29.20 t/s
+1.09.831.335 | task 858 | n_decoded =    452, tg =  29.17 t/s, tg_3s =  29.19 t/s
+1.10.622.806 | task 858 | prompt eval time =    1476.09 ms /   868 tokens (    1.70 ms per token,   588.04 tokens per second)
+1.10.622.809 | task 858 |        eval time =   16285.29 ms /   473 tokens (   34.43 ms per token,    29.04 tokens per second)
+1.10.622.809 | task 858 |       total time =   17761.38 ms /  1341 tokens
+1.10.622.809 | task 858 |    graphs reused =       1316
+1.10.623.069 | task 858 | stop processing: n_tokens = 12518, truncated = 0
+```
+
 In the end, we have an approach where a model as small as 4B params can accurately process a 10-page statement (a task that takes under 30 seconds on my base M5 Macbook), which I'm really happy with!
 
 ## Sharing and Security

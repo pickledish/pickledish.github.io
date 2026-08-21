@@ -5,7 +5,7 @@ body {
   font-family: "Wotfard", "Avenir Medium", "Avenir Next Medium", "Avenir Next LT Pro", "Montserrat", sans-serif;
 }
 
-code, pre {
+code {
   font-family: "Roboto Mono", "Consolas", monospace;
   font-size: 14px;
   background-color: #e5e5e5;
@@ -13,9 +13,38 @@ code, pre {
   padding: 1px 3px 1px 3px;
 }
 
+pre {
+  font-family: "Roboto Mono", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #f7f4ef;
+  border: 1px solid #d6d3d1;
+  border-radius: 6px;
+  padding: 20px 24px;
+  overflow-x: auto;
+  tab-size: 4;
+  -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+div.highlight {
+  background: none;
+}
+
 @media (prefers-color-scheme: dark) {
-  code, pre {
+  code {
     background-color: #525252;
+  }
+
+  pre {
+    background-color: #241e1a;
+    border-color: #3f3832;
   }
 }
 

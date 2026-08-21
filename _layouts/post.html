@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/css/tailwind.css">
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/markdown.css">
+  <link rel="stylesheet" href="/assets/css/syntax.css">
   <link rel="alternate" href="/feed.xml" type="application/rss+xml">
   <link rel="preload" href="/assets/fonts/wotfard-extralight-subset.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/wotfard-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
@@ -36,7 +37,7 @@
       </div>
     </div>
     <!-- CONTENT -->
-    <div class="w-full max-w-[692px] my-12">
+    <div class="w-full max-w-[692px] min-w-0 my-12">
       <div class="text-5xl font-light leading-tight text-center mb-4">{{ page.title }}</div>
       {% if page.subtitle %}
       <div class="text-center mb-4">{{ page.subtitle }}</div>
