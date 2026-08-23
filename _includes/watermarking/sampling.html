@@ -3,15 +3,11 @@
     <div class="card-heading">
       <div>
         <p class="kicker">Sampling</p>
-        <h3>Draw a random number on those intervals</h3>
+        <h3 id="stage1-heading" aria-live="polite">
+          “My favorite fruit is <span class="sampled-token is-blank" id="stage1-token">…</span>”
+        </h3>
       </div>
     </div>
-
-    <p class="card-note">
-      Each token owns a slice of the unit interval, sized by its probability.
-      A uniform draw between 0 and 1 lands in exactly one slice, and that
-      slice’s token is the sample.
-    </p>
 
     <div class="interval-track" id="stage1-track">
       <div class="interval mango" style="width: 65%"></div>
@@ -29,10 +25,5 @@
     <button class="button button-primary" id="sample-one" type="button">
       Draw a random number
     </button>
-
-    <div class="result-sentence" id="stage1-result" aria-live="polite">
-      <span>Waiting for a draw</span>
-      <strong>—</strong>
-    </div>
   </div>
 </div>

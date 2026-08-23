@@ -42,13 +42,14 @@
     const button = $("#sample-one");
     const marker = $("#stage1-marker");
     const markerLabel = $("#stage1-marker-label");
-    const result = $("#stage1-result");
-    if (!button || !marker || !markerLabel || !result) return;
+    const tokenEl = $("#stage1-token");
+    if (!button || !marker || !markerLabel || !tokenEl) return;
 
     button.addEventListener("click", async () => {
       const { token, draw } = sampleToken();
       placeDraw(marker, markerLabel, draw);
-      result.innerHTML = `<span>${draw.toFixed(3)} lands in the ${token.label} interval</span><strong>“${token.label}”</strong>`;
+      tokenEl.textContent = token.label;
+      tokenEl.className = `sampled-token ${token.id}`;
       button.disabled = true;
       await wait(540);
       button.disabled = false;
