@@ -60,6 +60,8 @@ P("mango") = P("mango" is sampled first) * P(coin is heads) +
            = 65%
 ```
 
+So yes we've just made it convoluted for no reason but BEAR WITH ME!
+
 ## stage 3: The 'g' Function
 
 Now, the real watermarking begins here in Stage 3.
@@ -70,19 +72,15 @@ Other than that, the process is exactly the same as in Stage 2, as you can see:
 
 [exact same widget as in stage 2, but with coin replaced by `g`]
 
-So, the only question is -- what is this `g` function, and which tokens does it prefer?
+So, the question is -- what is this `g` function, and when does it prefer one token over another?
 
 use the prev 4 tokens + secret key to make a hash, give 2 candidates a 0 or 1 score based on parity with hash or whatever
 
 [widget demonstrating this, tokens -> 0 or 1 score]
 
-then -- if both are 0 or both are 1, just pick at random, otherwise, choose the 1
-
-[widget demonstrating this]
-
 two KEY THINGS to note here!!
 
-1. without secret key, hash is indistinguishable from random noise => indistinguishable from stage 1
+1. without secret key, hash is indistinguishable from random noise => indistinguishable from stage 2
 2. however, we ARE distorting the probability distribution here -- show table or something:
 
 if candidates are A and B, say, A with 80% probability and B with 5% probability per vanilla logprobs
