@@ -37,6 +37,15 @@ div.highlight {
   background: none;
 }
 
+pre,
+.highlighter-rouge {
+  margin: 28px 0;
+}
+
+.highlighter-rouge pre {
+  margin: 0;
+}
+
 @media (prefers-color-scheme: dark) {
   code {
     background-color: #525252;
@@ -52,7 +61,7 @@ div.highlight {
   color: #ba8c2a;
 }
 
-p, blockquote, ul, ol, dl, table, pre, article {
+p, blockquote, ul, ol, dl, table, article {
   margin: 12px 0 18px 0;
 }
 

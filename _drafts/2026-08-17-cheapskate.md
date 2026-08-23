@@ -42,7 +42,7 @@ I've always felt this is the ideal shape for a one-person software project to ta
 
 There is some functionality already that can't fit into this simplistic model. For example, both the PDF-parsing and account-deletion bits require secret credentials (an OpenRouter API key and the Supabase service key respectively) that can't be published, and so Cheapskate uses a couple of [Edge Functions](https://supabase.com/docs/guides/functions) for those. Future functionality might lean on more of them.
 
-Still, the system has been very pleasant and functional to develop so far!
+The system has been very pleasant and functional to develop so far!
 
 ## Data Model
 
@@ -60,7 +60,7 @@ It also means we get statement backfills and a complete audit log essentially fo
 
 It isn't truly append-only (Cheapskate does support deleting an update as a means of undoing a mistake) but the benefits are the same, and it also makes it easy to reason about how new kinds of updates should work.
 
-## LLM Stuff
+## AI Stuff
 
 The most interesting part of Cheapskate, to me, is how it leverages LLMs, turning a task that would've been difficult-to-impossible a few years ago into something that can be done on a mid-spec laptop today.
 
@@ -72,48 +72,29 @@ This did take some experimentation to get right. For example:
 
 * Did you know LLMs can't actually read PDFs? They can read text and sometimes images, and a PDF is neither, so when you upload one to ChatGPT or whatever, they're converting it behind the scenes. Cheapskate v0.1 converted the PDF to an image (and thus required a VLM, a "vision language model", just an LLM with image encoder), under the impression that statements often include weirdness like graphs and multi-column layouts which would be better understood as an image. Totally wrong! It turns out `getTextContent` from [pdf.js](https://mozilla.github.io/pdf.js/) giving extracted text + coordinates from the PDF, while inscrutable to a human, ends up both more accurate and more token-efficient for an LLM.
 
-* There's also a snag using structured output here, in that it's incompatible with reasoning, at least today. This kind of makes sense; from what I understand, structured-output mode constrains the tokens the LLM is able to predict to those which are valid JSON + match the provided schema, right? And a reasoning block is just prose, not JSON, and so can't be generated. Still, this feels like a bug to me, and I hope it's fixed! In the meantime its effect on Cheapskate wasn't great; while large LLMs are smart enough to figure out the answer entirely in [latent reasoning](https://arxiv.org/abs/2507.06203) / "[J-space](https://www.anthropic.com/research/global-workspace)", laptop-scale ones kinda need the help from a little thinking time!
+* There's also a snag using structured output here, in that it's incompatible with reasoning, at least today. This kind of makes sense; from what I understand, structured-output mode constrains the tokens the LLM is able to predict to those which are valid JSON + match the provided schema, right? And a reasoning block is just prose, not JSON, and so can't be generated. Still, this feels like a bug to me, and I hope it's fixed! In the meantime its effect on Cheapskate wasn't great; while large LLMs are smart enough to figure out the answer entirely in [latent reasoning](https://arxiv.org/abs/2507.06203) / "[J-space](https://www.anthropic.com/research/global-workspace)", laptop-scale ones kinda need the help from a little thinking time.
 
 I was able to sort out the latter issue above with a two-step approach -- in one prompt, include the PDF and just ask the LLM to extract the information as regular text, and then a follow-up prompt to ask it to render that same information as JSON in structured-output mode -- which works well (and doesn't incur much latency thanks to the prompt cache).
 
 ```sh
-0.10.670.730 | task -1 | selected slot by LRU, t_last = -1
-0.10.670.803 | task 0 | processing task, is_child = 0
-0.14.498.893 | task 0 | prompt processing, n_tokens =   4096, progress = 0.37, t =   3.83 s / 1070.16 tokens per second
-0.16.809.878 | task 0 | prompt processing, n_tokens =   6144, progress = 0.55, t =   6.14 s / 1000.91 tokens per second
-0.19.321.574 | task 0 | prompt processing, n_tokens =   8192, progress = 0.73, t =   8.65 s / 947.04 tokens per second
-0.22.040.675 | task 0 | prompt processing, n_tokens =  10240, progress = 0.92, t =  11.37 s / 900.68 tokens per second
-0.22.759.556 | task 0 | prompt processing, n_tokens =  10666, progress = 0.95, t =  12.09 s / 882.35 tokens per second
-0.23.435.485 | task 0 | prompt processing, n_tokens =  11178, progress = 1.00, t =  12.76 s / 875.74 tokens per second
-0.27.549.492 | task 0 | n_decoded =    100, tg =  30.09 t/s, tg_3s =  30.09 t/s
-0.30.568.207 | task 0 | n_decoded =    190, tg =  29.96 t/s, tg_3s =  29.81 t/s
-0.33.592.257 | task 0 | n_decoded =    280, tg =  29.89 t/s, tg_3s =  29.76 t/s
-0.36.620.529 | task 0 | n_decoded =    370, tg =  29.85 t/s, tg_3s =  29.72 t/s
-0.39.651.894 | task 0 | n_decoded =    460, tg =  29.82 t/s, tg_3s =  29.69 t/s
-0.42.660.432 | task 0 | n_decoded =    549, tg =  29.78 t/s, tg_3s =  29.58 t/s
-0.45.691.565 | task 0 | n_decoded =    639, tg =  29.77 t/s, tg_3s =  29.69 t/s
-0.48.697.697 | task 0 | n_decoded =    728, tg =  29.75 t/s, tg_3s =  29.61 t/s
-0.51.713.755 | task 0 | n_decoded =    817, tg =  29.72 t/s, tg_3s =  29.51 t/s
-0.52.834.432 | task 0 | prompt eval time =   13554.50 ms / 11182 tokens (    1.21 ms per token,   824.97 tokens per second)
-0.52.834.434 | task 0 |        eval time =   28608.49 ms /   850 tokens (   33.66 ms per token,    29.71 tokens per second)
-0.52.834.434 | task 0 |       total time =   42162.99 ms / 12032 tokens
-0.52.834.435 | task 0 |    graphs reused =        846
-0.52.834.974 | task 0 | stop processing: n_tokens = 12031, truncated = 0
-0.52.860.873 | task -1 | selected slot by LCP similarity, f_sim_best = 0.928 (> 0.100 thold), f_keep = 0.929
-0.52.861.010 | task 858 | processing task, is_child = 0
-0.57.776.019 | task 858 | n_decoded =    100, tg =  29.08 t/s, tg_3s =  29.08 t/s
-1.00.790.127 | task 858 | n_decoded =    188, tg =  29.14 t/s, tg_3s =  29.20 t/s
-1.03.802.116 | task 858 | n_decoded =    276, tg =  29.16 t/s, tg_3s =  29.22 t/s
-1.06.816.155 | task 858 | n_decoded =    364, tg =  29.17 t/s, tg_3s =  29.20 t/s
-1.09.831.335 | task 858 | n_decoded =    452, tg =  29.17 t/s, tg_3s =  29.19 t/s
-1.10.622.806 | task 858 | prompt eval time =    1476.09 ms /   868 tokens (    1.70 ms per token,   588.04 tokens per second)
-1.10.622.809 | task 858 |        eval time =   16285.29 ms /   473 tokens (   34.43 ms per token,    29.04 tokens per second)
-1.10.622.809 | task 858 |       total time =   17761.38 ms /  1341 tokens
-1.10.622.809 | task 858 |    graphs reused =       1316
-1.10.623.069 | task 858 | stop processing: n_tokens = 12518, truncated = 0
+# first prompt, parsing PDF => long prompt eval
+prompt eval time = 13554.50 ms / 11182 tokens ( 1.21 ms/tok, 824.97 tok/sec)
+       eval time = 28608.49 ms /   850 tokens (33.66 ms/tok,  29.71 tok/sec)
+      total time = 42162.99 ms / 12032 tokens
+   graphs reused = 846
+stop processing: n_tokens = 12031, truncated = 0
 ```
 
-In the end, we have an approach where a model as small as 4B params can accurately process a 10-page statement (a task that takes under 30 seconds on my base M5 Macbook), which I'm really happy with!
+```sh
+# second prompt, outputting JSON => cache is reused
+prompt eval time =  1476.09 ms /  868 tokens ( 1.70 ms/tok, 588.04 tok/sec)
+       eval time = 16285.29 ms /  473 tokens (34.43 ms/tok,  29.04 tok/sec)
+      total time = 17761.38 ms / 1341 tokens
+   graphs reused = 1316
+stop processing: n_tokens = 12518, truncated = 0
+```
+
+In the end, we have an approach where a model as small as 4B params can accurately process a 10-page statement (a task that takes under 60 seconds on my base M5 Macbook), which I'm really happy with!
 
 ## Sharing and Security
 
@@ -141,4 +122,16 @@ To make these suggestions actionable / not annoying, we'll need to pull in some 
 
 I've been putting this off so far since it'll require some background service, or cron-triggered edge function, to actually update the prices, and likely some kind of integration with a finance API to get that data, which, I don't know how expensive that'll be. Still, it's a "soon" thing, and will (in my opinion) greatly improve the usefulness of the site.
 
-In addition, ____
+I'm also really interested in seeing how I can make the local-AI angle of Cheapskate have less friction. Right now, there's sadly a pretty high technical barrier to entry, even aside from the hardware requirements:
+
+* You need to know what an appropriate model _is_, and have downloaded one
+* You need to be serving that model on a local port (text logs above are `llama-server`)
+* You need to be using Chrome or Firefox (Safari considers `localhost` [insecure](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Mixed_content#browser_compatibility))
+* You need to allow the mildly-suspicious permissions prompt below
+* Most importantly, you need to know what you can expect from your hardware -- what are models you can fit (maybe quantized? To what extent? Do you need to close apps?), what should your prompt-processing or token-generation speeds be (can you process 10 pages worth of tokens in a reasonable amount of time?) -- otherwise, you're setting yourself up for a bad experience
+
+<img src="/assets/cheapskate/permission.png">
+
+I want for this to be easier to get right, guide users into the [pit of success](https://blog.codinghorror.com/falling-into-the-pit-of-success/), such that we could normalize local AI and have more people build apps like Cheapskate that rely on it.
+
+Maybe someday soon!
