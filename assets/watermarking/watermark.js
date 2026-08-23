@@ -38,6 +38,40 @@
     marker.style.left = `${Math.min(draw * 100, 99.7)}%`;
   }
 
+  function hideDraw(marker) {
+    marker.hidden = true;
+  }
+
+  function tokenStyle(token) {
+    return `--token-color: var(--${token.id})`;
+  }
+
+  function clearCandidateState(element) {
+    element.classList.remove("placeholder", "winner", "loser", "drawing");
+  }
+
+  function resetCandidate(element) {
+    clearCandidateState(element);
+    element.classList.add("placeholder");
+    element.textContent = "?";
+    element.style.cssText = "";
+  }
+
+  function fillCandidate(element, token) {
+    clearCandidateState(element);
+    element.textContent = token.label;
+    element.style.cssText = tokenStyle(token);
+    void element.offsetWidth;
+    element.classList.add("drawing");
+  }
+
+  function markWinner(winnerElement, loserElement) {
+    winnerElement.classList.remove("drawing");
+    loserElement.classList.remove("drawing");
+    winnerElement.classList.add("winner");
+    loserElement.classList.add("loser");
+  }
+
   function setupStageOne() {
     const button = $("#sample-one");
     const marker = $("#stage1-marker");
@@ -56,8 +90,78 @@
     });
   }
 
+  function setupStageTwo() {
+    const button = $("#sample-two");
+    const candidateA = $("#stage2-candidate-a");
+    const candidateB = $("#stage2-candidate-b");
+    const coin = $("#stage2-coin");
+    const tokenEl = $("#stage2-token");
+    const panelA = $("#stage2-panel-a");
+    const panelB = $("#stage2-panel-b");
+    const markerA = $("#stage2-marker-a");
+    const markerB = $("#stage2-marker-b");
+    const markerALabel = $("#stage2-marker-a-label");
+    const markerBLabel = $("#stage2-marker-b-label");
+    if (
+      !button ||
+      !candidateA ||
+      !candidateB ||
+      !coin ||
+      !tokenEl ||
+      !panelA ||
+      !panelB ||
+      !markerA ||
+      !markerB ||
+      !markerALabel ||
+      !markerBLabel
+    ) {
+      return;
+    }
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      tokenEl.textContent = "…";
+      tokenEl.className = "sampled-token is-blank";
+      resetCandidate(candidateA);
+      resetCandidate(candidateB);
+      hideDraw(markerA);
+      hideDraw(markerB);
+      panelA.classList.remove("active");
+      panelB.classList.remove("active");
+      coin.classList.remove("flipping-a", "flipping-b");
+      void coin.offsetWidth;
+
+      panelA.classList.add("active");
+      const sampleA = sampleToken();
+      placeDraw(markerA, markerALabel, sampleA.draw);
+      await wait(560);
+      fillCandidate(candidateA, sampleA.token);
+      await wait(650);
+
+      panelA.classList.remove("active");
+      panelB.classList.add("active");
+      const sampleB = sampleToken();
+      placeDraw(markerB, markerBLabel, sampleB.draw);
+      await wait(560);
+      fillCandidate(candidateB, sampleB.token);
+      await wait(700);
+
+      panelB.classList.remove("active");
+      const chooseA = randomUnit() < 0.5;
+      coin.classList.add(chooseA ? "flipping-a" : "flipping-b");
+      await wait(720);
+
+      const winner = chooseA ? sampleA.token : sampleB.token;
+      markWinner(chooseA ? candidateA : candidateB, chooseA ? candidateB : candidateA);
+      tokenEl.textContent = winner.label;
+      tokenEl.className = `sampled-token ${winner.id}`;
+      button.disabled = false;
+    });
+  }
+
   function init() {
     setupStageOne();
+    setupStageTwo();
   }
 
   if (document.readyState === "loading") {

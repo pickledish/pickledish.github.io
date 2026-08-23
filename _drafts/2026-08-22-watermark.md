@@ -48,7 +48,7 @@ Instead of just sampling one token from the LLM's distribution and emitting that
 
 You can try out this modified sampling process yourself:
 
-[widget for sampling 2 tokens from the model and then picking one randomly]
+{% include watermarking/coin-flip.html %}
 
 The important thing to note here is that this is _perfectly equivalent_ to Stage 1 in terms of outcome. Despite the extra steps here, we haven't changed the model's outputs in any way yet, as you can see when we take "mango" as an example:
 
