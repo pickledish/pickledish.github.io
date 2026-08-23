@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/markdown.css">
   <link rel="stylesheet" href="/assets/css/syntax.css">
+  {% for href in page.styles %}
+  <link rel="stylesheet" href="{{ href }}">
+  {% endfor %}
   <link rel="alternate" href="/feed.xml" type="application/rss+xml">
   <link rel="preload" href="/assets/fonts/wotfard-extralight-subset.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/wotfard-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
@@ -53,6 +56,9 @@
       <div>Made with <a href="https://jekyllrb.com">Jekyll</a> &nbsp; | &nbsp; Last updated {{ site.time | date_to_string }}</div>
     </div>
   </div>
+  {% for src in page.scripts %}
+  <script src="{{ src }}" defer></script>
+  {% endfor %}
   {% if site.analytics %}
   <img class="hidden" src="https://willettio.goatcounter.com/count?t={{ page.title | url_encode }}&p={{ page.url }}">
   {% endif %}

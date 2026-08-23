@@ -2,6 +2,10 @@
 layout: post
 title: "Building an Intuition for Watermarking"
 permalink: /posts/watermarking/
+styles:
+  - /assets/watermarking/watermark.css
+scripts:
+  - /assets/watermarking/watermark.js
 ---
 
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
@@ -28,11 +32,11 @@ In short, the token-generation process is to:
 
 So, for a situation where the LLM's next-token probability distribution looks like this:
 
-[non-interactive widget showing example dist, "my favorite fruit is", 65%, 20%, 10%, 5%]
+{% include watermarking/distribution.html %}
 
 Then you can try out the sampling process yourself to get a feel for it:
 
-[widget for generating a number between 0 and 1 and choosing the next token based on that]
+{% include watermarking/sampling.html %}
 
 LLM knobs you may have heard of, like `termperature` and `min-p`, control aspects of this distribution (e.g. how "sharp" it is, or how distinct options there are), but the process we're talking about here is always the same.
 
