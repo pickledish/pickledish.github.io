@@ -8,6 +8,10 @@ scripts:
   - /assets/watermarking/watermark.js
 ---
 
+{% include disclaimer.html content="
+Interactive widgets below are from an LLM, but all text came from the slow and inconsistent token generator that is my brain. Hope you enjoy!
+" %}
+
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
 
 Hm!
@@ -115,7 +119,7 @@ So, remember the "probability distribution" created by the LLM in Stage 1? This 
 
 In the "`g` likes only papaya" case, "papaya" will automatically win any contest it's in. This nearly _doubles_ the chances that the LLM will emit "papaya" as the next token.
 
-But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and so its real chances drop to almost 0%.
+But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and its real chances drop to almost 0%.
 
 {% include disclaimer.html content="
 It's important to note that, when looking across _all_ `g` functions, the effects \"average out\" -- as in, the `g` that loves \"papaya\" turns up exactly as often as the `g` that hates \"papaya\", and so when considering ____[broad/large text generation], the overall likelihood that \"papaya\" is generated is the same as what the LLM would've come up with organically.
@@ -127,7 +131,7 @@ Personally I'm not totally convinced; to me it sounds a bit like you have a bunc
 
 ## Aside: Detection
 
-Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key` is just a fixed string that lives on a post-it note in somebody's desk.
+Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key`, which is just a fixed string that lives on a post-it note in somebody's desk.
 
 What this means is that **we don't need the LLM around to determine if text was watermarked**, we just need the text itself and the secret, and we ourselves can re-run the same calculation `g` is doing. This part was really non-intuitive to me -- I thought I knew how watermarking worked (seeding the LLM's PRNG), but when I dug in I realized that detection would have more or less required the entire context + re-running the LLM 😅
 
@@ -146,8 +150,16 @@ Do you see how, in 3 of those 4 situations, the LLM ends up emitting a token `g`
 
 This means that, in watermarked text, we can expect **75%** of the tokens on average to be `g` preferred tokens, as opposed to only 50% in non-watermarked text. So if we re-run the `g` calculation on some arbitrary text, and keep track of how many tokens
 
-(detection is now possible, widget with example)
+[interactive widget scoring text]
 
-## stage 4: synthid (30 g-functions, 2^30 candidates)
+## Stage 4: SynthID
+
+(30 g-functions, 2^30 candidates)
 
 (skip for now, we'll come fill this in later)
+
+## Fin
+
+note that the other main argument for why this is OK is the 20M gemini test, linked in the anthropic doc too
+
+...shrug

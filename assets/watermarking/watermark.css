@@ -16,8 +16,6 @@
   --track: #edece6;
   --well: #f3f2ec;
   --raised: #ffffff;
-  --arena-tint: rgba(255, 255, 255, 0.4);
-  --arena-rule: rgba(23, 33, 29, 0.035);
   --panel-glow: rgba(56, 103, 232, 0.12);
   --token-shadow: 0 8px 22px rgba(23, 33, 29, 0.07);
   --shadow: 0 18px 50px rgba(25, 33, 29, 0.08);
@@ -446,9 +444,7 @@
   align-items: center;
   margin: 0 0 15px;
   padding: 18px 14px;
-  background:
-    linear-gradient(var(--arena-tint), var(--arena-tint)),
-    repeating-linear-gradient(0deg, transparent 0 30px, var(--arena-rule) 31px);
+  background: var(--well);
   border: 1px solid var(--line);
   border-radius: 17px;
 }
@@ -584,6 +580,7 @@
   font-style: italic;
   font-weight: 700;
   line-height: 1;
+  transform: translate(1px, -4px);
 }
 
 .watermark-widget .g-core.choosing {
@@ -793,8 +790,6 @@
     --track: #3a342f;
     --well: #1a1613;
     --raised: #2c2621;
-    --arena-tint: rgba(0, 0, 0, 0.22);
-    --arena-rule: rgba(245, 240, 232, 0.055);
     --panel-glow: rgba(56, 103, 232, 0.22);
     --token-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
     --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
