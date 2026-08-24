@@ -8,6 +8,7 @@
   --line: #d8d7ce;
   --blue: #3867e8;
   --blue-soft: #e8eeff;
+  --teal: #079b88;
   --mango: #ef7d4d;
   --banana: #e0b332;
   --coconut: #3d9b8d;
@@ -530,6 +531,29 @@
   transform: rotateY(180deg);
 }
 
+.watermark-widget .g-core {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: white;
+  background: var(--teal);
+  border-radius: 14px;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--teal) 28%, transparent);
+}
+
+.watermark-widget .g-core strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.watermark-widget .g-core.choosing {
+  animation: watermark-g-choose 720ms ease;
+}
+
 @keyframes watermark-bar-grow {
   to {
     transform: scaleX(1);
@@ -556,6 +580,24 @@
 @keyframes watermark-coin-flip-b {
   to {
     transform: rotateY(1980deg);
+  }
+}
+
+@keyframes watermark-g-choose {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.9) rotate(-10deg);
+  }
+  50% {
+    transform: scale(1.12) rotate(8deg);
+  }
+  75% {
+    transform: scale(0.96) rotate(-4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -634,5 +676,9 @@
   .watermark-widget .coin.flipping-b {
     animation: none;
     transform: rotateY(1980deg);
+  }
+
+  .watermark-widget .g-core.choosing {
+    animation: none;
   }
 }

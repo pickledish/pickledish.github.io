@@ -74,7 +74,7 @@ We're going to change just one thing from Stage 2, which is the coin flip -- we'
 
 Other than that, the process is exactly the same as in Stage 2, as you can see:
 
-[exact same widget as in stage 2, but with coin replaced by `g`]
+{% include watermarking/g-function.html %}
 
 So, the question is -- what is this `g` function, and when does it prefer one token over another?
 

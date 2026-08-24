@@ -163,9 +163,79 @@
     });
   }
 
+  function setupStageThree() {
+    const button = $("#sample-g");
+    const candidateA = $("#stage3-candidate-a");
+    const candidateB = $("#stage3-candidate-b");
+    const gCore = $("#stage3-g");
+    const tokenEl = $("#stage3-token");
+    const panelA = $("#stage3-panel-a");
+    const panelB = $("#stage3-panel-b");
+    const markerA = $("#stage3-marker-a");
+    const markerB = $("#stage3-marker-b");
+    const markerALabel = $("#stage3-marker-a-label");
+    const markerBLabel = $("#stage3-marker-b-label");
+    if (
+      !button ||
+      !candidateA ||
+      !candidateB ||
+      !gCore ||
+      !tokenEl ||
+      !panelA ||
+      !panelB ||
+      !markerA ||
+      !markerB ||
+      !markerALabel ||
+      !markerBLabel
+    ) {
+      return;
+    }
+
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      tokenEl.textContent = "…";
+      tokenEl.className = "sampled-token is-blank";
+      resetCandidate(candidateA);
+      resetCandidate(candidateB);
+      hideDraw(markerA);
+      hideDraw(markerB);
+      panelA.classList.remove("active");
+      panelB.classList.remove("active");
+      gCore.classList.remove("choosing");
+      void gCore.offsetWidth;
+
+      panelA.classList.add("active");
+      const sampleA = sampleToken();
+      placeDraw(markerA, markerALabel, sampleA.draw);
+      await wait(560);
+      fillCandidate(candidateA, sampleA.token);
+      await wait(650);
+
+      panelA.classList.remove("active");
+      panelB.classList.add("active");
+      const sampleB = sampleToken();
+      placeDraw(markerB, markerBLabel, sampleB.draw);
+      await wait(560);
+      fillCandidate(candidateB, sampleB.token);
+      await wait(700);
+
+      panelB.classList.remove("active");
+      const chooseA = randomUnit() < 0.5;
+      gCore.classList.add("choosing");
+      await wait(720);
+
+      const winner = chooseA ? sampleA.token : sampleB.token;
+      markWinner(chooseA ? candidateA : candidateB, chooseA ? candidateB : candidateA);
+      tokenEl.textContent = winner.label;
+      tokenEl.className = `sampled-token ${winner.id}`;
+      button.disabled = false;
+    });
+  }
+
   function init() {
     setupStageOne();
     setupStageTwo();
+    setupStageThree();
   }
 
   if (document.readyState === "loading") {
