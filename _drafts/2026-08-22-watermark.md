@@ -38,7 +38,7 @@ Then you can try out the sampling process yourself to get a feel for it:
 
 {% include watermarking/sampling.html %}
 
-LLM knobs you may have heard of, like `termperature` and `min-p`, control aspects of this distribution (e.g. how "sharp" it is, or how distinct options there are), but the process we're talking about here is always the same.
+LLM knobs you may have heard of, like `temperature` and `min-p`, control aspects of this distribution (e.g. how "sharp" it is, or how many distinct options there are), but the process we're talking about here is always the same.
 
 ## Stage 2: Sample Two Tokens
 
@@ -50,7 +50,7 @@ You can try out this modified sampling process yourself:
 
 {% include watermarking/coin-flip.html %}
 
-The important thing to note here is that this is _perfectly equivalent_ to Stage 1 in terms of outcome. Despite the extra steps here, we haven't changed the model's outputs in any way yet, as you can see when we take "mango" as an example:
+The important thing to note here is that this is _perfectly equivalent_ to Stage 1 in terms of the outcome. Despite the extra steps here, we have not changed the model's outputs in any way yet, as you can see when we take "mango" as an example:
 
 ```sh
 # Stage 1
@@ -78,8 +78,10 @@ Other than that, the process is exactly the same as in Stage 2, as you can see:
 
 So, the question is -- what is this `g` function, and when does it prefer one token over another?
 
-1. hash(myfavoritefruitis-SECRETKEY-mango)
-2. g likes it if it's even
+Fortunately it is pretty simple! Essentially:
+
+* `g` calculates `hash(previous_4_tokens + secret_key + candidate_token)`
+* `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
 [widget demonstrating this, tokens -> 0 or 1 score]
 
@@ -109,7 +111,7 @@ When `g` likes "mango", ____.
 It's important to note that, when looking across 
 From my understanding, some of the \"watermarking does not impact model quality\" argument stems from this fact.
 
-Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give each one either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_...
+Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_...
 
 But did each customer actually get what they were expecting?
 " %}
