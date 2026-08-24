@@ -160,6 +160,11 @@
   transform: scaleX(0);
   transform-origin: left;
   animation: watermark-bar-grow 800ms ease forwards;
+  transition: width 450ms ease;
+}
+
+.watermark-widget .distortion-list .probability-row {
+  grid-template-columns: 95px minmax(0, 1fr) 58px;
 }
 
 .watermark-widget .probability-value {
@@ -328,6 +333,35 @@
   cursor: wait;
   opacity: 0.7;
   transform: none;
+}
+
+.watermark-widget .button-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.watermark-widget .button-toggle {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 10px;
+  color: var(--ink);
+  background: var(--well);
+  border-color: var(--line);
+  box-shadow: none;
+  font-size: 12px;
+}
+
+.watermark-widget .button-toggle.is-active {
+  color: white;
+  background: var(--blue);
+  border-color: transparent;
+  box-shadow: 0 8px 18px rgba(56, 103, 232, 0.18);
+}
+
+.watermark-widget .button-toggle.is-active:hover {
+  background: #2e5bd7;
 }
 
 .watermark-widget .result-sentence {
@@ -611,6 +645,15 @@
     gap: 8px;
   }
 
+  .watermark-widget .distortion-list .probability-row {
+    grid-template-columns: 75px minmax(0, 1fr) 52px;
+  }
+
+  .watermark-widget .button-toggle {
+    padding: 0 6px;
+    font-size: 11px;
+  }
+
   .watermark-widget .track-labels span:nth-child(4) {
     display: none;
   }
@@ -660,6 +703,7 @@
   .watermark-widget .candidate-token.drawing {
     animation: none;
     transform: none;
+    transition: none;
   }
 
   .watermark-widget .draw-marker,

@@ -78,7 +78,8 @@ Other than that, the process is exactly the same as in Stage 2, as you can see:
 
 So, the question is -- what is this `g` function, and when does it prefer one token over another?
 
-use the prev 4 tokens + secret key to make a hash, give 2 candidates a 0 or 1 score based on parity with hash or whatever
+1. hash(myfavoritefruitis-SECRETKEY-mango)
+2. g likes it if it's even
 
 [widget demonstrating this, tokens -> 0 or 1 score]
 
@@ -96,19 +97,22 @@ Let's focus on the most and least probable tokens the LLM could generate -- "man
 * `g` likes "mango" but not "papaya"
 * `g` likes "papaya" but not "mango"
 
-In the first two situations, as we know, `g` acts the same as our coin flip from Stage 2 -- no watermarking business occurs. But in the latter two situations, things get weird -- `g` no longer acts like a random coin. In the last scenario for instance, `g` will _always_ choose "papaya" over "mango".
+In the first two situations, `g` acts the same as our coin flip from Stage 2 -- no watermarking business occurs. But in the latter situations, things get weird -- `g` no longer acts like a random coin. In the third scenario for instance, `g` will _always_ choose "mango" over "papaya".
 
 So, remember the "probability distribution" created by the LLM in Stage 1? This distorts it pretty substantially, since papaya-versus-mango was supposed to be 50/50. If you try the buttons below, you can see the overall effect the scenarios have:
 
-[widget watermarking/distribution.html, but interactive; 3 buttons at the bottom -- vanilla, likes mango, likes papaya. only include these two tokens not all 4
-
-coin flip => same old distribution
-pref mango => distorted distribution becomes A = 1-(0.2)^2, B almost never picked
-pref papaya => B becomes 10% ish]
+{% include watermarking/distortion.html %}
 
 When `g` likes "mango", ____.
 
-note about how distortions even out in aggregate, but it's like giving 24 or 0 eggs to each customer then claiming you gave a dozen on average
+{% include disclaimer.html content="
+It's important to note that, when looking across 
+From my understanding, some of the \"watermarking does not impact model quality\" argument stems from this fact.
+
+Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give each one either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_...
+
+But did each customer actually get what they were expecting?
+" %}
 
 ## Aside: Detection
 

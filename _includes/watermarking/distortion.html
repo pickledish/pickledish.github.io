@@ -1,0 +1,66 @@
+<div class="watermark-widget">
+  <div class="card">
+    <div class="card-heading">
+      <div>
+        <p class="kicker">Output distribution</p>
+        <h3>“My favorite fruit is …”</h3>
+      </div>
+      <span class="status-pill" id="distortion-pill">coin flip</span>
+    </div>
+
+    <div class="probability-list distortion-list">
+      <div class="probability-row" style="--token-color: var(--mango)">
+        <div class="token-name">
+          <span class="token-dot"></span>
+          <span>mango</span>
+        </div>
+        <div class="probability-bar">
+          <span id="distortion-mango-bar" style="--width: 65%; animation-delay: 0ms"></span>
+        </div>
+        <span class="probability-value" id="distortion-mango-value">65%</span>
+      </div>
+      <div class="probability-row" style="--token-color: var(--banana)">
+        <div class="token-name">
+          <span class="token-dot"></span>
+          <span>banana</span>
+        </div>
+        <div class="probability-bar">
+          <span id="distortion-banana-bar" style="--width: 20%; animation-delay: 80ms"></span>
+        </div>
+        <span class="probability-value" id="distortion-banana-value">20%</span>
+      </div>
+      <div class="probability-row" style="--token-color: var(--coconut)">
+        <div class="token-name">
+          <span class="token-dot"></span>
+          <span>coconut</span>
+        </div>
+        <div class="probability-bar">
+          <span id="distortion-coconut-bar" style="--width: 10%; animation-delay: 160ms"></span>
+        </div>
+        <span class="probability-value" id="distortion-coconut-value">10%</span>
+      </div>
+      <div class="probability-row" style="--token-color: var(--papaya)">
+        <div class="token-name">
+          <span class="token-dot"></span>
+          <span>papaya</span>
+        </div>
+        <div class="probability-bar">
+          <span id="distortion-papaya-bar" style="--width: 5%; animation-delay: 240ms"></span>
+        </div>
+        <span class="probability-value" id="distortion-papaya-value">5%</span>
+      </div>
+    </div>
+
+    <div class="button-row" role="group" aria-label="g-function preference">
+      <button class="button button-toggle is-active" id="distortion-vanilla" type="button" data-mode="vanilla" aria-pressed="true">
+        Vanilla
+      </button>
+      <button class="button button-toggle" id="distortion-likes-mango" type="button" data-mode="mango" aria-pressed="false">
+        Likes mango
+      </button>
+      <button class="button button-toggle" id="distortion-likes-papaya" type="button" data-mode="papaya" aria-pressed="false">
+        Likes papaya
+      </button>
+    </div>
+  </div>
+</div>

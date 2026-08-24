@@ -232,10 +232,77 @@
     });
   }
 
+  function tournamentOutput(scores) {
+    const gMass = TOKENS.reduce(
+      (sum, token, index) => sum + token.probability * scores[index],
+      0,
+    );
+    return TOKENS.map((token, index) => (
+      scores[index]
+        ? token.probability * (2 - gMass)
+        : token.probability * (1 - gMass)
+    ));
+  }
+
+  function formatPercent(probability) {
+    const pct = probability * 100;
+    if (Math.abs(pct - Math.round(pct)) < 1e-9) return `${Math.round(pct)}%`;
+    return `${pct.toFixed(2)}%`;
+  }
+
+  function setupDistortion() {
+    const pill = $("#distortion-pill");
+    const rows = TOKENS.map((token) => ({
+      bar: $(`#distortion-${token.id}-bar`),
+      value: $(`#distortion-${token.id}-value`),
+    }));
+    const buttons = [...document.querySelectorAll("#distortion-vanilla, #distortion-likes-mango, #distortion-likes-papaya")];
+    if (!pill || rows.some((row) => !row.bar || !row.value) || buttons.length === 0) {
+      return;
+    }
+
+    const modes = {
+      vanilla: {
+        scores: [0, 0, 0, 0],
+        pill: "coin flip",
+      },
+      mango: {
+        scores: [1, 0, 0, 0],
+        pill: "g likes mango",
+      },
+      papaya: {
+        scores: [0, 0, 0, 1],
+        pill: "g likes papaya",
+      },
+    };
+
+    function applyMode(mode) {
+      const config = modes[mode];
+      const output = tournamentOutput(config.scores);
+
+      rows.forEach((row, index) => {
+        row.bar.style.setProperty("--width", `${output[index] * 100}%`);
+        row.value.textContent = formatPercent(output[index]);
+      });
+      pill.textContent = config.pill;
+
+      for (const button of buttons) {
+        const selected = button.dataset.mode === mode;
+        button.classList.toggle("is-active", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      }
+    }
+
+    for (const button of buttons) {
+      button.addEventListener("click", () => applyMode(button.dataset.mode));
+    }
+  }
+
   function init() {
     setupStageOne();
     setupStageTwo();
     setupStageThree();
+    setupDistortion();
   }
 
   if (document.readyState === "loading") {
