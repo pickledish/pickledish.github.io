@@ -14,7 +14,7 @@ Hm!
 
 Well, I guess I just have to go understand the damn thing so I can make up my own mind.
 
-The actual implementation is unfortunately more in-the-weeds than I was hoping, at least for someone with a good decade between them and their last statistics class and no familiarity beyond the basics with LLMs. Still, after spending a few hours going back and forth with the papers and articles, I think that not only do I now have a more definitive answer for whether the process degrades the output, but I also believe that it's not so hard that only an academic can understand it.
+The actual implementation is more in-the-weeds than I was hoping, at least for someone with a good decade between them and their last statistics class and no LLM familiarity beyond the basics. Still, after spending a few hours going back and forth with the papers and articles, not only do I think I have a more definitive answer for whether the process degrades the output, but I also believe it's not so hard that only an academic can understand it.
 
 So, I've taken the intuition I built and distilled it into a short explainer here, broken down into a few iterative stages where each stage just changes one small thing about the last, starting with normal LLM token sampling and ending with full-on SynthID.
 
@@ -66,11 +66,11 @@ P("mango") = P("mango" is sampled first) * P(coin is heads) +
 
 So yes we've just made it convoluted for no reason but BEAR WITH ME!
 
-## stage 3: The 'g' Function
+## Stage 3: The 'g' Function
 
 Now, the real watermarking begins here in Stage 3.
 
-We're going to change just one thing from Stage 2, which is the coin flip -- we're going to replace it with a simple function, called `g`, which sometimes has a preference between the two candidates it's given.
+We're going to change just one thing from Stage 2, which is the coin flip -- we'll replace it with a simple function, called `g`, which, sometimes, has a preference between the two candidates it's given.
 
 Other than that, the process is exactly the same as in Stage 2, as you can see:
 
@@ -85,16 +85,34 @@ use the prev 4 tokens + secret key to make a hash, give 2 candidates a 0 or 1 sc
 two KEY THINGS to note here!!
 
 1. without secret key, hash is indistinguishable from random noise => indistinguishable from stage 2
-2. however, we ARE distorting the probability distribution here -- show table or something:
+2. however, we ARE distorting the probability distribution here -- see below
 
-if candidates are A and B, say, A with 80% probability and B with 5% probability per vanilla logprobs
+## Aside: Distortion
 
-A 0 and B 0 => coin flip, no watermark
-A 1 and B 1 => same
-A 1 and B 0 => distorted distribution becomes A = 1-(0.2)^2, B almost never picked
-A 0 and B 1 => B becomes 10% ish
+Let's focus on the most and least probable tokens the LLM could generate -- "mango" (at 65% likelihood) and "papaya" (just 5% likelihood). In a contest between the two of them, there are 4 possible scenarios of which ones the `g` function will have a preference for, each showing up with the same frequency:
 
-[this can probably be non-interactive but we want it to be really clear]
+* `g` likes both of them
+* `g` likes neither of them
+* `g` likes "mango" but not "papaya"
+* `g` likes "papaya" but not "mango"
+
+In the first two situations, as we know, `g` acts the same as our coin flip from Stage 2 -- no watermarking business occurs. But in the latter two situations, things get weird -- `g` no longer acts like a random coin. In the last scenario for instance, `g` will _always_ choose "papaya" over "mango".
+
+So, remember the "probability distribution" created by the LLM in Stage 1? This distorts it pretty substantially, since papaya-versus-mango was supposed to be 50/50. If you try the buttons below, you can see the overall effect the scenarios have:
+
+[widget watermarking/distribution.html, but interactive; 3 buttons at the bottom -- vanilla, likes mango, likes papaya. only include these two tokens not all 4
+
+coin flip => same old distribution
+pref mango => distorted distribution becomes A = 1-(0.2)^2, B almost never picked
+pref papaya => B becomes 10% ish]
+
+When `g` likes "mango", ____.
+
+note about how distortions even out in aggregate, but it's like giving 24 or 0 eggs to each customer then claiming you gave a dozen on average
+
+## Aside: Detection
+
+(detection is now possible, widget with example)
 
 ## stage 4: synthid (30 g-functions, 2^30 candidates)
 

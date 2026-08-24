@@ -80,12 +80,16 @@
     if (!button || !marker || !markerLabel || !tokenEl) return;
 
     button.addEventListener("click", async () => {
+      button.disabled = true;
+      tokenEl.textContent = "…";
+      tokenEl.className = "sampled-token is-blank";
+      hideDraw(marker);
+
       const { token, draw } = sampleToken();
       placeDraw(marker, markerLabel, draw);
+      await wait(560);
       tokenEl.textContent = token.label;
       tokenEl.className = `sampled-token ${token.id}`;
-      button.disabled = true;
-      await wait(540);
       button.disabled = false;
     });
   }
