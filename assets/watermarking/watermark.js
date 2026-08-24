@@ -256,7 +256,7 @@
       bar: $(`#distortion-${token.id}-bar`),
       value: $(`#distortion-${token.id}-value`),
     }));
-    const buttons = [...document.querySelectorAll("#distortion-vanilla, #distortion-likes-mango, #distortion-likes-papaya")];
+    const buttons = [...document.querySelectorAll("#distortion-vanilla, #distortion-likes-papaya, #distortion-likes-except-papaya")];
     if (!pill || rows.some((row) => !row.bar || !row.value) || buttons.length === 0) {
       return;
     }
@@ -266,13 +266,13 @@
         scores: [0, 0, 0, 0],
         pill: "coin flip",
       },
-      mango: {
-        scores: [1, 0, 0, 0],
-        pill: "g likes mango",
-      },
       papaya: {
         scores: [0, 0, 0, 1],
         pill: "g likes papaya",
+      },
+      "except-papaya": {
+        scores: [1, 1, 1, 0],
+        pill: "g likes all but papaya",
       },
     };
 
@@ -298,11 +298,102 @@
     }
   }
 
+  const G_CONTEXT = "myfavoritefruitis";
+  const HASH_BITS = 10;
+
+  async function sha256Bytes(text) {
+    const encoded = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", encoded);
+    return new Uint8Array(digest);
+  }
+
+  function lastBits(bytes, count) {
+    const neededBytes = Math.ceil(count / 8);
+    let value = 0;
+    for (let i = bytes.length - neededBytes; i < bytes.length; i++) {
+      value = (value << 8) | bytes[i];
+    }
+    return value.toString(2).padStart(neededBytes * 8, "0").slice(-count);
+  }
+
+  function setupGScore() {
+    const form = $("#g-score-form");
+    const input = $("#g-score-secret");
+    const button = form?.querySelector("button[type='submit']");
+    const rows = TOKENS.map((token) => ({
+      token,
+      row: $(`#g-score-${token.id}`),
+      hash: $(`#g-score-${token.id}-hash`),
+      bits: $(`#g-score-${token.id}-bits`),
+      binary: $(`#g-score-${token.id}-binary`),
+      mark: $(`#g-score-${token.id}-mark`),
+    }));
+    if (!form || !input || !button || rows.some((row) => !row.row || !row.hash || !row.bits || !row.binary || !row.mark)) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const step = (ms) => wait(reduceMotion ? 0 : ms);
+
+    function reveal(element) {
+      element.classList.remove("is-visible");
+      void element.offsetWidth;
+      element.classList.add("is-visible");
+    }
+
+    function resetRows() {
+      for (const item of rows) {
+        item.row.classList.remove("is-no");
+        item.hash.classList.remove("is-visible");
+        item.bits.classList.remove("is-visible");
+        item.hash.textContent = "";
+        item.binary.replaceChildren();
+        item.mark.textContent = "";
+        item.mark.className = "score-mark";
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      resetRows();
+
+      try {
+        const secret = input.value;
+        const results = await Promise.all(rows.map(async (item) => {
+          const bytes = await sha256Bytes(`${G_CONTEXT}${secret}${item.token.label}`);
+          const bits = lastBits(bytes, HASH_BITS);
+          const likes = bits.endsWith("0");
+          return { item, bits, likes };
+        }));
+
+        for (const { item, bits, likes } of results) {
+          item.hash.textContent = `sha256(${JSON.stringify(G_CONTEXT)} + ${JSON.stringify(secret)} + ${JSON.stringify(item.token.label)})`;
+          reveal(item.hash);
+          await step(420);
+
+          const prefix = document.createTextNode(`…${bits.slice(0, -1)}`);
+          const lsb = document.createElement("span");
+          lsb.className = "lsb";
+          lsb.textContent = bits.at(-1);
+          item.binary.replaceChildren(prefix, lsb);
+          item.mark.textContent = likes ? "💚" : "👎";
+          item.row.classList.toggle("is-no", !likes);
+          reveal(item.bits);
+          await step(280);
+        }
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
   function init() {
     setupStageOne();
     setupStageTwo();
     setupStageThree();
     setupDistortion();
+    setupGScore();
   }
 
   if (document.readyState === "loading") {

@@ -16,7 +16,7 @@ Well, I guess I just have to go understand the damn thing so I can make up my ow
 
 The actual implementation is more in-the-weeds than I was hoping, at least for someone with a good decade between them and their last statistics class and no LLM familiarity beyond the basics. Still, after spending a few hours going back and forth with the papers and articles, not only do I think I have a more definitive answer for whether the process degrades the output, but I also believe it's not so hard that only an academic can understand it.
 
-So, I've taken the intuition I built and distilled it into a short explainer here, broken down into a few iterative stages where each stage just changes one small thing about the last, starting with normal LLM token sampling and ending with full-on SynthID.
+So, I've taken that intuition and tried to distill it into a short explainer here, broken down into 4 stages with each stage building one small new thing upon the last, starting with normal LLM token sampling and ending with full-on SynthID.
 
 Let's see if we can understand it together!
 
@@ -83,7 +83,15 @@ Fortunately it is pretty simple! Essentially:
 * `g` calculates `hash(previous_4_tokens + secret_key + candidate_token)`
 * `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
-[widget demonstrating this, tokens -> 0 or 1 score]
+And if it likes both candidates (or dislikes both candidates), it just selects one at random. You can put your own secret in below to see how `g` works:
+
+{% include watermarking/hash.html %}
+
+Each of the elements of the hash serves an important purpose:
+
+* `candidate_token` is, of course, the subject of our watermarking
+* `previous_4_tokens` is included because otherwise we'd just ALWAYS penalize a certain word
+* `secret_key` so that only the LLM provider can watermark, or detect, text
 
 two KEY THINGS to note here!!
 
@@ -92,47 +100,54 @@ two KEY THINGS to note here!!
 
 ## Aside: Distortion
 
-Let's focus on the most and least probable tokens the LLM could generate -- "mango" (at 65% likelihood) and "papaya" (just 5% likelihood). In a contest between the two of them, there are 4 possible scenarios of which ones the `g` function will have a preference for, each showing up with the same frequency:
+Let's focus for a moment on the least probable token the LLM could generate: "papaya", at just 5% likelihood. In a contest between "papaya" and any other token, there are 4 possible scenarios of which ones the `g` function will have a preference for, each showing up with the same frequency:
 
 * `g` likes both of them
 * `g` likes neither of them
-* `g` likes "mango" but not "papaya"
-* `g` likes "papaya" but not "mango"
+* `g` likes "papaya" but not the other one
+* `g` likes the other one but not "papaya"
 
-In the first two situations, `g` acts the same as our coin flip from Stage 2 -- no watermarking business occurs. But in the latter situations, things get weird -- `g` no longer acts like a random coin. In the third scenario for instance, `g` will _always_ choose "mango" over "papaya".
+In the first two situations, `g` acts the same as the coin flip -- no watermarking business occurs. But in the latter situations, things get weird -- `g` no longer acts like a random coin. In the third scenario for instance, `g` will _always_ choose "papaya" over the other candidate.
 
-So, remember the "probability distribution" created by the LLM in Stage 1? This distorts it pretty substantially, since papaya-versus-mango was supposed to be 50/50. If you try the buttons below, you can see the overall effect the scenarios have:
+So, remember the "probability distribution" created by the LLM in Stage 1? This can distort it pretty substantially. If you try the buttons below, you can see how "papaya" is affected by two `g` functions at the different extremes: one that likes "papaya" and no other tokens, and one that likes all tokens _except_ for "papaya":
 
 {% include watermarking/distortion.html %}
 
-When `g` likes "mango", ____.
+In the "`g` likes only papaya" case, "papaya" will automatically win any contest it's in. This nearly _doubles_ the chances that the LLM will emit "papaya" as the next token.
+
+But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and so its real chances drop to almost 0%.
 
 {% include disclaimer.html content="
-It's important to note that, when looking across 
-From my understanding, some of the \"watermarking does not impact model quality\" argument stems from this fact.
+It's important to note that, when looking across _all_ `g` functions, the effects \"average out\" -- as in, the `g` that loves \"papaya\" turns up exactly as often as the `g` that hates \"papaya\", and so when considering ____[broad/large text generation], the overall likelihood that \"papaya\" is generated is the same as what the LLM would've come up with organically.
 
-Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_...
+From my understanding, a lot of the \"watermarking does not impact model quality\" argument stems from this fact.
 
-But did each customer actually get what they were expecting?
+Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_... But did each customer actually get what they were expecting?
 " %}
 
 ## Aside: Detection
+
+Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key` is just a fixed string that lives on a post-it note in somebody's desk.
+
+What this means is that **we don't need the LLM around to determine if text was watermarked**, we just need the text itself and the secret, and we ourselves can re-run the same calculation `g` is doing. This part was really non-intuitive to me -- I thought I knew how watermarking worked (seeding the LLM's PRNG), but when I dug in I realized that detection would have more or less required the entire context + re-running the LLM 😅
+
+Anyways, calculating `g` ourselves is important because that's how detection works!
+
+Let's revisit the 4 equally-likely situations `g` will be presented with, and specifically look at what kind of token gets output in each of those situations:
+
+```
+g likes both candidates           =>   💚 g picks a token it likes
+g likes neither candidate         =>   👎 g picks a token it does not like
+g likes the 1st but not the 2nd   =>   💚 g picks a token it likes
+g likes the 2nd but not the 1st   =>   💚 g picks a token it likes
+```
+
+Do you see how, in 3 of those 4 situations, the LLM ends up emitting a token `g` preferred?
+
+This means that, in watermarked text, we can expect **75%** of the tokens on average to be `g` preferred tokens, as opposed to only 50% in non-watermarked text. So if we re-run the `g` calculation on some arbitrary text, and keep track of how many tokens
 
 (detection is now possible, widget with example)
 
 ## stage 4: synthid (30 g-functions, 2^30 candidates)
 
 (skip for now, we'll come fill this in later)
-
-
-
-
-
-
-
-notes from tests
-
-- put g-function interactive RIGHT BELOW coin-flip interactive
-  - to show that it's the exact same except `g` instead of `rand`
-  - from the outside, g seems like randomness
-  - but here's what it's really doing: then show the scoring, 1 vs 0
