@@ -91,8 +91,11 @@ h4 {
   margin: 28px 0 -8px 0;
 }
 
+ul, ol {
+  list-style: revert;
+}
+
 li {
-  list-style: initial;
   margin-left: 28px;
 }
 

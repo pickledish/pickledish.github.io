@@ -9,7 +9,7 @@ scripts:
 ---
 
 {% include disclaimer.html content="
-Interactive widgets below are from an LLM, but all text came from the slow and inconsistent token generator that is my brain. Hope you enjoy!
+Interactive widgets below are from an LLM, but the words are [100 percent pure old fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
 " %}
 
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
@@ -42,7 +42,7 @@ Then you can try out the sampling process yourself to get a feel for it:
 
 {% include watermarking/sampling.html %}
 
-LLM knobs you may have heard of, like `temperature` and `min-p`, control aspects of this distribution (e.g. how "sharp" it is, or how many distinct options there are), but the process we're talking about here is always the same.
+LLM knobs you may have heard of, like `temperature` and `min-p`, can control aspects of this distribution (e.g. how "sharp" it is, or how many distinct options there are), but the process we're talking about here is always the same.
 
 ## Stage 2: Sample Two Tokens
 
@@ -74,7 +74,7 @@ So yes we've just made it convoluted for no reason but BEAR WITH ME!
 
 Now, the real watermarking begins here in Stage 3.
 
-We're going to change just one thing from Stage 2, which is the coin flip -- we'll replace it with a simple function, called `g`, which, sometimes, has a preference between the two candidates it's given.
+We're going to change just one thing from Stage 2, which is the coin flip -- we'll replace it with a simple function called `g`, which, sometimes, has a preference between the two candidates in the contest.
 
 Other than that, the process is exactly the same as in Stage 2, as you can see:
 
@@ -84,23 +84,24 @@ So, the question is -- what is this `g` function, and when does it prefer one to
 
 Fortunately it is pretty simple! Essentially:
 
-* `g` calculates `hash(previous_4_tokens + secret_key + candidate_token)`
+* `g` calculates `hash(secret_key ++ previous_4_tokens ++ candidate_token)`
 * `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
-And if it likes both candidates (or dislikes both candidates), it just selects one at random. You can put your own secret in below to see how `g` works:
+And `g` just opts for a token it likes, if there is one. If it likes both candidates (or dislikes both candidates), it selects one at random.
+
+You can put your own secret in below to see how `g` works:
 
 {% include watermarking/hash.html %}
 
 Each of the elements of the hash serves an important purpose:
 
+* `secret_key` being included in the hash means that only the owner of the LLM can apply, or detect, their own watermark
+* `previous_4_tokens` is there so that `g`'s preference for a token is dependent on the tokens that come before it. Without this, `g` might (for example) just universally dislike "banana", which would be noticeable to users
 * `candidate_token` is, of course, the subject of our watermarking
-* `previous_4_tokens` is included because otherwise we'd just ALWAYS penalize a certain word
-* `secret_key` so that only the LLM provider can watermark, or detect, text
 
-two KEY THINGS to note here!!
+The interesting thing is, without _all three_ of these parameters, le hash is totally unpredictable, i.e. indistinguishable from random noise. Which means, without the secret key, it's statistically impossible to FOO[detect vs stage 2]
 
-1. without secret key, hash is indistinguishable from random noise => indistinguishable from stage 2
-2. however, we ARE distorting the probability distribution here -- see below
+However, that doesn't mean `g` has no impact on token probabilities -- see below.
 
 ## Aside: Distortion
 
@@ -137,7 +138,7 @@ What this means is that **we don't need the LLM around to determine if text was 
 
 Anyways, calculating `g` ourselves is important because that's how detection works!
 
-Let's revisit the 4 equally-likely situations `g` will be presented with, and specifically look at what kind of token gets output in each of those situations:
+Let's revisit the 4 equally-likely situations `g` will be presented with, and in particular, let's look at what kind of token gets output in each of those situations:
 
 ```
 g likes both candidates           =>   💚 g picks a token it likes
@@ -146,19 +147,29 @@ g likes the 1st but not the 2nd   =>   💚 g picks a token it likes
 g likes the 2nd but not the 1st   =>   💚 g picks a token it likes
 ```
 
-Do you see how, in 3 of those 4 situations, the LLM ends up emitting a token `g` preferred?
+Do you see how, in 3 of the 4 situations, the LLM ends up emitting a token `g` preferred?
 
-This means that, in watermarked text, we can expect **75%** of the tokens on average to be `g` preferred tokens, as opposed to only 50% in non-watermarked text. So if we re-run the `g` calculation on some arbitrary text, and keep track of how many tokens
+This means that, in watermarked text, we can expect **75%** of the tokens on average to be `g` preferred tokens, as opposed to only 50% preferred (random) in non-watermarked text. So if we re-run the `g` calculation on some arbitrary text, and keep track of how many tokens
 
 [interactive widget scoring text]
 
 ## Stage 4: SynthID
 
+If you thought this was going to be the most complicated section, sorry to disappoint -- in fact we've already done all the hard work!
+
+Google's SynthID is just the exact process we detailed above, repeated a bunch of times.
+
+There are no problems with the approach described in Stage 3 _per se_ -- as we saw, it effectively watermarks text and we can detect it after the fact -- but... 
+
 (30 g-functions, 2^30 candidates)
 
-(skip for now, we'll come fill this in later)
+From what I understand, this actually ends up distorting the probability distributions _more_, for the sake of easier detection -- simple method requires X tokens to be confident, synthID only requires Y
 
 ## Fin
+
+so, in the end we learned something that we possibly could have realized at the start -- watermarking DOES distort the text, of course it does, since that distortion IS detect-ability
+
+it seems like empirically, the distortion doesn't end up mattering much -- 
 
 note that the other main argument for why this is OK is the 20M gemini test, linked in the anthropic doc too
 
