@@ -192,7 +192,7 @@ You might have noticed that the latter case above -- when `g` is handed two copi
 
 To make this really clear, let's see what happens when an LLM works on regurgitating a piece from Shakespeare's _foo_:
 
-[widget showing bad dist -- "lost" is 99% likely, "forgotten" is 1% likely, same dist widget as we've been using]
+{% include watermarking/predictable.html %}
 
 In this situation, the 2 candidates that `g` must decide between will both be "lost" a whopping _98% of the time_. So even if `g` doesn't like "lost", that's still gonna be what the LLM emits the vast majority of the time.
 
