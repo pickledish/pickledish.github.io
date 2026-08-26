@@ -1,0 +1,56 @@
+<div class="watermark-widget">
+  <div class="card">
+    <div class="card-heading">
+      <div>
+        <p class="kicker">Detection</p>
+        <h3>Sliding window</h3>
+      </div>
+    </div>
+
+    <div class="detect-stage" id="detect-stage">
+      <div class="detect-viewport" id="detect-viewport">
+        <div class="detect-track" id="detect-track">
+          <div class="detect-row">
+            <div class="detect-words" id="detect-words"></div>
+            <div class="detect-braces" aria-hidden="true">
+              <div class="detect-brace detect-brace-prev" id="detect-brace-prev">
+                <span class="slot-label">previous 4</span>
+              </div>
+              <div class="detect-brace detect-brace-cur" id="detect-brace-cur">
+                <span class="slot-label">current</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detect-score" id="detect-score">
+        <code class="score-hash" id="detect-hash"></code>
+        <div class="score-bits" id="detect-bits">
+          <span class="score-binary" id="detect-binary"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detect-readout" id="detect-readout" aria-live="polite">
+      <span class="detect-count" id="detect-yes">
+        <span class="detect-count-mark" aria-hidden="true">💚</span>
+        <strong id="detect-yes-n">0</strong>
+      </span>
+      <span class="detect-count" id="detect-no">
+        <span class="detect-count-mark" aria-hidden="true">👎</span>
+        <strong id="detect-no-n">0</strong>
+      </span>
+      <span class="detect-count detect-count-pct">
+        <strong id="detect-percent">0%</strong>
+        <span>liked</span>
+      </span>
+    </div>
+
+    <div class="button-row detect-actions">
+      <button class="button button-primary" id="detect-step" type="button">Step</button>
+      <button class="button button-primary" id="detect-step-10" type="button">Step 10×</button>
+      <button class="button button-toggle" id="detect-reset" type="button">Reset</button>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building an Intuition for Watermarking"
+title: "Building Intuition for Watermarking"
 permalink: /posts/watermarking/
 styles:
   - /assets/watermarking/watermark.css
@@ -9,7 +9,7 @@ scripts:
 ---
 
 {% include disclaimer.html content="
-Interactive widgets below are from an LLM, but the words are [100 percent pure old fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
+Interactive widgets below are from an LLM, but the words are [100 percent pure old-fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
 " %}
 
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
@@ -56,7 +56,7 @@ You can try out this modified sampling process yourself:
 
 The important thing to note here is that this is _perfectly equivalent_ to Stage 1 in terms of the outcome. Despite the extra steps here, we have not changed the model's outputs in any way yet, as you can see when we take "mango" as an example:
 
-```sh
+```rb
 # Stage 1
 P("mango") = P("mango" is sampled)
            = 65%
@@ -87,7 +87,7 @@ Fortunately it's pretty simple! Essentially:
 * `g` calculates `hash(secret_key ++ previous_4_tokens ++ candidate_token)`
 * `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
-And `g` just opts for a token it likes, if there is one. If it likes both candidates (or dislikes both candidates), it selects one at random.
+And `g` just opts for a token it likes, if there is one. If it likes both candidates (or dislikes both), it selects one at random. This preference is what makes up the watermark!
 
 You can put your own secret in below to see how `g` works:
 
@@ -105,7 +105,9 @@ However, that doesn't mean `g` has no impact on token probabilities. That is nex
 
 ## Stage 3: Distortion
 
-Let's focus for a moment on the least probable token the LLM could generate: "papaya", at just 5% likelihood. In a contest between "papaya" and any other token, there are 4 possible scenarios of which ones the `g` function will have a preference for, each showing up with the same frequency:
+Let's focus for a moment on the least probable token the LLM could generate: "papaya", at just 5% likelihood. In a contest between "papaya" and any other token, there are 4 possible scenarios of which ones the `g` function will have a preference for:
+
+<!-- don't say they're equally likely -- for a single token generation, like we're talking about here, they're not -->
 
 * `g` likes both of them
 * `g` likes neither of them
@@ -134,25 +136,27 @@ Personally I'm not totally convinced; to me it sounds a bit like you have a bunc
 
 Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key`, which is just a fixed string that lives on a post-it note in somebody's desk.
 
-What this means is that **we don't need the LLM around to determine if text was watermarked**, we just need the text itself and the secret, and we ourselves can re-run the same calculation `g` is doing. This part was really non-intuitive to me -- I thought I knew how watermarking worked (seeding the LLM's PRNG), but when I dug in I realized that detection would have more or less required the entire context + re-running the LLM 😅
+What this means is that **we don't need the LLM around to determine if text was watermarked**, we just need the text itself and the secret, and we can run the same calculation `g` did. This part was really non-intuitive to me -- I thought I knew how watermarking worked (seeding the LLM's PRNG), but when I dug in I realized that detection would have more or less required the entire context + re-running the LLM 😅
 
-Anyways, calculating `g` ourselves is important because that's how detection works!
+Anyways, calculating `g` ourselves is important because that's how detection works! You can see the process right here:
 
-[interactive is 1 row of side-scrolling text (fades on the right to indicate there's more), with braces underneath, sliding window, 4 for prev words and 1 for current word, button at bottom is "step" and "reset", similar to above, when you press "step" it (1) calculates g (2) updates fraction (accumulating) then (3) moves sliding windows 1 to the right]
+{% include watermarking/detection.html %}
 
-end prev ^ with "if a suspicious percent of tokens are liked by g, it's watermarked" then
+foo foo explanation, we walk through the text with a sliding window, calculating `g` as we go, tallying up tokens it liked and didn't like
 
-## aisde: what is a "suspicious number"?
+if a suspicious ratio of tokens are liked by g, it's watermarked
 
-> note, you can skip this part if you want, it is not essential, just if you're curious
+## Aside: What is a "Suspicious Ratio"?
 
-For me, the hand-waving above leaves a bit to be desired -- what _should_ the `g`-score be for watermarked and non-watermarked text, exactly? How do we know when it's high enough to be "suspicious"?
+For me, the hand-waving above leaves a bit to be desired -- what should we _expect_ this ratio to be for watermarked and non-watermarked text, exactly? How do we know when it's high enough to be "suspicious"?
+
+To understand, let's revisit the little contests that happen during generation, and look at cases separately -- when `g` is deciding between two different tokens, and when it gets duplicates.
 
 ---
 
-To understand the detection process, we must consider the two kinds of contests separately -- when `g` is deciding between two different tokens, and when it gets duplicates.
+First, let's consider the case where `g` is handed two **different** tokens. Remember from earlier the 4 situations, each equally likely on average, and in particular, let's see what kind of token gets output in each:
 
-First, let's consider the case where `g` is handed two **different** tokens. We'll revisit the 4 equally-likely situations from earlier, and in particular, let's look at what kind of token gets output in each:
+<!-- here we can say they're equally likely because we're talking about aggregates / scanning a bunch of text -->
 
 ```
 g likes both candidates           =>   💚 g picks a token it likes
@@ -161,43 +165,32 @@ g likes the 1st but not the 2nd   =>   💚 g picks a token it likes
 g likes the 2nd but not the 1st   =>   💚 g picks a token it likes
 ```
 
-Do you see how, in 3 of the 4 situations, the LLM ends up emitting a token `g` preferred?
-
-That ____ -- 50% vs 75% -- is the difference that is detectable in watermarked text.
+Do you see how, in 3 of the 4 situations, le LLM ends up emitting a token `g` preferred? Thus, the expected ratio is pushed up towards 75% -- pretty high!
 
 ---
 
 But, now suppose `g` sees the **same** token twice to "decide between". Well, it's not really much of a decision, right? It returns the token regardless of whether it liked it or not, and moves on. In our running example, that's gonna happen almost half the time in fact:
 
-```
-P(duplicate) = P(mango + mango) + P(banana + banana) + P(coconut + coconut) + P(papaya + papaya)
+```rb
+P(duplicate) = P("mango" + "mango") + P("banana" + "banana") + P("coconut" + "coconut") + P("papaya" + "papaya")
              = (65% ^ 2) + (20% ^ 2) + (10% ^ 2) + (5% ^ 2)
              = 42.25% + 4% + 1% + 0.25%
              = 47.5%
 ```
 
-In these cases, foo
+In these cases, it's random whether `g` liked the token, and so the expected ratio is pushed the opposite way, down towards 50%.
 
 ---
 
-summary below is bad -- we just need to say "so with non-watermarked text, we expect `g` will like 50% of the tokens, but with watermarked text, we expect it'll like more than 50% of them" -- since the 62.5% number only can even be DETERMINED if you have the token prob distribution, so at detection time you don't know what it "should be"
+So -- "suspicious" means somewhere between 50% and 75% depending on the text!
 
-So in summary:
+<!-- remember, can only even DO this scoring if you have the secret key! -->
 
-* About half the time, `g` gets a duplicate token, and no watermarking is possible
-* The other half the time, we expect `g` to output a token it likes 75% of the time
+## Aside: Predictable Text
 
-foo foo 62.5% expected from this generation
+You might have noticed that the latter case above -- when `g` is handed two copies of the same token -- is kind of problematic. The more often that situation crops up, the closer the expected ratio is pushed down towards 50%, and the smaller the difference becomes between normal text and watermarked text.
 
-[interactive widget scoring text]
-
-remember, can only even DO this scoring if you have the secret key!
-
-## Stage 3: Predictable Text
-
-You might have noticed that the latter case above -- when `g` is handed two copies of the same token -- is kind of problematic. The more often that situation crops up, the more often "no watermarking is possible", and the smaller the difference becomes between watermarked text and normal text.
-
-For example, let's see what happens when an LLM is working on regurgitating a monologue of Shakespeare's _foo_:
+To make this really clear, let's see what happens when an LLM works on regurgitating a piece from Shakespeare's _foo_:
 
 [widget showing bad dist -- "lost" is 99% likely, "forgotten" is 1% likely, same dist widget as we've been using]
 
@@ -211,7 +204,9 @@ So you can see why, the less "creativity" is involved in the text you're generat
 
 ## Stage 4: SynthID
 
-If you thought this was going to be the most complicated section, sorry to disappoint -- in fact we've already done all the hard work!
+Phew, we made it!
+
+If you thought this was going to be the most complicated section, sorry to disappoint -- in fact we've already done all the hard work.
 
 Google's SynthID is just the process we detailed above, repeated a bunch of times.
 
