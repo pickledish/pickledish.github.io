@@ -9,14 +9,14 @@ scripts:
 ---
 
 {% include disclaimer.html content="
-Interactive widgets below are from an LLM, but the words are [100 percent pure old-fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
+Interactive widgets below were made with AI, but all words are [100% pure old-fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
 " %}
 
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
 
 Hm!
 
-Well, I guess I just have to go understand the damn thing so I can make up my own mind.
+Well, I guess I just have to go figure the damn thing out so I can make up my own mind.
 
 The actual implementation is more in-the-weeds than I was hoping, at least for someone with a good decade between them and their last statistics class and no LLM familiarity beyond the basics. Still, after spending a few hours going back and forth with the papers and articles, not only do I think I have a more definitive answer for whether the process degrades the output, but I also believe it's not so hard that only an academic can understand it.
 
@@ -134,7 +134,7 @@ Personally I'm not totally convinced; to me it sounds a bit like you have a bunc
 
 ## Stage 3: Detection
 
-Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key`, which is just a fixed string that lives on a post-it note in somebody's desk.
+Notice that crucially, `g` only relies on 3 parameters -- two of which you can plainly see in the generated text itself, and `secret_key`, which is just a fixed string that lives on a post-it note in somebody at Anthropic's desk.
 
 What this means is that **we don't need the LLM around to determine if text was watermarked**, we just need the text itself and the secret, and we can run the same calculation `g` did. This part was really non-intuitive to me -- I thought I knew how watermarking worked (seeding the LLM's PRNG), but when I dug in I realized that detection would have more or less required the entire context + re-running the LLM 😅
 
@@ -142,11 +142,11 @@ Anyways, calculating `g` ourselves is important because that's how detection wor
 
 {% include watermarking/detection.html %}
 
-foo foo explanation, we walk through the text with a sliding window, calculating `g` as we go, tallying up tokens it liked and didn't like
+We walk through the text, calculating `g` for each token using the 4 tokens before it and our secret key, tallying up how many `g` liked and how many it didn't. Then, we use those counts to find the ratio, the "percent of tokens `g` preferred".
 
-if a suspicious ratio of tokens are liked by g, it's watermarked
+If that ratio is suspiciously high, then the text is watermarked!
 
-## Aside: What is a "Suspicious Ratio"?
+## Aside: A Suspicious Ratio?
 
 For me, the hand-waving above leaves a bit to be desired -- what should we _expect_ this ratio to be for watermarked and non-watermarked text, exactly? How do we know when it's high enough to be "suspicious"?
 
@@ -154,9 +154,7 @@ To understand, let's revisit the little contests that happen during generation, 
 
 ---
 
-First, let's consider the case where `g` is handed two **different** tokens. Remember from earlier the 4 situations, each equally likely on average, and in particular, let's see what kind of token gets output in each:
-
-<!-- here we can say they're equally likely because we're talking about aggregates / scanning a bunch of text -->
+First, let's consider the case where `g` is handed two **different** tokens. Remember from earlier the 4 situations, each equally likely on average, and in particular, let's see what kind of token is output in each:
 
 ```
 g likes both candidates           =>   💚 g picks a token it likes
@@ -180,9 +178,11 @@ P(duplicate) = P("mango" + "mango") + P("banana" + "banana") + P("coconut" + "co
 
 In these cases, it's random whether `g` liked the token, and so the expected ratio is pushed the opposite way, down towards 50%.
 
+rephrase "it's random whether `g` liked the token"
+
 ---
 
-So -- "suspicious" means somewhere between 50% and 75% depending on the text!
+So -- "suspicious" means "somewhere between 50% and 75%", depending on the text!
 
 <!-- remember, can only even DO this scoring if you have the secret key! -->
 
@@ -190,17 +190,17 @@ So -- "suspicious" means somewhere between 50% and 75% depending on the text!
 
 You might have noticed that the latter case above -- when `g` is handed two copies of the same token -- is kind of problematic. The more often that situation crops up, the closer the expected ratio is pushed down towards 50%, and the smaller the difference becomes between normal text and watermarked text.
 
-To make this really clear, let's see what happens when an LLM works on regurgitating a piece from Shakespeare's _foo_:
+To make this really clear, let's see what happens when an LLM works on regurgitating a piece from Alfred Tennyson's _In Memoriam A. H. H._:
 
 {% include watermarking/predictable.html %}
 
-In this situation, the 2 candidates that `g` must decide between will both be "lost" a whopping _98% of the time_. So even if `g` doesn't like "lost", that's still gonna be what the LLM emits the vast majority of the time.
+In this situation, the 2 candidates that `g` must decide between will both be "lost" a whopping _98% of the time_. So even if `g` doesn't like "lost", that's still almost always gonna be what the LLM emits.
 
 And, if we generate a lot of tokens like that, you can see how it affects the "percent of tokens `g` likes" as we run our detection process:
 
 [interactive widget scoring text]
 
-So you can see why, the less "creativity" is involved in the text you're generating, the harder it is for this process to embed
+The less "creativity" is involved in the text that's being generated, the harder it is for this process to embed a watermark!
 
 ## Stage 4: SynthID
 
@@ -212,7 +212,13 @@ Google's SynthID is just the process we detailed above, repeated a bunch of time
 
 There are no problems with the approach from Stage 3 _per se_ -- as we saw, it does effectively watermark text, and we can detect it after the fact -- but in practice researchers found that at detection-time, it takes way too many tokens to build up good confidence about whether text bears the watermark or not.
 
-(30 g-functions, 2^30 candidates)
+So, "higher signal" is what SynthID was built for! It's hugely scaled up from what we discussed so far -- instead of 1 `g` function, there are 30, and instead of 2 candidates, there are (literally) a billion, all competing in a March Madness style single-elimination bracket.
+
+[simple bracket widget]
+
+The thinking here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
+
+
 
 From what I understand, this actually ends up distorting the probability distributions _more_, for the sake of easier detection -- simple method requires X tokens to be confident, synthID only requires Y
 
