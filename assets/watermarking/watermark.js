@@ -716,6 +716,13 @@
     barsWrap.append(mean);
     plot.append(barsWrap);
 
+    function positionMean() {
+      const bar = bars[2];
+      mean.style.left = `${bar.offsetLeft + bar.offsetWidth / 2}px`;
+    }
+
+    new ResizeObserver(positionMean).observe(barsWrap);
+
     let rounds = 0;
 
     function formatPossibilities(count) {

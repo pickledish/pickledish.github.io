@@ -214,28 +214,30 @@ There are no problems with the approach from Stage 3 _per se_ -- as we saw, it d
 
 So, "higher signal" is what SynthID was built for! It's hugely scaled up from what we discussed so far -- instead of 1 `g` function, there are 30, and instead of 2 candidates, there are (literally) a billion, all competing in a March Madness style single-elimination bracket.
 
+A simple 3-round example is below, with its corresponding `2 ^ 3 = 8` candidates:
+
 [simple bracket widget]
 
 The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
-This does come at a cost, in that it meddles further with the LLM's original token probabilities. Remember how in the **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability, to anywhere in [0%, 9.75%]? Each additional round takes what the last round produced and distorts it again, causing the range to stretch wider and wider.
+This does come at a cost, in that it meddles further with the LLM's original token probabilities. Remember how in the **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Each additional round takes what the previous round produced and distorts it again, causing the range to stretch wider and wider.
 
-I'm sorry for this chart, which is the last I'll show you and also the most insane. It shows how papaya's chances diverge from its original, fixed 5% as we add rounds to our tournament:
+I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It shows how papaya's chances diverge from its original 5% as we add rounds to our tournament:
 
 {% include watermarking/worlds.html %}
 
-[rephrase] This is the bagel shop again, except now most customers are leaving with no bagels, and a few are leaving with 100!
+It's the bagel thing all over again, except now  except now most customers are leaving with no bagels at all, and a few are leaving with like 100!
 
 This said, SynthID is extremely successful at what it set out to do -- detection is much easier.
 
-for the sake of easier detection -- simple method requires X tokens to be confident, synthID only requires Y
+> On Gemma-7B, 100-token responses to ELI5 prompts, temperature 1.0, using the mean-g-value score at FPR=1%, detection goes from TPR ≈ 4% at 1 layer to ≈ 88% at 28 layers. Four percent is essentially chance — a single-match watermark is close to undetectable in a 100-token response. That's from Section 4.1 of the arXiv analysis.
 
 ## Fin
 
 So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the text -- and I mean, of course it does, since "distortion" and "detectability" are the same thing.
 
-For what it's worth, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where ____, and 
+For what it's worth, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 
-note that the other main argument for why this is OK is the 20M gemini test, linked in the anthropic doc too
+So, maybe this is all tilting at windmills, but -- at least they're pretty interesting windmills.
 
 ¯\\\_(ツ)\_/¯
