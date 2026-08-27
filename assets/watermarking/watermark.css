@@ -890,6 +890,172 @@
   box-shadow: 0 0 0 3px var(--panel-glow);
 }
 
+.watermark-widget .worlds-chart {
+  --worlds-pad-top: 26px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin: 34px 0 0;
+  column-gap: 6px;
+}
+
+.watermark-widget .worlds-y {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.watermark-widget .worlds-y-scale {
+  position: relative;
+  flex: 1 1 auto;
+  margin-top: var(--worlds-pad-top);
+  min-width: 1.25em;
+}
+
+.watermark-widget .worlds-y-scale span {
+  position: absolute;
+  right: 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  transform: translateY(50%);
+  white-space: nowrap;
+}
+
+.watermark-widget .worlds-y-scale span.is-top {
+  transform: translateY(100%);
+}
+
+.watermark-widget .worlds-y-scale span.is-bottom {
+  transform: none;
+}
+
+.watermark-widget .worlds-plot {
+  grid-column: 2;
+  grid-row: 1;
+  height: 196px;
+  padding: var(--worlds-pad-top) 10px 0;
+  overflow: hidden;
+  background: var(--well);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+}
+
+.watermark-widget .worlds-bars {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.watermark-widget .worlds-bar {
+  flex: 1 1 0;
+  height: var(--height, 0%);
+  min-width: 0;
+  background: var(--papaya);
+  border-radius: 3px 3px 0 0;
+  transition: height 350ms ease, opacity 180ms ease;
+}
+
+.watermark-widget .worlds-bar:not(.is-empty) {
+  cursor: help;
+}
+
+.watermark-widget .worlds-bar.is-empty {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.watermark-widget .worlds-mean {
+  position: absolute;
+  top: -14px;
+  bottom: 0;
+  left: 5%;
+  z-index: 1;
+  width: 0;
+  border-left: 1.5px dashed color-mix(in srgb, var(--muted) 70%, transparent);
+  pointer-events: none;
+  transform: translateX(-0.75px);
+}
+
+.watermark-widget .worlds-mean span {
+  position: absolute;
+  top: 0;
+  left: 6px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.watermark-widget .worlds-axis {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2;
+  height: 16px;
+  margin: 8px 10px 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+}
+
+.watermark-widget .worlds-axis span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.watermark-widget .worlds-axis span:first-child {
+  transform: none;
+}
+
+.watermark-widget .worlds-axis span:last-child {
+  transform: translateX(-100%);
+}
+
+.watermark-widget .worlds-controls {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  gap: 8px;
+  align-items: center;
+  margin-top: 22px;
+}
+
+.watermark-widget .worlds-controls .button {
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.watermark-widget .worlds-round {
+  margin: 0;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.watermark-widget .button-toggle:disabled {
+  cursor: default;
+  opacity: 0.38;
+  transform: none;
+  box-shadow: none;
+}
+
+.watermark-widget .button-toggle:disabled:hover {
+  background: var(--well);
+  transform: none;
+}
+
 @keyframes watermark-counter-pulse-yes {
   0% {
     background: transparent;
@@ -1038,6 +1204,31 @@
     padding: 0 8px;
     font-size: 13px;
   }
+
+  .watermark-widget .worlds-chart {
+    --worlds-pad-top: 22px;
+  }
+
+  .watermark-widget .worlds-plot {
+    height: 158px;
+    padding: var(--worlds-pad-top) 6px 0;
+  }
+
+  .watermark-widget .worlds-bars {
+    gap: 1px;
+  }
+
+  .watermark-widget .worlds-axis {
+    margin: 8px 6px 0;
+  }
+
+  .watermark-widget .worlds-axis span:nth-child(even) {
+    display: none;
+  }
+
+  .watermark-widget .worlds-axis span:last-child {
+    display: inline;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1107,5 +1298,9 @@
 
   .watermark-widget .g-core.choosing {
     animation: none;
+  }
+
+  .watermark-widget .worlds-bar {
+    transition: none;
   }
 }

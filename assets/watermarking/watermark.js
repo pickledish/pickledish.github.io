@@ -678,6 +678,85 @@
     })();
   }
 
+  function setupWorlds() {
+    const plot = $("#worlds-plot");
+    const label = $("#worlds-round");
+    const prev = $("#worlds-prev");
+    const next = $("#worlds-next");
+    if (!plot || !label || !prev || !next) return;
+
+    const maxRounds = 5;
+    const bucketWidth = 2;
+    const histograms = [
+      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [4, 1, 5, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [95, 27, 42, 33, 23, 14, 10, 5, 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1828, 529, 425, 364, 226, 234, 177, 73, 64, 35, 54, 46, 13, 9, 12, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [33149, 8481, 5228, 4349, 2765, 2652, 2690, 994, 951, 825, 837, 743, 553, 303, 170, 113, 211, 66, 175, 106, 91, 26, 10, 17, 13, 13, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [583536, 124255, 70757, 57276, 35645, 32188, 35894, 15233, 13251, 11994, 11684, 11625, 11800, 5809, 3191, 3112, 3888, 2288, 2905, 2563, 2278, 1870, 1416, 741, 453, 407, 543, 457, 186, 462, 289, 278, 157, 40, 16, 40, 9, 30, 4, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    const worldCounts = histograms.map((hist) => hist.reduce((sum, count) => sum + count, 0));
+
+    const barsWrap = document.createElement("div");
+    barsWrap.className = "worlds-bars";
+    const bars = histograms[0].map((_, index) => {
+      const bar = document.createElement("span");
+      bar.className = "worlds-bar is-empty";
+      bar.style.setProperty("--height", "0%");
+      const lo = index * bucketWidth;
+      const hi = lo + bucketWidth;
+      bar.dataset.range = `${lo}–${hi}%`;
+      barsWrap.append(bar);
+      return bar;
+    });
+
+    const mean = document.createElement("div");
+    mean.className = "worlds-mean";
+    mean.innerHTML = "<span>5%</span>";
+    barsWrap.append(mean);
+    plot.append(barsWrap);
+
+    let rounds = 0;
+
+    function formatPossibilities(count) {
+      return `${count.toLocaleString("en-US")} ${count === 1 ? "possibility" : "possibilities"}`;
+    }
+
+    function render() {
+      const hist = histograms[rounds];
+      const total = worldCounts[rounds];
+      bars.forEach((bar, index) => {
+        const count = hist[index];
+        bar.style.setProperty("--height", `${Math.sqrt(count / total) * 100}%`);
+        bar.classList.toggle("is-empty", count === 0);
+        bar.title = count
+          ? `${bar.dataset.range}: ${count.toLocaleString("en-US")} of ${formatPossibilities(total)}`
+          : "";
+      });
+      const roundText = rounds === 1 ? "1 round" : `${rounds} rounds`;
+      label.textContent = `${roundText} (${formatPossibilities(total)})`;
+      prev.disabled = rounds === 0;
+      next.disabled = rounds === maxRounds;
+      plot.setAttribute(
+        "aria-label",
+        `Histogram of papaya’s probability after ${roundText}, across ${formatPossibilities(total)}`,
+      );
+    }
+
+    prev.addEventListener("click", () => {
+      if (rounds === 0) return;
+      rounds -= 1;
+      render();
+    });
+    next.addEventListener("click", () => {
+      if (rounds === maxRounds) return;
+      rounds += 1;
+      render();
+    });
+
+    render();
+  }
+
   function init() {
     setupStageOne();
     setupStageTwo();
@@ -685,6 +764,7 @@
     setupDistortion();
     setupGScore();
     setupDetect();
+    setupWorlds();
   }
 
   if (document.readyState === "loading") {

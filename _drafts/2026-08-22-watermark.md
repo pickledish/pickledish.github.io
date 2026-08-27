@@ -87,7 +87,7 @@ Fortunately it's pretty simple! Essentially:
 * `g` calculates `hash(secret_key ++ previous_4_tokens ++ candidate_token)`
 * `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
-And `g` just opts for a token it likes, if there is one. If it likes both candidates (or dislikes both), it selects one at random. This preference is what makes up the watermark!
+And when `g` is given two tokens to decide between, it just opts for a token it likes, if there is one. If it likes both candidates (or it dislikes both), it selects one at random. This preference is what makes up the watermark!
 
 You can put your own secret in below to see how `g` works:
 
@@ -129,7 +129,7 @@ It's important to note that, when looking across _all_ `g` functions, the effect
 
 From my understanding, a lot of the \"watermarking does not impact model quality\" argument stems from this fact.
 
-Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 0 or 24. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_... But did each customer actually get what they were expecting?
+Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 6 or 18. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_... But did each customer actually get what they were expecting?
 " %}
 
 ## Stage 3: Detection
@@ -146,7 +146,7 @@ We walk through the text, calculating `g` for each token using the 4 tokens befo
 
 If that ratio is suspiciously high, then the text is watermarked!
 
-## Aside: A Suspicious Ratio?
+## Stage 3: A Suspicious Ratio?
 
 For me, the hand-waving above leaves a bit to be desired -- what should we _expect_ this ratio to be for watermarked and non-watermarked text, exactly? How do we know when it's high enough to be "suspicious"?
 
@@ -186,7 +186,7 @@ So -- "suspicious" means "somewhere between 50% and 75%", depending on the text!
 
 <!-- remember, can only even DO this scoring if you have the secret key! -->
 
-## Aside: Predictable Text
+## Stage 3: Predictable Text
 
 You might have noticed that the latter case above -- when `g` is handed two copies of the same token -- is kind of problematic. The more often that situation crops up, the closer the expected ratio is pushed down towards 50%, and the smaller the difference becomes between normal text and watermarked text.
 
@@ -216,18 +216,26 @@ So, "higher signal" is what SynthID was built for! It's hugely scaled up from wh
 
 [simple bracket widget]
 
-The thinking here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
+The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
+This does come at a cost, in that it meddles further with the LLM's original token probabilities. Remember how in the **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability, to anywhere in [0%, 9.75%]? Each additional round takes what the last round produced and distorts it again, causing the range to stretch wider and wider.
 
+I'm sorry for this chart, which is the last I'll show you and also the most insane. It shows how papaya's chances diverge from its original, fixed 5% as we add rounds to our tournament:
 
-From what I understand, this actually ends up distorting the probability distributions _more_, for the sake of easier detection -- simple method requires X tokens to be confident, synthID only requires Y
+{% include watermarking/worlds.html %}
+
+[rephrase] This is the bagel shop again, except now most customers are leaving with no bagels, and a few are leaving with 100!
+
+This said, SynthID is extremely successful at what it set out to do -- detection is much easier.
+
+for the sake of easier detection -- simple method requires X tokens to be confident, synthID only requires Y
 
 ## Fin
 
-so, in the end we learned something that we possibly could have realized at the start -- watermarking DOES distort the text, of course it does, since that distortion IS detect-ability
+So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the text -- and I mean, of course it does, since "distortion" and "detectability" are the same thing.
 
-it seems like empirically, the distortion doesn't end up mattering much -- 
+For what it's worth, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where ____, and 
 
 note that the other main argument for why this is OK is the 20M gemini test, linked in the anthropic doc too
 
-...shrug
+¯\\\_(ツ)\_/¯
