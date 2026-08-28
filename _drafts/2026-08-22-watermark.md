@@ -93,13 +93,27 @@ You can put your own secret in below to see how `g` works:
 
 {% include watermarking/hash.html %}
 
+You might guess that, in our toy example here, there are 16 distinct like/dislike assignments that `g` could have, 16 different "moods" it could be in, depending on the secret key and the 4 prior tokens, shown as 16 columns below:
+
+
+```
+M: 💚 │ 💚 │ 💚 │ 💚 │ 💚 │ 💚 │ 💚 │ 💚 │ 👎 │ 👎 │ 👎 │ 👎 │ 👎 │ 👎 │ 👎 │ 👎
+B: 💚 │ 💚 │ 💚 │ 💚 │ 👎 │ 👎 │ 👎 │ 👎 │ 💚 │ 💚 │ 💚 │ 💚 │ 👎 │ 👎 │ 👎 │ 👎
+C: 💚 │ 💚 │ 👎 │ 👎 │ 💚 │ 💚 │ 👎 │ 👎 │ 💚 │ 💚 │ 👎 │ 👎 │ 💚 │ 💚 │ 👎 │ 👎
+P: 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎
+```
+
+And, you'd be right!
+
+---
+
 Each of the elements of the hash serves an important purpose:
 
 * `secret_key` being included in the hash means that only the owner of the LLM can apply, or detect, their own watermark
 * `previous_4_tokens` is there so that `g`'s preference for a token is dependent on the tokens that come before it. Without this, `g` might (for example) just universally dislike "banana", which would be noticeable to users
 * `candidate_token` is, of course, the subject of our watermarking
 
-The interesting thing is, without _all three_ of these parameters, le hash is totally unpredictable, i.e. indistinguishable from random noise. This means, without the secret key, `g`'s choices seem random -- there's no statistical test you can run on a piece of text to tell whether it came from Stage 2 or Stage 3.
+An interesting thing is, without _all three_ of these parameters, the hash is totally unpredictable, i.e. indistinguishable from random noise. This means, without the secret key, `g`'s choices seem random -- there's no statistical test you can run on a piece of text to tell whether it came from Stage 2 or Stage 3.
 
 However, that doesn't mean `g` has no impact on token probabilities. That is next!
 
@@ -116,7 +130,7 @@ Let's focus for a moment on the least probable token the LLM could generate: "pa
 
 In the first two situations, `g` acts the same as the coin flip -- no watermarking business occurs. But in the latter situations, things get weird -- `g` no longer acts like a random coin. In the third scenario for instance, `g` will _always_ choose "papaya" over the other candidate.
 
-So, remember the "probability distribution" created by the LLM in Stage 1? This can distort it pretty substantially. If you try the buttons below, you can see how "papaya" is affected by two `g` functions at the different extremes: one that likes "papaya" and no other tokens, and one that likes all tokens _except_ for "papaya":
+So, remember the "probability distribution" created by the LLM in Stage 1? This can distort it pretty substantially. If you try the buttons below, you can see how "papaya" is affected by 2 of the 16 different `g` moods: one that likes "papaya" and no other tokens, and one that likes all tokens _except_ for "papaya":
 
 {% include watermarking/distortion.html %}
 
@@ -125,11 +139,11 @@ In the "`g` likes only papaya" case, "papaya" will automatically win any contest
 But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and its real chances drop to almost 0%.
 
 {% include disclaimer.html content="
-It's important to note that, when looking across _all_ `g` functions, the effects \"average out\" -- as in, the `g` that loves \"papaya\" turns up exactly as often as the `g` that hates \"papaya\", and so when considering ____[broad/large text generation], the overall likelihood that \"papaya\" is generated is the same as what the LLM would've come up with organically.
+It's important to note that, when looking across _all_ moods of `g`, the effects \"average out\" -- so, the mood that loves \"papaya\" turns up exactly as often as the mood that hates \"papaya\", and over many generations, le likelihood that \"papaya\" is generated overall comes to exactly 5%.
+
+From what I understand, the \"non-distortionary\" claims in the SynthID paper and articles are based on this fact.
 
 From my understanding, a lot of the \"watermarking does not impact model quality\" argument stems from this fact.
-
-Personally I'm not totally convinced; to me it sounds a bit like you have a bunch of customers come in, each requesting a dozen bagels, and you decide at random to give them either 6 or 18. Sure, at the end of the day you can claim you gave out a dozen bagels _on average_... But did each customer actually get what they were expecting?
 " %}
 
 ## Stage 3: Detection
@@ -163,7 +177,7 @@ g likes the 1st but not the 2nd   =>   💚 g picks a token it likes
 g likes the 2nd but not the 1st   =>   💚 g picks a token it likes
 ```
 
-Do you see how, in 3 of the 4 situations, le LLM ends up emitting a token `g` preferred? Thus, the expected ratio is pushed up towards 75% -- pretty high!
+Do you see how, in 3 of the 4 situations, the LLM ends up emitting a token `g` preferred? Thus the expected ratio is pushed up towards 75% -- pretty high!
 
 ---
 
@@ -216,27 +230,33 @@ So, "higher signal" is what SynthID was built for! It's hugely scaled up from wh
 
 A simple 3-round example is below, with its corresponding `2 ^ 3 = 8` candidates:
 
-[simple bracket widget]
+{% include watermarking/bracket.html %}
 
 The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
 This does come at a cost, in that it meddles further with the LLM's original token probabilities. Remember how in the **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Each additional round takes what the previous round produced and distorts it again, causing the range to stretch wider and wider.
 
-I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It shows how papaya's chances diverge from its original 5% as we add rounds to our tournament:
+I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It (I hope) helps to visualize how the ultimate chance the LLM emits "papaya" changes as we add rounds:
 
 {% include watermarking/worlds.html %}
 
-It's the bagel thing all over again, except now  except now most customers are leaving with no bagels at all, and a few are leaving with like 100!
+foo foo foo
 
-This said, SynthID is extremely successful at what it set out to do -- detection is much easier.
+<!-- It's the bagel thing all over again, except now  except now most customers are leaving with no bagels at all, and a few are leaving with like 100! -->
 
-> On Gemma-7B, 100-token responses to ELI5 prompts, temperature 1.0, using the mean-g-value score at FPR=1%, detection goes from TPR ≈ 4% at 1 layer to ≈ 88% at 28 layers. Four percent is essentially chance — a single-match watermark is close to undetectable in a 100-token response. That's from Section 4.1 of the arXiv analysis.
+This said, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of the paper:
+
+<img src="/assets/watermarking/tpr.png" class="halfwidthimage">
+
+When trying the watermark + detection process on 100-token-long bits of text, they saw the TPR ("true positive rate", the percent of actually-watermarked texts that they could correctly identify) increase from a paltry 4% for the 1-round tournament, up to 88% for the 28-round tournament, which is transformative!
 
 ## Fin
 
 So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the text -- and I mean, of course it does, since "distortion" and "detectability" are the same thing.
 
-For what it's worth, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
+Though, I'm honestly still not sure if "distortion" is even the right word -- is there really much difference between "a 5% chance" and "a 6% chance half the time, and a 4% chance the other half of the time"? I guess if we really _could_ seed the LLM's PRNG, that would turn "a 5% chance" into "a 0% chance most of the time, and a 100% chance occasionally" -- and nobody's calling that "the model being degraded".
+
+Besides, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 
 So, maybe this is all tilting at windmills, but -- at least they're pretty interesting windmills.
 

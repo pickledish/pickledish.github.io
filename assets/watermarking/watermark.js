@@ -47,7 +47,7 @@
   }
 
   function clearCandidateState(element) {
-    element.classList.remove("placeholder", "winner", "loser", "drawing");
+    element.classList.remove("placeholder", "winner", "loser", "drawing", "is-active");
   }
 
   function resetCandidate(element) {
@@ -57,10 +57,14 @@
     element.style.cssText = "";
   }
 
-  function fillCandidate(element, token) {
+  function setCandidate(element, token) {
     clearCandidateState(element);
     element.textContent = token.label;
     element.style.cssText = tokenStyle(token);
+  }
+
+  function fillCandidate(element, token) {
+    setCandidate(element, token);
     void element.offsetWidth;
     element.classList.add("drawing");
   }
@@ -678,50 +682,270 @@
     })();
   }
 
+  function setupBracket() {
+    const root = $("#bracket");
+    const stepButton = $("#bracket-step");
+    const resetButton = $("#bracket-reset");
+    const tokenEl = $("#bracket-token");
+    const widget = root?.closest(".watermark-widget");
+    if (!root || !stepButton || !resetButton || !tokenEl || !widget) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const pause = (ms) => wait(reduceMotion ? 0 : ms);
+    const slot = (round, index) => root.querySelector(`[data-slot="${round}-${index}"]`);
+    const gBox = (round, index) => root.querySelector(`[data-g="${round}-${index}"]`);
+
+    let board = [];
+    let likes = [];
+    let nextRound = 0;
+    let busy = false;
+
+    function matchCount(round) {
+      return 8 >> (round + 1);
+    }
+
+    function nonce() {
+      const buffer = new Uint32Array(1);
+      if (window.crypto?.getRandomValues) window.crypto.getRandomValues(buffer);
+      else buffer[0] = Math.floor(randomUnit() * 2 ** 32);
+      return buffer[0].toString(16);
+    }
+
+    async function likesFor(secret) {
+      const entries = await Promise.all(TOKENS.map(async (token) => {
+        const { likes: liked } = await scoreCandidate(G_CONTEXT, secret, token.label);
+        return [token.id, liked];
+      }));
+      return Object.fromEntries(entries);
+    }
+
+    function chooseWinner(tokenA, tokenB, likeMap) {
+      const likeA = likeMap[tokenA.id];
+      const likeB = likeMap[tokenB.id];
+      if (likeA !== likeB) return likeA ? 0 : 1;
+      return randomUnit() < 0.5 ? 0 : 1;
+    }
+
+    function paint() {
+      for (let round = 0; round < 4; round++) {
+        const count = 8 >> round;
+        for (let index = 0; index < count; index++) {
+          const token = board[round][index];
+          const element = slot(round, index);
+          if (token) setCandidate(element, token);
+          else resetCandidate(element);
+        }
+      }
+      for (const g of root.querySelectorAll(".g-core")) {
+        g.classList.remove("choosing");
+      }
+    }
+
+    async function fly(fromEl, toEl, token) {
+      if (reduceMotion) {
+        setCandidate(toEl, token);
+        return;
+      }
+
+      const from = fromEl.getBoundingClientRect();
+      const to = toEl.getBoundingClientRect();
+      const clone = fromEl.cloneNode(true);
+      clone.classList.add("bracket-flyer");
+      clone.style.left = `${from.left}px`;
+      clone.style.top = `${from.top}px`;
+      clone.style.width = `${from.width}px`;
+      clone.style.height = `${from.height}px`;
+      widget.append(clone);
+      void clone.offsetWidth;
+      clone.style.left = `${to.left}px`;
+      clone.style.top = `${to.top}px`;
+      clone.style.width = `${to.width}px`;
+      clone.style.height = `${to.height}px`;
+      await wait(420);
+      clone.remove();
+      setCandidate(toEl, token);
+    }
+
+    async function seed() {
+      busy = true;
+      stepButton.disabled = true;
+      resetButton.disabled = true;
+      for (const flyer of widget.querySelectorAll(".bracket-flyer")) flyer.remove();
+
+      const key = nonce();
+      board = [
+        Array.from({ length: 8 }, () => sampleToken().token),
+        [null, null, null, null],
+        [null, null],
+        [null],
+      ];
+      nextRound = 0;
+      tokenEl.textContent = "…";
+      tokenEl.className = "sampled-token is-blank";
+      paint();
+
+      try {
+        likes = await Promise.all([1, 2, 3].map((layer) => likesFor(`${layer}:${key}`)));
+      } finally {
+        busy = false;
+        resetButton.disabled = false;
+        stepButton.disabled = false;
+      }
+    }
+
+    async function playRound() {
+      const round = nextRound;
+      const likeMap = likes[round];
+      const matches = matchCount(round);
+
+      for (let match = 0; match < matches; match++) {
+        const i0 = match * 2;
+        const i1 = i0 + 1;
+        const tokenA = board[round][i0];
+        const tokenB = board[round][i1];
+        const win = chooseWinner(tokenA, tokenB, likeMap);
+        const token = win === 0 ? tokenA : tokenB;
+        const elA = slot(round, i0);
+        const elB = slot(round, i1);
+        const g = gBox(round, match);
+
+        elA.classList.add("is-active");
+        elB.classList.add("is-active");
+        g.classList.remove("choosing");
+        void g.offsetWidth;
+        g.classList.add("choosing");
+        await pause(720);
+
+        elA.classList.remove("is-active");
+        elB.classList.remove("is-active");
+        markWinner(win === 0 ? elA : elB, win === 0 ? elB : elA);
+        await pause(280);
+
+        board[round + 1][match] = token;
+        await fly(win === 0 ? elA : elB, slot(round + 1, match), token);
+      }
+
+      nextRound += 1;
+      if (nextRound >= 3) {
+        const champ = board[3][0];
+        tokenEl.textContent = champ.label;
+        tokenEl.className = `sampled-token ${champ.id}`;
+        stepButton.disabled = true;
+      }
+    }
+
+    stepButton.addEventListener("click", async () => {
+      if (busy || nextRound >= 3) return;
+      busy = true;
+      stepButton.disabled = true;
+      resetButton.disabled = true;
+      try {
+        await playRound();
+      } finally {
+        busy = false;
+        resetButton.disabled = false;
+        if (nextRound < 3) stepButton.disabled = false;
+      }
+    });
+
+    resetButton.addEventListener("click", () => {
+      if (busy) return;
+      void seed();
+    });
+
+    void seed();
+  }
+
+  function niceCeiling(value) {
+    if (value <= 1) return 1;
+    const exp = Math.floor(Math.log10(value));
+    const pow = 10 ** exp;
+    const mant = value / pow;
+    const steps = [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    return steps.find((step) => mant <= step) * pow;
+  }
+
+  function desiredSlots(maxCount, pixelMax) {
+    const count = Math.max(maxCount, 1);
+    if (count <= 6) return count;
+    return Math.max(8, Math.min(pixelMax, Math.round(4 * Math.log2(count))));
+  }
+
+  function histogramScale(maxCount, plotHeight) {
+    const count = Math.max(maxCount, 1);
+    const pixelMax = Math.max(8, Math.floor((plotHeight || 170) / 2));
+    const yMax = niceCeiling(count);
+    const slotsWanted = desiredSlots(count, pixelMax);
+    const unit = Math.max(1, Math.ceil(yMax / slotsWanted));
+    const slots = Math.max(1, Math.round(yMax / unit));
+    return { unit, slots, yMax };
+  }
+
+  function axisTicks(yMax) {
+    if (yMax <= 1) return [0, 1];
+    if (yMax <= 6) return Array.from({ length: yMax + 1 }, (_, i) => i);
+    for (const divisions of [3, 4, 5, 2]) {
+      if (yMax % divisions === 0) {
+        return Array.from({ length: divisions + 1 }, (_, i) => (yMax * i) / divisions);
+      }
+    }
+    return [0, yMax];
+  }
+
+  function formatCount(value) {
+    if (value >= 1000) {
+      return new Intl.NumberFormat("en-US", {
+        notation: "compact",
+        compactDisplay: "short",
+        maximumFractionDigits: 1,
+      }).format(value);
+    }
+    return String(value);
+  }
+
   function setupWorlds() {
     const plot = $("#worlds-plot");
+    const yScale = $("#worlds-y-scale");
     const label = $("#worlds-round");
     const prev = $("#worlds-prev");
     const next = $("#worlds-next");
-    if (!plot || !label || !prev || !next) return;
+    if (!plot || !yScale || !label || !prev || !next) return;
 
     const maxRounds = 5;
-    const bucketWidth = 2;
+    const bucketWidth = 1;
     const histograms = [
-      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [4, 1, 5, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [95, 27, 42, 33, 23, 14, 10, 5, 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [1828, 529, 425, 364, 226, 234, 177, 73, 64, 35, 54, 46, 13, 9, 12, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [33149, 8481, 5228, 4349, 2765, 2652, 2690, 994, 951, 825, 837, 743, 553, 303, 170, 113, 211, 66, 175, 106, 91, 26, 10, 17, 13, 13, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [583536, 124255, 70757, 57276, 35645, 32188, 35894, 15233, 13251, 11994, 11684, 11625, 11800, 5809, 3191, 3112, 3888, 2288, 2905, 2563, 2278, 1870, 1416, 741, 453, 407, 543, 457, 186, 462, 289, 278, 157, 40, 16, 40, 9, 30, 4, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [2, 2, 0, 1, 2, 3, 2, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [56, 39, 13, 14, 17, 25, 24, 9, 11, 12, 8, 6, 7, 3, 2, 3, 4, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1261, 567, 286, 243, 210, 215, 242, 122, 108, 118, 126, 108, 94, 83, 42, 31, 30, 34, 25, 10, 31, 23, 27, 19, 10, 3, 6, 3, 1, 11, 3, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [25107, 8042, 4632, 3849, 2697, 2531, 2616, 1733, 1461, 1304, 1347, 1305, 1327, 1363, 597, 397, 422, 529, 440, 385, 446, 391, 429, 314, 357, 196, 229, 74, 56, 114, 51, 62, 159, 52, 18, 48, 109, 66, 43, 63, 65, 26, 14, 12, 3, 7, 13, 4, 1, 30],
+      [469338, 114198, 68414, 55841, 37157, 33600, 31682, 25594, 19453, 16192, 16227, 15961, 16719, 19175, 8803, 6430, 6527, 6724, 6244, 5750, 5779, 5905, 6072, 5553, 6497, 5303, 3923, 1886, 1528, 1663, 1379, 1733, 2518, 1370, 1082, 1206, 1742, 1163, 994, 1569, 1306, 972, 1006, 864, 707, 709, 486, 255, 178, 3199],
     ];
     const worldCounts = histograms.map((hist) => hist.reduce((sum, count) => sum + count, 0));
 
-    const barsWrap = document.createElement("div");
-    barsWrap.className = "worlds-bars";
-    const bars = histograms[0].map((_, index) => {
-      const bar = document.createElement("span");
-      bar.className = "worlds-bar is-empty";
-      bar.style.setProperty("--height", "0%");
+    const stacksWrap = document.createElement("div");
+    stacksWrap.className = "worlds-stacks";
+    const stacks = histograms[0].map((_, index) => {
+      const stack = document.createElement("div");
+      stack.className = "worlds-stack is-empty";
       const lo = index * bucketWidth;
-      const hi = lo + bucketWidth;
-      bar.dataset.range = `${lo}–${hi}%`;
-      barsWrap.append(bar);
-      return bar;
+      stack.dataset.range = `${lo}%`;
+      stacksWrap.append(stack);
+      return stack;
     });
 
     const mean = document.createElement("div");
     mean.className = "worlds-mean";
     mean.innerHTML = "<span>5%</span>";
-    barsWrap.append(mean);
-    plot.append(barsWrap);
+    stacksWrap.append(mean);
+    plot.append(stacksWrap);
 
     function positionMean() {
-      const bar = bars[2];
-      mean.style.left = `${bar.offsetLeft + bar.offsetWidth / 2}px`;
+      const stack = stacks[5];
+      mean.style.left = `${stack.offsetLeft}px`;
     }
 
-    new ResizeObserver(positionMean).observe(barsWrap);
+    new ResizeObserver(positionMean).observe(stacksWrap);
 
     let rounds = 0;
 
@@ -729,16 +953,48 @@
       return `${count.toLocaleString("en-US")} ${count === 1 ? "possibility" : "possibilities"}`;
     }
 
+    function renderYAxis(yMax) {
+      yScale.replaceChildren(
+        ...axisTicks(yMax).map((tick) => {
+          const span = document.createElement("span");
+          if (tick === yMax) span.className = "is-top";
+          if (tick === 0) span.className = "is-bottom";
+          span.style.bottom = `${(tick / yMax) * 100}%`;
+          span.textContent = formatCount(tick);
+          return span;
+        }),
+      );
+    }
+
+    function renderStack(stack, count, unit, slots) {
+      const boxes = count === 0 ? 0 : Math.min(slots, Math.max(1, Math.round(count / unit)));
+      while (stack.childElementCount < boxes) {
+        const box = document.createElement("span");
+        box.className = "worlds-box";
+        stack.append(box);
+      }
+      while (stack.childElementCount > boxes) {
+        stack.lastElementChild.remove();
+      }
+      stack.classList.toggle("is-empty", boxes === 0);
+      stack.title = count
+        ? `${count.toLocaleString("en-US")} ${count === 1 ? "possibility" : "possibilities"} at ~${stack.dataset.range}`
+        : "";
+    }
+
     function render() {
       const hist = histograms[rounds];
       const total = worldCounts[rounds];
-      bars.forEach((bar, index) => {
-        const count = hist[index];
-        bar.style.setProperty("--height", `${Math.sqrt(count / total) * 100}%`);
-        bar.classList.toggle("is-empty", count === 0);
-        bar.title = count
-          ? `${bar.dataset.range}: ${count.toLocaleString("en-US")} of ${formatPossibilities(total)}`
-          : "";
+      const { unit, slots, yMax } = histogramScale(Math.max(...hist), stacksWrap.clientHeight);
+      const gap = slots > 40 ? 0 : 1;
+      stacksWrap.style.setProperty("--box-gap", `${gap}px`);
+      stacksWrap.style.setProperty(
+        "--box-h",
+        `calc((100% - ${slots - 1} * var(--box-gap)) / ${slots})`,
+      );
+      renderYAxis(yMax);
+      stacks.forEach((stack, index) => {
+        renderStack(stack, hist[index], unit, slots);
       });
       const roundText = rounds === 1 ? "1 round" : `${rounds} rounds`;
       label.textContent = `${roundText} (${formatPossibilities(total)})`;
@@ -746,7 +1002,7 @@
       next.disabled = rounds === maxRounds;
       plot.setAttribute(
         "aria-label",
-        `Histogram of papaya’s probability after ${roundText}, across ${formatPossibilities(total)}`,
+        `Count of g-functions by papaya’s probability after ${roundText}, across ${formatPossibilities(total)}`,
       );
     }
 
@@ -771,6 +1027,7 @@
     setupDistortion();
     setupGScore();
     setupDetect();
+    setupBracket();
     setupWorlds();
   }
 
