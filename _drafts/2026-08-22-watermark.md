@@ -103,7 +103,7 @@ C: 💚 │ 💚 │ 👎 │ 👎 │ 💚 │ 💚 │ 👎 │ 👎 │ 💚 
 P: 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎 │ 💚 │ 👎
 ```
 
-And, you'd be right!
+And you'd be right!
 
 ---
 
@@ -130,7 +130,7 @@ Let's focus for a moment on the least probable token the LLM could generate: "pa
 
 In the first two situations, `g` acts the same as the coin flip -- no watermarking business occurs. But in the latter situations, things get weird -- `g` no longer acts like a random coin. In the third scenario for instance, `g` will _always_ choose "papaya" over the other candidate.
 
-So, remember the "probability distribution" created by the LLM in Stage 1? This can distort it pretty substantially. If you try the buttons below, you can see how "papaya" is affected by 2 of the 16 different `g` moods: one that likes "papaya" and no other tokens, and one that likes all tokens _except_ for "papaya":
+So, remember the "probability distribution" created by the LLM in Stage 1? This can distort it pretty substantially. If you try the buttons below, you can see how "papaya" is affected by 2 of the 16 different `g` moods: the one liking "papaya" and no other tokens, and the one liking all tokens _except_ for "papaya":
 
 {% include watermarking/distortion.html %}
 
@@ -184,15 +184,13 @@ Do you see how, in 3 of the 4 situations, the LLM ends up emitting a token `g` p
 But, now suppose `g` sees the **same** token twice to "decide between". Well, it's not really much of a decision, right? It returns the token regardless of whether it liked it or not, and moves on. In our running example, that's gonna happen almost half the time in fact:
 
 ```rb
-P(duplicate) = P("mango" + "mango") + P("banana" + "banana") + P("coconut" + "coconut") + P("papaya" + "papaya")
+P(duplicate) = P("mango" & "mango") + P("banana" & "banana") + P("coconut" & "coconut") + P("papaya" & "papaya")
              = (65% ^ 2) + (20% ^ 2) + (10% ^ 2) + (5% ^ 2)
              = 42.25% + 4% + 1% + 0.25%
              = 47.5%
 ```
 
-In these cases, it's random whether `g` liked the token, and so the expected ratio is pushed the opposite way, down towards 50%.
-
-rephrase "it's random whether `g` liked the token"
+Any `g` function will like and dislike tokens in equal measure, thus the expected ratio is pushed the opposite way, down towards 50%.
 
 ---
 
@@ -234,13 +232,13 @@ A simple 3-round example is below, with its corresponding `2 ^ 3 = 8` candidates
 
 The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
-This does come at a cost, in that it meddles further with the LLM's original token probabilities. Remember how in the **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Each additional round takes what the previous round produced and distorts it again, causing the range to stretch wider and wider.
+This does meddle further with the LLM's original token probabilities. Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Here, each additional round takes what the previous round produced and distorts it again, causing the range to stretch wider and wider.
 
 I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It (I hope) helps to visualize how the ultimate chance the LLM emits "papaya" changes as we add rounds:
 
 {% include watermarking/worlds.html %}
 
-foo foo foo
+(The number of distinct mood combinations goes up exponentially as we add `g`-functions; so with 1 round it's 16 moods, as we saw earlier, but with 2 it's 16\*16 total moods, and so on. A square at 18% is a mood combination that puts the likelihood of "papaya" at 18%.)
 
 <!-- It's the bagel thing all over again, except now  except now most customers are leaving with no bagels at all, and a few are leaving with like 100! -->
 
@@ -252,11 +250,15 @@ When trying the watermark + detection process on 100-token-long bits of text, th
 
 ## Fin
 
-So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the text -- and I mean, of course it does, since "distortion" and "detectability" are the same thing.
+So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the probability that a certain token is generated at a certain moment -- I mean, of course it does, since that distortion is exactly the thing that we can detect after the fact.
 
-Though, I'm honestly still not sure if "distortion" is even the right word -- is there really much difference between "a 5% chance" and "a 6% chance half the time, and a 4% chance the other half of the time"? I guess if we really _could_ seed the LLM's PRNG, that would turn "a 5% chance" into "a 0% chance most of the time, and a 100% chance occasionally" -- and nobody's calling that "the model being degraded".
+But, does it degrade the quality of the text overall? I don't believe so.
 
-Besides, it sounds like empirically this distortion doesn't end up mattering much. A big part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
+Yes, the watermarking makes it so that "a 5% chance" might become "a 2% chance half of the time, and a 8% chance the other half of the time". That sounds bad!
+
+But, remember my "watermarking is easy, you just seed the LLM's PRNG" misunderstanding from earlier? In the end, this isn't actually any different -- the PRNG, conditioned on a seed, is maximally "distorted" too, every probability collapses to either 0% or 100%. And nobody calls that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
+
+Besides, empirically, it doesn't end up mattering much. Part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 
 So, maybe this is all tilting at windmills, but -- at least they're pretty interesting windmills.
 
