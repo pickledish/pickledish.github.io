@@ -232,15 +232,13 @@ A simple 3-round example is below, with its corresponding `2 ^ 3 = 8` candidates
 
 The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
-This does meddle further with the LLM's original token probabilities. Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Here, each additional round takes what the previous round produced and distorts it again, causing the range to stretch wider and wider.
+This does meddle further with the LLM's original token probabilities. Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Here, each additional round takes the previous round's mood and distorts it again, causing the range to stretch wider and wider.
 
 I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It (I hope) helps to visualize how the ultimate chance the LLM emits "papaya" changes as we add rounds:
 
 {% include watermarking/worlds.html %}
 
 (The number of distinct mood combinations goes up exponentially as we add `g`-functions; so with 1 round it's 16 moods, as we saw earlier, but with 2 it's 16\*16 total moods, and so on. A square at 18% is a mood combination that puts the likelihood of "papaya" at 18%.)
-
-<!-- It's the bagel thing all over again, except now  except now most customers are leaving with no bagels at all, and a few are leaving with like 100! -->
 
 This said, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of the paper:
 

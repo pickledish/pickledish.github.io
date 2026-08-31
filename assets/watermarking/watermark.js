@@ -871,13 +871,29 @@
     return Math.max(8, Math.min(pixelMax, Math.round(4 * Math.log2(count))));
   }
 
-  function histogramScale(maxCount, plotHeight) {
+  function histogramScale(maxCount, plotHeight, stackWidth) {
     const count = Math.max(maxCount, 1);
-    const pixelMax = Math.max(8, Math.floor((plotHeight || 170) / 2));
-    const yMax = niceCeiling(count);
+    const height = Math.max(plotHeight || 0, 1);
+    const pixelMax = Math.max(8, Math.floor(height / 2));
+    let yMax = niceCeiling(count);
     const slotsWanted = desiredSlots(count, pixelMax);
-    const unit = Math.max(1, Math.ceil(yMax / slotsWanted));
-    const slots = Math.max(1, Math.round(yMax / unit));
+    let unit = Math.max(1, Math.ceil(yMax / slotsWanted));
+    let slots = Math.max(1, Math.round(yMax / unit));
+
+    if (stackWidth > 0) {
+      let gap = 1;
+      let slotsForSquare = Math.max(1, Math.ceil((height + gap) / (stackWidth + gap)));
+      if (slotsForSquare > 40) {
+        gap = 0;
+        slotsForSquare = Math.max(1, Math.ceil(height / stackWidth));
+      }
+      if (slots < slotsForSquare) {
+        unit = 1;
+        yMax = niceCeiling(Math.max(count, slotsForSquare));
+        slots = Math.max(1, Math.round(yMax / unit));
+      }
+    }
+
     return { unit, slots, yMax };
   }
 
@@ -942,15 +958,13 @@
 
     function positionMean() {
       const stack = stacks[5];
-      mean.style.left = `${stack.offsetLeft}px`;
+      mean.style.left = `${stack.offsetLeft + stack.offsetWidth / 2}px`;
     }
-
-    new ResizeObserver(positionMean).observe(stacksWrap);
 
     let rounds = 0;
 
-    function formatPossibilities(count) {
-      return `${count.toLocaleString("en-US")} ${count === 1 ? "possibility" : "possibilities"}`;
+    function formatMoods(count) {
+      return `${count.toLocaleString("en-US")} ${count === 1 ? "mood" : "moods"}`;
     }
 
     function renderYAxis(yMax) {
@@ -978,14 +992,18 @@
       }
       stack.classList.toggle("is-empty", boxes === 0);
       stack.title = count
-        ? `${count.toLocaleString("en-US")} ${count === 1 ? "possibility" : "possibilities"} at ~${stack.dataset.range}`
+        ? `${count.toLocaleString("en-US")} ${count === 1 ? "mood" : "moods"} at ~${stack.dataset.range}`
         : "";
     }
 
     function render() {
       const hist = histograms[rounds];
       const total = worldCounts[rounds];
-      const { unit, slots, yMax } = histogramScale(Math.max(...hist), stacksWrap.clientHeight);
+      const { unit, slots, yMax } = histogramScale(
+        Math.max(...hist),
+        stacksWrap.clientHeight,
+        stacks[0]?.clientWidth || 0,
+      );
       const gap = slots > 40 ? 0 : 1;
       stacksWrap.style.setProperty("--box-gap", `${gap}px`);
       stacksWrap.style.setProperty(
@@ -997,12 +1015,12 @@
         renderStack(stack, hist[index], unit, slots);
       });
       const roundText = rounds === 1 ? "1 round" : `${rounds} rounds`;
-      label.textContent = `${roundText} (${formatPossibilities(total)})`;
+      label.textContent = `${roundText} (${formatMoods(total)})`;
       prev.disabled = rounds === 0;
       next.disabled = rounds === maxRounds;
       plot.setAttribute(
         "aria-label",
-        `Count of g-functions by papaya’s probability after ${roundText}, across ${formatPossibilities(total)}`,
+        `Count of g-function moods by papaya’s probability after ${roundText}, across ${formatMoods(total)}`,
       );
     }
 
@@ -1016,6 +1034,11 @@
       rounds += 1;
       render();
     });
+
+    new ResizeObserver(() => {
+      render();
+      positionMean();
+    }).observe(stacksWrap);
 
     render();
   }
