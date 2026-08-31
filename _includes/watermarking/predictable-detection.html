@@ -1,0 +1,56 @@
+<div class="watermark-widget" data-detect="shakespeare">
+  <div class="card">
+    <div class="card-heading">
+      <div>
+        <p class="kicker">Detection</p>
+        <h3>Sliding window</h3>
+      </div>
+    </div>
+
+    <div class="detect-stage">
+      <div class="detect-viewport">
+        <div class="detect-track">
+          <div class="detect-row">
+            <div class="detect-words"></div>
+            <div class="detect-braces" aria-hidden="true">
+              <div class="detect-brace detect-brace-prev">
+                <span class="slot-label">previous 4</span>
+              </div>
+              <div class="detect-brace detect-brace-cur">
+                <span class="slot-label">current</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detect-score">
+        <code class="score-hash"></code>
+        <div class="score-bits">
+          <span class="score-binary"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detect-readout" aria-live="polite">
+      <span class="detect-count detect-yes">
+        <span class="detect-count-mark" aria-hidden="true">💚</span>
+        <strong>0</strong>
+      </span>
+      <span class="detect-count detect-no">
+        <span class="detect-count-mark" aria-hidden="true">👎</span>
+        <strong>0</strong>
+      </span>
+      <span class="detect-count detect-count-pct">
+        <strong>0%</strong>
+        <span>liked</span>
+      </span>
+    </div>
+
+    <div class="button-row detect-actions">
+      <button class="button button-primary" type="button" data-detect-action="step">Step</button>
+      <button class="button button-primary" type="button" data-detect-action="step-10">Step 10×</button>
+      <button class="button button-toggle" type="button" data-detect-action="reset">Reset</button>
+    </div>
+  </div>
+</div>

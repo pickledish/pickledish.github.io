@@ -305,9 +305,14 @@
   const G_CONTEXT = "myfavoritefruitis";
   const HASH_BITS = 10;
   const DETECT_SECRET = "key";
-  const DETECT_WORDS = `
-    my favorite fruit is mango no wait banana no wait actually mango because one time I had a mango at my cousins house and it was so good it was like eating a sunset if a sunset was sticky and also my cousin has this dog named peanut who tried to steal the mango and peanut is like the fastest dog in the whole world and also maybe the dumbest because after the mango he tried to eat a bee and then he ran around in circles for like a whole hour and my cousin said peanut thinks he can fly if he just runs fast enough which is so silly but then we went to the park and I still had mango juice on my shirt and there was a kid with a kite that looked like a shark and I said I wish I had a kite like that and also another mango and then my mom said we could get ice cream after if I did not fall in the creek again which I definitely did not mean to do last time it was the creeks fault because the rocks were all slippery and also there was a frog and I had to get a closer look obviously and the frog was this big and it looked at me and I looked at it and then it jumped on my shoe and I screamed but in a cool way not a scared way and my sister laughed so hard she dropped her popsicle in the dirt and then she cried and I gave her half of mine even though it was the good flavor and then we saw a cloud that looked exactly like a dinosaur eating a mango which is a very smart dinosaur and I told everybody but nobody else could see it except peanut who barked at the sky and then we went home and I built a fort in the living room with all the couch cushions and a blanket from the hall closet that is not supposed to be on the floor but I was really careful and I put a sign on it that said no grownups allowed unless they bring snacks or mangoes and my dad brought pretzels so I let him in for five minutes and he said the fort was structurally impressive which I think means cool
-  `.trim().split(/\s+/);
+  const DETECT_CORPORA = {
+    fruit: `
+      my favorite fruit is mango no wait banana no wait actually mango because one time I had a mango at my cousins house and it was so good it was like eating a sunset if a sunset was sticky and also my cousin has this dog named peanut who tried to steal the mango and peanut is like the fastest dog in the whole world and also maybe the dumbest because after the mango he tried to eat a bee and then he ran around in circles for like a whole hour and my cousin said peanut thinks he can fly if he just runs fast enough which is so silly but then we went to the park and I still had mango juice on my shirt and there was a kid with a kite that looked like a shark and I said I wish I had a kite like that and also another mango and then my mom said we could get ice cream after if I did not fall in the creek again which I definitely did not mean to do last time it was the creeks fault because the rocks were all slippery and also there was a frog and I had to get a closer look obviously and the frog was this big and it looked at me and I looked at it and then it jumped on my shoe and I screamed but in a cool way not a scared way and my sister laughed so hard she dropped her popsicle in the dirt and then she cried and I gave her half of mine even though it was the good flavor and then we saw a cloud that looked exactly like a dinosaur eating a mango which is a very smart dinosaur and I told everybody but nobody else could see it except peanut who barked at the sky and then we went home and I built a fort in the living room with all the couch cushions and a blanket from the hall closet that is not supposed to be on the floor but I was really careful and I put a sign on it that said no grownups allowed unless they bring snacks or mangoes and my dad brought pretzels so I let him in for five minutes and he said the fort was structurally impressive which I think means cool
+    `,
+    shakespeare: `
+      All the world’s a stage, And all the men and women merely players; They have their exits and their entrances; And one man in his time plays many parts, His acts being seven ages. At first the infant, Mewling and puking in the nurse’s arms; And then the whining school-boy, with his satchel And shining morning face, creeping like snail Unwillingly to school. And then the lover, Sighing like furnace, with a woeful ballad Made to his mistress’ eyebrow. Then a soldier, Full of strange oaths, and bearded like the pard, Jealous in honour, sudden and quick in quarrel, Seeking the bubble reputation Even in the cannon’s mouth. And then the justice, In fair round belly with good capon lin’d, With eyes severe and beard of formal cut, Full of wise saws and modern instances; And so he plays his part. The sixth age shifts Into the lean and slipper’d pantaloon, With spectacles on nose and pouch on side; His youthful hose, well sav’d, a world too wide For his shrunk shank; and his big manly voice, Turning again toward childish treble, pipes And whistles in his sound. Last scene of all, That ends this strange eventful history, Is second childishness and mere oblivion; Sans teeth, sans eyes, sans taste, sans everything.
+    `,
+  };
 
   async function sha256Bytes(text) {
     const encoded = new TextEncoder().encode(text);
@@ -408,25 +413,34 @@
     });
   }
 
-  function setupDetect() {
-    const stage = $("#detect-stage");
-    const viewport = $("#detect-viewport");
-    const track = $("#detect-track");
-    const wordsEl = $("#detect-words");
-    const bracePrev = $("#detect-brace-prev");
-    const braceCur = $("#detect-brace-cur");
-    const scoreEl = $("#detect-score");
-    const hashEl = $("#detect-hash");
-    const bitsEl = $("#detect-bits");
-    const binaryEl = $("#detect-binary");
-    const yesCount = $("#detect-yes");
-    const noCount = $("#detect-no");
-    const yesN = $("#detect-yes-n");
-    const noN = $("#detect-no-n");
-    const percentEl = $("#detect-percent");
-    const stepButton = $("#detect-step");
-    const step10Button = $("#detect-step-10");
-    const resetButton = $("#detect-reset");
+  function setupDetectWidgets() {
+    document.querySelectorAll(".watermark-widget[data-detect]").forEach((root) => {
+      const corpus = DETECT_CORPORA[root.dataset.detect];
+      if (!corpus) return;
+      setupDetect(root, corpus.trim().split(/\s+/));
+    });
+  }
+
+  function setupDetect(root, words) {
+    const q = (selector) => root.querySelector(selector);
+    const stage = q(".detect-stage");
+    const viewport = q(".detect-viewport");
+    const track = q(".detect-track");
+    const wordsEl = q(".detect-words");
+    const bracePrev = q(".detect-brace-prev");
+    const braceCur = q(".detect-brace-cur");
+    const scoreEl = q(".detect-score");
+    const hashEl = scoreEl?.querySelector(".score-hash");
+    const bitsEl = scoreEl?.querySelector(".score-bits");
+    const binaryEl = scoreEl?.querySelector(".score-binary");
+    const yesCount = q(".detect-yes");
+    const noCount = q(".detect-no");
+    const yesN = yesCount?.querySelector("strong");
+    const noN = noCount?.querySelector("strong");
+    const percentEl = q(".detect-count-pct strong");
+    const stepButton = q("[data-detect-action='step']");
+    const step10Button = q("[data-detect-action='step-10']");
+    const resetButton = q("[data-detect-action='reset']");
     if (
       !stage ||
       !viewport ||
@@ -453,7 +467,6 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const pause = (ms) => wait(reduceMotion ? 0 : ms);
     const fadeWidth = 56;
-    const words = DETECT_WORDS;
     let tokenEls = [];
     let cursor = 0;
     let liked = 0;
@@ -1049,7 +1062,7 @@
     setupStageThree();
     setupDistortion();
     setupGScore();
-    setupDetect();
+    setupDetectWidgets();
     setupBracket();
     setupWorlds();
   }

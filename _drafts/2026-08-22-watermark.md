@@ -196,21 +196,19 @@ Any `g` function will like and dislike tokens in equal measure, thus the expecte
 
 So -- "suspicious" means "somewhere between 50% and 75%", depending on the text!
 
-<!-- remember, can only even DO this scoring if you have the secret key! -->
-
 ## Stage 3: Predictable Text
 
 You might have noticed that the latter case above -- when `g` is handed two copies of the same token -- is kind of problematic. The more often that situation crops up, the closer the expected ratio is pushed down towards 50%, and the smaller the difference becomes between normal text and watermarked text.
 
-To make this really clear, let's see what happens when an LLM works on regurgitating a piece from Alfred Tennyson's _In Memoriam A. H. H._:
+To make this really clear, let's see what happens when an LLM is asked to regurgitate a piece from Shakespeare's _As You Like It_:
 
 {% include watermarking/predictable.html %}
 
-In this situation, the 2 candidates that `g` must decide between will both be "lost" a whopping _98% of the time_. So even if `g` doesn't like "lost", that's still almost always gonna be what the LLM emits.
+In this situation, the two candidates for `g` to decide between will both be "stage" a whopping _98% of the time_. So even if `g` doesn't like "stage", that is still almost always going to be what the LLM emits.
 
-And, if we generate a lot of tokens like that, you can see how it affects the "percent of tokens `g` likes" as we run our detection process:
+And, if we generate a lot of tokens like that, you can see how it affects the "ratio of tokens `g` likes" as we run our detection process:
 
-[interactive widget scoring text]
+{% include watermarking/predictable-detection.html %}
 
 The less "creativity" is involved in the text that's being generated, the harder it is for this process to embed a watermark!
 
@@ -232,15 +230,11 @@ A simple 3-round example is below, with its corresponding `2 ^ 3 = 8` candidates
 
 The logic here is -- if a token being preferred by one `g`-function gave us a little signal, it being preferred by _all 30 functions_ gives us a lot more signal, since it's so much less likely for that to happen by chance.
 
-This does meddle further with the LLM's original token probabilities. Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% probability to anywhere in [0.25%, 9.75%]? Here, each additional round takes the previous round's mood and distorts it again, causing the range to stretch wider and wider.
+This does meddle further with the token probabilities, though.
 
-I'm sorry for this chart, which is the last I'll show and also the most insane, as it is a histogram of probabilities. It (I hope) helps to visualize how the ultimate chance the LLM emits "papaya" changes as we add rounds:
+Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% likelihood to anywhere in [0.25%, 9.75%] depending on its mood? Here each additional round takes the mood of the previous round and distorts it again, causing that range to stretch wider and wider. Crucially, though, if you average papaya's chances across all 16^30 possible moods of the 30-round tournament... it comes out to 5% still!
 
-{% include watermarking/worlds.html %}
-
-(The number of distinct mood combinations goes up exponentially as we add `g`-functions; so with 1 round it's 16 moods, as we saw earlier, but with 2 it's 16\*16 total moods, and so on. A square at 18% is a mood combination that puts the likelihood of "papaya" at 18%.)
-
-This said, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of the paper:
+And, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of the paper:
 
 <img src="/assets/watermarking/tpr.png" class="halfwidthimage">
 
@@ -248,13 +242,13 @@ When trying the watermark + detection process on 100-token-long bits of text, th
 
 ## Fin
 
-So, in the end, we learned something that we possibly could have realized before we started -- that watermarking _does_ distort the probability that a certain token is generated at a certain moment -- I mean, of course it does, since that distortion is exactly the thing that we can detect after the fact.
+So, I learned something that I might have been able to see from the start -- that watermarking _does_ distort the probability that a certain token is generated at a certain moment (and I mean, of course it does, since that distortion is the exact thing that we can detect afterwards).
 
 But, does it degrade the quality of the text overall? I don't believe so.
 
 Yes, the watermarking makes it so that "a 5% chance" might become "a 2% chance half of the time, and a 8% chance the other half of the time". That sounds bad!
 
-But, remember my "watermarking is easy, you just seed the LLM's PRNG" misunderstanding from earlier? In the end, this isn't actually any different -- the PRNG, conditioned on a seed, is maximally "distorted" too, every probability collapses to either 0% or 100%. And nobody calls that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
+But, remember my "watermarking is easy, you just seed the LLM's PRNG" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
 
 Besides, empirically, it doesn't end up mattering much. Part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 

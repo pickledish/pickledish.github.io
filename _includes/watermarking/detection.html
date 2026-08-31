@@ -1,4 +1,4 @@
-<div class="watermark-widget">
+<div class="watermark-widget" data-detect="fruit">
   <div class="card">
     <div class="card-heading">
       <div>
@@ -33,11 +33,11 @@
     </div>
 
     <div class="detect-readout" id="detect-readout" aria-live="polite">
-      <span class="detect-count" id="detect-yes">
+      <span class="detect-count detect-yes" id="detect-yes">
         <span class="detect-count-mark" aria-hidden="true">💚</span>
         <strong id="detect-yes-n">0</strong>
       </span>
-      <span class="detect-count" id="detect-no">
+      <span class="detect-count detect-no" id="detect-no">
         <span class="detect-count-mark" aria-hidden="true">👎</span>
         <strong id="detect-no-n">0</strong>
       </span>
@@ -48,9 +48,9 @@
     </div>
 
     <div class="button-row detect-actions">
-      <button class="button button-primary" id="detect-step" type="button">Step</button>
-      <button class="button button-primary" id="detect-step-10" type="button">Step 10×</button>
-      <button class="button button-toggle" id="detect-reset" type="button">Reset</button>
+      <button class="button button-primary" id="detect-step" type="button" data-detect-action="step">Step</button>
+      <button class="button button-primary" id="detect-step-10" type="button" data-detect-action="step-10">Step 10×</button>
+      <button class="button button-toggle" id="detect-reset" type="button" data-detect-action="reset">Reset</button>
     </div>
   </div>
 </div>
