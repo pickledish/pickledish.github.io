@@ -758,14 +758,19 @@
       clone.style.top = `${from.top}px`;
       clone.style.width = `${from.width}px`;
       clone.style.height = `${from.height}px`;
+      clone.style.transform = "translate(0, 0)";
       widget.append(clone);
-      void clone.offsetWidth;
-      clone.style.left = `${to.left}px`;
-      clone.style.top = `${to.top}px`;
-      clone.style.width = `${to.width}px`;
-      clone.style.height = `${to.height}px`;
-      await wait(420);
-      clone.remove();
+      toEl.style.visibility = "hidden";
+      try {
+        void clone.offsetWidth;
+        clone.style.transform = `translate(${to.left - from.left}px, ${to.top - from.top}px)`;
+        clone.style.width = `${to.width}px`;
+        clone.style.height = `${to.height}px`;
+        await wait(420);
+      } finally {
+        clone.remove();
+        toEl.style.visibility = "";
+      }
       setCandidate(toEl, token);
     }
 

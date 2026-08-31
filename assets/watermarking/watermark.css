@@ -673,10 +673,13 @@
   grid-row: 1 / span 2;
 }
 
+.watermark-widget .bracket-match > .candidate-token {
+  align-self: center;
+}
+
 .watermark-widget .bracket-match > .candidate-token:last-child {
   grid-column: 3;
   grid-row: 1 / span 2;
-  align-self: center;
 }
 
 .watermark-widget .bracket-corridor {
@@ -760,18 +763,21 @@
   box-shadow: 0 0 0 3px var(--panel-glow);
 }
 
-.watermark-widget .bracket-flyer {
+.watermark-widget .candidate-token.bracket-flyer,
+.watermark-widget .candidate-token.winner.bracket-flyer,
+.watermark-widget .candidate-token.loser.bracket-flyer {
   position: fixed;
   z-index: 20;
   margin: 0;
   min-height: 0;
+  padding: 0 6px;
   border-radius: 10px;
   pointer-events: none;
-  transform: none;
+  transform: translate(0, 0);
   font-size: 12px;
+  box-shadow: var(--token-shadow);
   transition:
-    left 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    top 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
     width 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
     height 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -1425,7 +1431,8 @@
     --bracket-corridor: 64px;
   }
 
-  .watermark-widget .bracket .candidate-token {
+  .watermark-widget .bracket .candidate-token,
+  .watermark-widget .candidate-token.bracket-flyer {
     min-height: 32px;
     font-size: 11px;
   }
@@ -1536,7 +1543,7 @@
     animation: none;
   }
 
-  .watermark-widget .bracket-flyer {
+  .watermark-widget .candidate-token.bracket-flyer {
     transition: none;
   }
 

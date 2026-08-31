@@ -15,8 +15,8 @@ Interactive widgets below were made with AI, but all words are [100% pure old-fa
 <br/>
 
 <figure>
-  <img src="/assets/watermarking/windmill.jpg">
-  <figcaption>An AI-generated image of a cute windmill on a hill. This is foreshadowing :)</figcaption>
+  <img src="/assets/watermarking/pennsyl.jpeg">
+  <figcaption>Some windmills I saw on a drive through Pennsylvania. This is foreshadowing!</figcaption>
 </figure>
 
 <br/>
