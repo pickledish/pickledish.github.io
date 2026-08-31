@@ -113,6 +113,25 @@ img {
   margin: 28px auto 28px auto;
 }
 
+figure {
+  margin: 28px auto;
+  text-align: center;
+}
+
+figure img {
+  margin: 0 auto;
+}
+
+figure p {
+  margin: 0;
+}
+
+figcaption {
+  margin-top: 8px;
+  text-align: center;
+  opacity: 0.55;
+}
+
 .shadow {
   filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.8));
 }

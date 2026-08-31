@@ -12,6 +12,15 @@ scripts:
 Interactive widgets below were made with AI, but all words are [100% pure old-fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
 " %}
 
+<br/>
+
+<figure>
+  <img src="/assets/watermarking/windmill.jpg">
+  <figcaption>An AI-generated image of a cute windmill on a hill. This is foreshadowing :)</figcaption>
+</figure>
+
+<br/>
+
 Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](https://www.seangoedecke.com/ai-text-watermarking-is-not-a-big-deal/), and others assert [it absolutely does](https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_claude_is_a_perversion_of_writing).
 
 Hm!
@@ -244,7 +253,7 @@ So, I learned something that I might have been able to see from the start -- tha
 
 But, does it degrade the quality of the text overall? I don't believe so.
 
-Yes, the watermarking makes it so that "a 5% chance" might become "a 2% chance half of the time, and a 8% chance the other half of the time". That sounds bad!
+Yes, it definitely sounds bad when "papaya" having a 5% chance is distorted into a 2% chance (...half the time, and an 8% chance the other half of the time).
 
 But, remember my "watermarking is easy, just seed the PRNG for the LLM" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
 
