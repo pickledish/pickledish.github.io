@@ -255,40 +255,28 @@
   }
 
   function setupDistortion() {
-    const pill = $("#distortion-pill");
     const rows = TOKENS.map((token) => ({
       bar: $(`#distortion-${token.id}-bar`),
       value: $(`#distortion-${token.id}-value`),
     }));
     const buttons = [...document.querySelectorAll("#distortion-vanilla, #distortion-likes-papaya, #distortion-likes-except-papaya")];
-    if (!pill || rows.some((row) => !row.bar || !row.value) || buttons.length === 0) {
+    if (rows.some((row) => !row.bar || !row.value) || buttons.length === 0) {
       return;
     }
 
     const modes = {
-      vanilla: {
-        scores: [0, 0, 0, 0],
-        pill: "coin flip",
-      },
-      papaya: {
-        scores: [0, 0, 0, 1],
-        pill: "g likes papaya",
-      },
-      "except-papaya": {
-        scores: [1, 1, 1, 0],
-        pill: "g likes all but papaya",
-      },
+      vanilla: [0, 0, 0, 0],
+      papaya: [0, 0, 0, 1],
+      "except-papaya": [1, 1, 1, 0],
     };
 
     function applyMode(mode) {
-      const config = modes[mode];
-      const output = tournamentOutput(config.scores);
+      const output = tournamentOutput(modes[mode]);
 
       rows.forEach((row, index) => {
         row.bar.style.setProperty("--width", `${output[index] * 100}%`);
         row.value.textContent = formatPercent(output[index]);
       });
-      pill.textContent = config.pill;
 
       for (const button of buttons) {
         const selected = button.dataset.mode === mode;
@@ -709,7 +697,7 @@
     const gBox = (round, index) => root.querySelector(`[data-g="${round}-${index}"]`);
 
     let board = [];
-    let likes = [];
+    let scores = [];
     let nextRound = 0;
     let busy = false;
 
@@ -724,19 +712,21 @@
       return buffer[0].toString(16);
     }
 
-    async function likesFor(secret) {
+    async function scoresFor(secret) {
       const entries = await Promise.all(TOKENS.map(async (token) => {
-        const { likes: liked } = await scoreCandidate(G_CONTEXT, secret, token.label);
-        return [token.id, liked];
+        const { bits, likes } = await scoreCandidate(G_CONTEXT, secret, token.label);
+        return [token.id, { likes, rank: Number.parseInt(bits, 2) }];
       }));
       return Object.fromEntries(entries);
     }
 
-    function chooseWinner(tokenA, tokenB, likeMap) {
-      const likeA = likeMap[tokenA.id];
-      const likeB = likeMap[tokenB.id];
-      if (likeA !== likeB) return likeA ? 0 : 1;
-      return randomUnit() < 0.5 ? 0 : 1;
+    function chooseWinner(tokenA, tokenB, scoreMap) {
+      if (tokenA.id === tokenB.id) return 0;
+      const a = scoreMap[tokenA.id];
+      const b = scoreMap[tokenB.id];
+      if (a.likes !== b.likes) return a.likes ? 0 : 1;
+      if (a.rank !== b.rank) return a.rank > b.rank ? 0 : 1;
+      return tokenA.id < tokenB.id ? 0 : 1;
     }
 
     function paint() {
@@ -798,7 +788,7 @@
       paint();
 
       try {
-        likes = await Promise.all([1, 2, 3].map((layer) => likesFor(`${layer}:${key}`)));
+        scores = await Promise.all([1, 2, 3].map((layer) => scoresFor(`${layer}:${key}`)));
       } finally {
         busy = false;
         resetButton.disabled = false;
@@ -808,7 +798,7 @@
 
     async function playRound() {
       const round = nextRound;
-      const likeMap = likes[round];
+      const scoreMap = scores[round];
       const matches = matchCount(round);
 
       for (let match = 0; match < matches; match++) {
@@ -816,7 +806,7 @@
         const i1 = i0 + 1;
         const tokenA = board[round][i0];
         const tokenB = board[round][i1];
-        const win = chooseWinner(tokenA, tokenB, likeMap);
+        const win = chooseWinner(tokenA, tokenB, scoreMap);
         const token = win === 0 ? tokenA : tokenB;
         const elA = slot(round, i0);
         const elB = slot(round, i1);

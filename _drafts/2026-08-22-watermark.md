@@ -12,11 +12,11 @@ scripts:
 Interactive widgets below were made with AI, but all words are [100% pure old-fashioned home-grown human](https://youtu.be/r4b3JHaxB2M?t=11). Hope you enjoy!
 " %}
 
-Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](), and others assert [it absolutely does]().
+Since Anthropic's [announcement](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content) a couple of weeks ago that they (along with most other LLM providers) would start adding an "imperceptible" watermark to Claude outputs, there's been a lot of consternation online. Does it degrade the quality of the model's generated text? Some assert [it absolutely does not](https://www.seangoedecke.com/ai-text-watermarking-is-not-a-big-deal/), and others assert [it absolutely does](https://daringfireball.net/2026/08/anthropics_watermark_text_adulteration_in_claude_is_a_perversion_of_writing).
 
 Hm!
 
-Well, I guess I just have to go figure the damn thing out so I can make up my own mind.
+Well, I guess I have to go figure the darn thing out so I can make up my own mind.
 
 The actual implementation is more in-the-weeds than I was hoping, at least for someone with a good decade between them and their last statistics class and no LLM familiarity beyond the basics. Still, after spending a few hours going back and forth with the papers and articles, not only do I think I have a more definitive answer for whether the process degrades the output, but I also believe it's not so hard that only an academic can understand it.
 
@@ -68,7 +68,7 @@ P("mango") = P("mango" is sampled first) * P(coin is heads) +
            = 65%
 ```
 
-So yes we've just made it convoluted for no reason but BEAR WITH ME!
+So yes we've just made it convoluted for no reason but [BEAR WITH ME](https://x.com/DennisFarrell/status/857268898508541955?lang=en)!
 
 ## Stage 3: The 'g' Function
 
@@ -139,11 +139,9 @@ In the "`g` likes only papaya" case, "papaya" will automatically win any contest
 But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and its real chances drop to almost 0%.
 
 {% include disclaimer.html content="
-It's important to note that, when looking across _all_ moods of `g`, the effects \"average out\" -- so, the mood that loves \"papaya\" turns up exactly as often as the mood that hates \"papaya\", and over many generations, le likelihood that \"papaya\" is generated overall comes to exactly 5%.
+It's important to note that, when looking across _all_ moods of `g`, the effects \"average out\" -- so, the mood that loves \"papaya\" turns up exactly as often as the one that hates \"papaya\", and over many generations, the likelihood that \"papaya\" is generated overall comes to exactly 5%.
 
-From what I understand, the \"non-distortionary\" claims in the SynthID paper and articles are based on this fact.
-
-From my understanding, a lot of the \"watermarking does not impact model quality\" argument stems from this fact.
+From what I understand, this is the basis of the \"does not impact quality\" claim made in the SynthID paper (and cited by Anthropic). More on this at the end of the post!
 " %}
 
 ## Stage 3: Detection
@@ -210,7 +208,7 @@ And, if we generate a lot of tokens like that, you can see how it affects the "r
 
 {% include watermarking/predictable-detection.html %}
 
-The less "creativity" is involved in the text that's being generated, the harder it is for this process to embed a watermark!
+So you can see how the process relies on creativity/freedom in token generation to embed its watermark; when the text being generated is so constrained, it's pretty much impossible.
 
 ## Stage 4: SynthID
 
@@ -248,9 +246,9 @@ But, does it degrade the quality of the text overall? I don't believe so.
 
 Yes, the watermarking makes it so that "a 5% chance" might become "a 2% chance half of the time, and a 8% chance the other half of the time". That sounds bad!
 
-But, remember my "watermarking is easy, you just seed the LLM's PRNG" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
+But, remember my "watermarking is easy, just seed the PRNG for the LLM" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
 
-Besides, empirically, it doesn't end up mattering much. Part of the SynthID paper is dedicated to an A/B test they did where foo, and foo. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they also ran their own internal tests and saw "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
+Besides, empirically, it doesn't end up mattering much. Part of the [Nature article](https://www.nature.com/articles/s41586-024-08025-4) details an A/B test that Google ran between vanilla vs watermarked Gemini, where they found no significant difference in user ratings. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they ran their own internal tests and found "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 
 So, maybe this is all tilting at windmills, but -- at least they're pretty interesting windmills.
 
