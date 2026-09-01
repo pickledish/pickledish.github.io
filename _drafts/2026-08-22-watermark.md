@@ -14,10 +14,7 @@ Interactive widgets below were made with AI, but all words are [100% pure old-fa
 
 <br/>
 
-<figure>
-  <img src="/assets/watermarking/pennsyl.jpeg">
-  <figcaption>Some windmills I saw on a drive through Pennsylvania. This is foreshadowing!</figcaption>
-</figure>
+{% include watermarking/spinning-coin.html %}
 
 <br/>
 

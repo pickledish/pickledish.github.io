@@ -1,0 +1,13 @@
+<div class="watermark-widget" aria-hidden="true">
+  <div class="spinning-coin">
+    <div class="coin spinning">
+      <div class="coin-rim">
+        {% for i in (0..35) %}
+        <span style="--i: {{ i }}"><i></i></span>
+        {% endfor %}
+      </div>
+      <div class="coin-face">A</div>
+      <div class="coin-face coin-back">B</div>
+    </div>
+  </div>
+</div>

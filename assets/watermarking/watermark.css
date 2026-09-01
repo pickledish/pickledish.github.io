@@ -576,6 +576,52 @@
   transform: rotateY(180deg);
 }
 
+.watermark-widget .spinning-coin {
+  display: grid;
+  place-items: center;
+  perspective: 500px;
+}
+
+.watermark-widget .coin.spinning {
+  animation: watermark-coin-spin 4s linear infinite;
+}
+
+.watermark-widget .coin.spinning .coin-face {
+  transform: translateZ(2px);
+  box-shadow: inset 0 0 0 2px #f7dc91;
+  animation: watermark-coin-spin-shade 4s linear infinite;
+}
+
+.watermark-widget .coin.spinning .coin-back {
+  transform: rotateY(180deg) translateZ(2px);
+}
+
+.watermark-widget .coin.spinning .coin-rim {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.watermark-widget .coin.spinning .coin-rim span {
+  position: absolute;
+  inset: 0;
+  transform: rotateZ(calc(var(--i) * 10deg));
+  transform-style: preserve-3d;
+}
+
+.watermark-widget .coin.spinning .coin-rim i {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 9px;
+  margin: -4.5px 0 0 -2px;
+  background: #d9aa37;
+  transform: translateX(24px) rotateY(90deg);
+}
+
 .watermark-widget .g-core {
   display: grid;
   place-items: center;
@@ -1321,6 +1367,35 @@
   }
 }
 
+@keyframes watermark-coin-spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+@keyframes watermark-coin-spin-shade {
+  0%,
+  100% {
+    filter: brightness(1.08);
+  }
+  12.5%,
+  37.5%,
+  62.5%,
+  87.5% {
+    filter: brightness(0.91);
+  }
+  25%,
+  75% {
+    filter: brightness(0.5);
+  }
+  50% {
+    filter: brightness(1.08);
+  }
+}
+
 @keyframes watermark-g-choose {
   0% {
     transform: scale(1) rotate(0deg);
@@ -1353,9 +1428,18 @@
     grid-template-columns: 75px minmax(0, 1fr) 52px;
   }
 
+  .watermark-widget .button-row.distortion-actions {
+    grid-template-columns: 1fr;
+  }
+
   .watermark-widget .button-toggle {
     padding: 8px 6px;
     font-size: 13px;
+  }
+
+  .watermark-widget .distortion-actions .button-toggle {
+    padding: 8px 12px;
+    font-size: 14px;
   }
 
   .watermark-widget .track-labels span:nth-child(4) {
@@ -1408,6 +1492,7 @@
   .watermark-widget .detect-score {
     grid-template-columns: minmax(0, 1fr);
     gap: 6px;
+    min-height: 64px;
   }
 
   .watermark-widget .detect-score .score-bits {
@@ -1531,6 +1616,11 @@
   .watermark-widget .coin.flipping-b {
     animation: none;
     transform: rotateY(1980deg);
+  }
+
+  .watermark-widget .coin.spinning,
+  .watermark-widget .coin.spinning .coin-face {
+    animation: none;
   }
 
   .watermark-widget .detect-yes.is-pulse,
