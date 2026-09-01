@@ -145,7 +145,7 @@ In the "`g` likes only papaya" case, "papaya" will automatically win any contest
 But, the "`g` likes everything except papaya" case is even more extreme -- it means that the only time "papaya" can be emitted is when it appears as _both_ candidates in a contest. This almost never happens, and its real chances drop to almost 0%.
 
 {% include disclaimer.html content="
-It's important to note that, when looking across _all_ moods of `g`, the effects \"average out\" -- so, the mood that loves \"papaya\" turns up exactly as often as the one that hates \"papaya\", and over many generations, the likelihood that \"papaya\" is generated overall comes to exactly 5%.
+It's important to note that, when looking across _all_ moods of `g`, the effects average out -- the mood that loves \"papaya\" is exactly as likely to turn up as the one that hates \"papaya\", so across secret keys, the overall likelihood \"papaya\" is generated here is still 5%.
 
 From what I understand, this is the basis of the \"does not impact quality\" claim made in the SynthID paper (and cited by Anthropic). More on this at the end of the post!
 " %}
