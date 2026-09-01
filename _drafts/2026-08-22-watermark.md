@@ -90,7 +90,7 @@ So, the question is -- what is this `g` function, and when does it prefer one to
 
 Fortunately it's pretty simple! Essentially:
 
-* `g` calculates `hash(secret_key ++ previous_4_tokens ++ candidate_token)`
+* `g` calculates `hash(previous_4_tokens ++ secret_key ++ candidate_token)`
 * `g` likes a candidate when that hash comes out as an even number (i.e. ends with 0)
 
 And when `g` is given two tokens to decide between, it just opts for a token it likes, if there is one. If it likes both candidates (or it dislikes both), it selects one at random. This preference is what makes up the watermark!
@@ -115,8 +115,8 @@ And you'd be right!
 
 Each of the elements of the hash serves an important purpose:
 
-* `secret_key` being included in the hash means that only the owner of the LLM can apply, or detect, their own watermark
 * `previous_4_tokens` is there so that `g`'s preference for a token is dependent on the tokens that come before it. Without this, `g` might (for example) just universally dislike "banana", which would be noticeable to users
+* `secret_key` being included in the hash means that only the owner of the LLM can apply, or detect, their own watermark
 * `candidate_token` is, of course, the subject of our watermarking
 
 An interesting thing is, without _all three_ of these parameters, the hash is totally unpredictable, i.e. indistinguishable from random noise. This means, without the secret key, `g`'s choices seem random -- there's no statistical test you can run on a piece of text to tell whether it came from Stage 2 or Stage 3.
@@ -252,7 +252,7 @@ But, does it degrade the quality of the text overall? I don't believe so.
 
 Yes, it definitely sounds bad when "papaya" having a 5% chance is distorted into a 2% chance (...half the time, and an 8% chance the other half of the time).
 
-But, remember my "watermarking is easy, just seed the PRNG for the LLM" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(secret_key ++ previous_4_tokens ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
+But, remember my "watermarking is easy, just seed the PRNG for the LLM" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(previous_4_tokens ++ secret_key ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
 
 Besides, empirically, it doesn't end up mattering much. Part of the [Nature article](https://www.nature.com/articles/s41586-024-08025-4) details an A/B test that Google ran between vanilla vs watermarked Gemini, where they found no significant difference in user ratings. This is referenced in Anthropic's [later post](https://www.anthropic.com/news/claude-text-watermark) too, where they ran their own internal tests and found "no impact of watermarking on the content, level of creativity, or readability of Claude’s text".
 
