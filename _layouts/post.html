@@ -5,17 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{ page.title }} — willett dot io</title>
-  <link rel="stylesheet" href="/assets/css/tailwind.css">
-  <link rel="stylesheet" href="/assets/css/fonts.css">
-  <link rel="stylesheet" href="/assets/css/markdown.css">
-  <link rel="stylesheet" href="/assets/css/syntax.css">
-  {% for href in page.styles %}
-  <link rel="stylesheet" href="{{ href }}">
-  {% endfor %}
-  <link rel="alternate" href="/feed.xml" type="application/rss+xml">
-  <link rel="preload" href="/assets/fonts/wotfard-extralight-subset.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/wotfard-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/wotfard-semibold-subset.woff2" as="font" type="font/woff2" crossorigin>
+  {% include head-css.html syntax=true %}
   {% seo %}
 </head>
 
@@ -57,7 +47,7 @@
     </div>
   </div>
   {% for src in page.scripts %}
-  <script src="{{ src }}" defer></script>
+  <script src="{{ src }}?v={{ site.time | date: '%s' }}" defer></script>
   {% endfor %}
   {% if site.analytics %}
   <img class="hidden" src="https://willettio.goatcounter.com/count?t={{ page.title | url_encode }}&p={{ page.url }}">

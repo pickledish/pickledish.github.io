@@ -1,0 +1,18 @@
+{% assign asset_v = site.time | date: '%s' %}
+<link rel="stylesheet" href="/assets/css/tailwind.css?v={{ asset_v }}">
+<link rel="stylesheet" href="/assets/css/fonts.css?v={{ asset_v }}">
+<link rel="stylesheet" href="/assets/css/markdown.css?v={{ asset_v }}">
+{% if include.syntax -%}
+<link rel="stylesheet" href="/assets/css/syntax.css?v={{ asset_v }}">
+{% endif -%}
+{% for href in page.styles -%}
+<link rel="stylesheet" href="{{ href }}?v={{ asset_v }}">
+{% endfor -%}
+<link rel="alternate" href="/feed.xml" type="application/rss+xml">
+<link rel="preload" href="/assets/fonts/wotfard-extralight-subset.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/wotfard-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/wotfard-semibold-subset.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/roboto-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+{% if include.syntax -%}
+<link rel="preload" href="/assets/fonts/roboto-mono-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+{% endif -%}

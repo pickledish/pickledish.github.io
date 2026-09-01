@@ -6,7 +6,7 @@ body {
 }
 
 code {
-  font-family: "Roboto Mono", "Consolas", monospace;
+  font-family: "Roboto Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 14px;
   background-color: #e5e5e5;
   border-radius: 4px;
@@ -14,7 +14,7 @@ code {
 }
 
 pre {
-  font-family: "Roboto Mono", "Consolas", monospace;
+  font-family: "Roboto Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 14px;
   line-height: 1.5;
   background-color: #f7f4ef;
