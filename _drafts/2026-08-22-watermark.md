@@ -238,7 +238,7 @@ This does meddle further with the token probabilities, though.
 
 Remember how in **Stage 3: Distortion**, we saw that `g` could take "papaya" from its original 5% likelihood to anywhere in [0.25%, 9.75%] depending on its mood? Here each additional round takes the mood of the previous round and distorts it again, causing that range to stretch wider and wider. Crucially, though, if you average papaya's chances across all 16^30 possible moods of the 30-round tournament... it comes out to 5% still!
 
-And, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of the paper:
+And, SynthID is extremely successful at what it set out to do -- detection is much easier. From Section 4.1 of [this paper](https://arxiv.org/abs/2603.03410):
 
 <img src="/assets/watermarking/tpr.png" class="halfwidthimage">
 
@@ -250,7 +250,7 @@ So, I learned something that I might have been able to see from the start -- tha
 
 But, does it degrade the quality of the text overall? I don't believe so.
 
-Yes, it definitely sounds bad when "papaya" having a 5% chance is distorted into a 2% chance (...half the time, and an 8% chance the other half of the time).
+Yes, it definitely sounds bad that "papaya" having a 5% chance is turned into a 0.25% chance (...sometimes, and an 9.75% chance just as often).
 
 But, remember my "watermarking is easy, just seed the PRNG for the LLM" misunderstanding from earlier? In the end, this isn't actually any different -- after all, a seeded PRNG is maximally "distorted" too, with every probability collapsing to either 0% or 100%, and nobody considers that degradation! The decision for "papaya-or-not-papaya" may come from `/dev/urandom`, or a seed, or `hash(previous_4_tokens ++ secret_key ++ token)`, but regardless the outcome is the same -- "papaya" still shows up in an unbiased 5% of situations.
 
