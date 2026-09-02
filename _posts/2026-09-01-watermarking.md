@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building Intuition for Watermarking"
+title: "Let's Build Intuition for Watermarking"
 permalink: /posts/watermarking/
 styles:
   - /assets/watermarking/watermark.css
