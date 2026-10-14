@@ -4,11 +4,7 @@ title: "Introducing Cheapskate!"
 permalink: /posts/cheapskate/
 ---
 
-[Cheapskate](foo) is a tool I've made over the last few months to help manage investments.
-
-I built it for me, but it wasn't very much work to also build it for you, so I also built it for you.
-
-(image)
+[Cheapskate](https://skate.cheap/#/) is a tool I've made over the last few months to help manage investments.
 
 You visit once a month with statements from all your bank accounts, and Cheapskate parses the individual investments from each one to track your holdings over time. More importantly, you assign an asset class to each, and define a target portfolio composition, so the tool can help you diversify according to your own unique goals.
 
@@ -16,29 +12,35 @@ I'm proud of it, and so I wanted to share a little here about how it came to be,
 
 ## Origin Story
 
-I'm not really a money person, so now that through some weird twists of fate I have some, my modus operandi is just "don't fuck it up", right. In that vein, it seems like the common-sense approach is "diversification" -- spread your eggs among a few different baskets so you don't lose literally half of worth in an event like 2008. Something simple, like the [Boglehead three-fund portfolio](https://www.bogleheads.org/wiki/Three-fund_portfolio), 60%/20%/20%. Yeah, I can do that!
+I'm not really a money person, so in the event I find myself with any, my modus operandi just becomes "don't fuck it up", right. In that vein, it seems like the big common-sense approach is "diversification" -- spread your eggs among a few different baskets so you don't lose literally half your worth in a 2008-style event. Something simple, like the [Boglehead 3-fund portfolio](https://www.bogleheads.org/wiki/Three-fund_portfolio), 60%/20%/20%. Yeah, I can do that!
+
+<img src="/assets/cheapskate/goals_x.png" class="lightbox">
 
 Turns out, that's easier in theory than in practice. What happens when you have four different accounts -- two 401(k)s, a Roth IRA, and an after-tax one? And so does your wife? Is it better to hold bonds in a tax-advantaged account? What if her 401(k) only really has "target date" funds which are a blend of US stocks, international stocks, and bonds? And most importantly -- even if you do all the math to get the allocation perfect _right now_, how's that going to look next year? You ready to do it all again?
 
-I think this is the point some people might get a money-manager. But not this guy!
+I think this is the point some people might pay someone else to do it. But not this guy!
 
 I just in general dislike outsourcing problems like this, and besides, this _concept_ isn't difficult, just the math is. Software is great at doing hard math. I'm a software developer. I think we can make something happen here?
 
-My original concept was quite different from where we ended up, and quite simpler -- just use [Plaid](https://plaid.com/) or something to connect to a user's accounts and pull holdings for each, then aggregate with a few pie charts to help them make rebalancing decisions. Easy! But, apparently the "pull holdings" part is... special? And really expensive? Like, the "contact sales" kind of expensive; I saw reports of minimums being in the hundreds of dollars per month, of course an outlandish sum for an open-source app I wanted to offer for free.
+My original concept was quite different from where we ended up, and quite simpler -- just use [Plaid](https://plaid.com/) or something to connect to a user's accounts and pull holdings for each, then aggregate with a few pie charts to help them make rebalancing decisions. Easy! But, apparently the "pull holdings" part is... special? And really expensive? Like, the "contact sales" kind of expensive; I saw reports of minimums being in the hundreds of dollars per month, of course an outlandish sum for an [open-source](https://github.com/pickledish/cheapskate) app I wanted to offer for free.
+
+<img src="/assets/cheapskate/plaid.png">
 
 So, I had to do something different, and the current Cheapskate was born!
 
 ## Architecture
 
-The Cheapskate architecture is super simple, and (not coincidentally) also my favorite format for software :)
+The architecture Cheapskate ended up with is super simple and (not coincidentally) is also my favorite format for software :)
 
 It's a "backend-free" web app, which means it is just a static bundle thrown onto Bunny CDN (though any web host will work fine here), plus a database that the frontend talks with directly via e.g. PostgREST (Firebase and Supabase are the usual picks here, and Cheapskate uses the latter one).
+
+<img src="/assets/cheapskate/worth_x.png" class="lightbox">
 
 I've always felt this is the ideal shape for a one-person software project to take:
 
 * It is extremely cheap, since static site hosting costs pennies, and Firebase/Supabase both have generous free tiers for their DBs
-* The codebase stays small and focused, since all that fiddly unrelated-to-my-app-but-must-be-set-up-perfectly stuff (like auth, CORS, load balancer health checks, Helm charts, etc) simply doesn't exist
-* It is zero operational burden, since there are no servers to manage, no Docker images to build, no blue/green deployments to watch, stuff like that
+* The codebase stays small and focused, since all that fiddly unrelated-to-my-app-but-must-be-set-up-perfectly stuff (like auth, CORS, load balancer health checks, Helm charts, etc) is not my concern
+* It is zero operational burden -- my whole job is essentially running services, I do not want that to be my free time too! Mo servers mo problems
 
 There is some functionality already that can't fit into this simplistic model. For example, both the PDF-parsing and account-deletion bits require secret credentials (an OpenRouter API key and the Supabase service key respectively) that can't be published, and so Cheapskate uses a couple of [Edge Functions](https://supabase.com/docs/guides/functions) for those. Future functionality might lean on more of them.
 
@@ -56,9 +58,9 @@ From this, we can reconstruct the state of an account at any point in time just 
 
 It also means we get statement backfills and a complete audit log essentially for free!
 
-(image)
+<img src="/assets/cheapskate/history_x.png" class="lightbox">
 
-It isn't truly append-only (Cheapskate does support deleting an update as a means of undoing a mistake) but the benefits are the same, and it also makes it easy to reason about how new kinds of updates should work.
+It isn't truly append-only (Cheapskate does support deleting an update as a means of undoing a mistake) but the benefits are the same, and it makes it easy to reason about how new kinds of updates should work too.
 
 ## AI Stuff
 
@@ -66,7 +68,7 @@ The most interesting part of Cheapskate, to me, is how it leverages LLMs, turnin
 
 The LLM integration is what enables the app to parse any statement, from any bank, into a list of investment holdings. For this, the "upload statement" flow uses the structured-output mode that's provided by any OpenAI-compatible LLM API (and has actually existed for a pretty long time, [over 2 years](https://openai.com/index/introducing-structured-outputs-in-the-api/) now). It's a great feature for incorporating isolated bits of AI magic in more "normal" applications, and I wish it got more love!
 
-(image)
+<img src="/assets/cheapskate/upload_x.png" class="lightbox">
 
 This did take some experimentation to get right. For example:
 
@@ -104,7 +106,9 @@ It was necessary because I'm married / have combined finances with my wife, and 
 
 Implementation-wise, it's woven into the RLS policies for every table. Instead of "each _user_ can CRUD only their own rows" (as is the most common case with RLS), I've gone with a set of "each _family_ can CRUD only its own rows" policies. When a user attempts to run a query against a table, Postgres runs a quick check to see what family that user is a part of, and the RLS is applied from there.
 
-This works well! The implementation scope was small and simple, and it makes it very easy to invite someone else to your family and be sure that they will be able to do everything they need to do.
+<img src="/assets/cheapskate/settings_x.png" class="lightbox">
+
+This works well! The implementation scope was small and simple, and it makes it very easy to invite someone else to your family and be sure that they can do everything they need to.
 
 There are substantial downsides to this approach, though. For one, it's not very flexible; it isn't possible to (for example) add someone as a "limited" member of a family, with visibility of, or write access to, only certain accounts. I believe implementing this would be very difficult with this sharing architecture.
 
@@ -112,17 +116,38 @@ In addition, it is entirely "security by obscurity"! Just knowing a family's UUI
 
 <!-- Also I have always liked security-by-obscurity approaches, I think they are cute :) -->
 
-## The Future?
+## Should You Use Cheapskate?
+
+You can!
+
+It's reliable and functional; in fact I've been using it myself for almost a year! The data model has had time to bake and I don't expect any more big changes to it or the UI.
+
+That said, there are still quite a few caveats:
+
+* It only supports Google SSO (adding others at such an early stage seemed silly)
+* There is no way to report bugs or feedback (you'd have to [email me](mailto:brandon@willett.io))
+* At the end of the day, it's your real financial numbers sitting in some guy's free Supabase account. Like, I promise to not snoop, but that's such a weak gesture towards privacy to ask people to accept. This whole time I've been searching for something better, but this is what it is (for now).
+
+For what it's worth, I do have a plan to address these shortcomings! But that is longer-term.
+
+And importantly, this is definitely still alpha software -- there could be some big change in the future (to fix the above? 👀), a boundary across which existing data can't be migrated. If you _do_ decide to use Cheapskate, please know that in this event, I will give ample notice (at least a month) and a feature to download all your data before it goes poof!
+
+## The Future
 
 I am excited to continue developing Cheapskate! This is just v1 / the first iteration I feel good enough about to share.
 
 Ultimately, in line with my goal of this being a kind of pseudo-robo-advisor, I'd like to take the "portfolio rebalancing" aspect one small step further than it is today, and enable Cheapskate to make **suggestions** around what assets you could buy or sell in order to achieve a portfolio composition that's more in line with your goals.
 
-To make these suggestions actionable / not annoying, we'll need to pull in some external data -- namely, ticker prices for publicly-traded assets, probably on a daily basis. This way, a suggestion won't just be "you ____", it will be "", which is a lot easier to take action on.
+To make these suggestions actionable / not annoying, we'll need to pull in some external data -- namely, ticker prices for publicly-traded assets, probably daily. Then, a suggestion won't just be "you need to sell some DDOG", it'll be "you need to sell some DDOG, and it's at its highest price today of the last 6 months", which is a lot easier to take action on.
+
+<figure>
+    <img src="/assets/cheapskate/ddog.png" class="halfwidthimage">
+    <figcaption>(and as of publishing, it kinda is, good job datadog)</figcaption>
+</figure>
 
 I've been putting this off so far since it'll require some background service, or cron-triggered edge function, to actually update the prices, and likely some kind of integration with a finance API to get that data, which, I don't know how expensive that'll be. Still, it's a "soon" thing, and will (in my opinion) greatly improve the usefulness of the site.
 
-I'm also really interested in seeing how I can make the local-AI angle of Cheapskate have less friction. Right now, there's sadly a pretty high technical barrier to entry, even aside from the hardware requirements:
+I'm also really interested in seeing how I can make the local-AI angle of Cheapskate have less friction. Today, the technical barrier to entry is sadly pretty high even aside from the hardware requirements:
 
 * You need to know what an appropriate model _is_, and have downloaded one
 * You need to be serving that model on a local port (text logs above are `llama-server`)

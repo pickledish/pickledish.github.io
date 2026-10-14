@@ -142,6 +142,116 @@ figcaption {
   }
 }
 
+/*
+  CSS-only lightbox, using the HTML Popover API (no JavaScript).
+
+    <img src="/assets/example.png" class="lightbox">
+
+  A Jekyll hook rewrites that into a <button popovertarget> plus a
+  sibling <span popover> with a close button over the image.
+  Click the image to open; click it again, click the backdrop, or
+  press Escape to close.
+*/
+img.lightbox,
+button.lightbox-trigger,
+button.lightbox-trigger > img {
+  cursor: zoom-in;
+}
+
+.lightbox-wrap {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 28px auto;
+}
+
+button.lightbox-trigger {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+button.lightbox-trigger:focus {
+  outline: none;
+}
+
+button.lightbox-trigger:focus-visible {
+  outline: 2px solid #ba8c2a;
+  outline-offset: 4px;
+}
+
+button.lightbox-trigger > img {
+  margin: 0 auto;
+}
+
+body:has(.lightbox-full:popover-open) {
+  overflow: hidden;
+}
+
+.lightbox-full::backdrop {
+  background: rgb(0 0 0 / 0.8);
+  cursor: zoom-out;
+}
+
+.lightbox-full:popover-open {
+  position: fixed;
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  height: max-content;
+  max-width: calc(100vw - 10rem);
+  max-height: calc(100vh - 10rem);
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  cursor: zoom-out;
+}
+
+.lightbox-full:popover-open img {
+  display: block;
+  margin: 0;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 10rem);
+  max-height: calc(100vh - 10rem);
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+button.lightbox-close {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+button.lightbox-close:focus {
+  outline: none;
+}
+
+button.lightbox-close:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .lightbox-full:popover-open,
+  .lightbox-full:popover-open img {
+    max-width: calc(100vw - 3rem);
+    max-height: calc(100vh - 3rem);
+  }
+}
+
 .pxl {
   width: 67%;
   image-rendering: pixelated;
