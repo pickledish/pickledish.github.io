@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Introducing Cheapskate!"
+title: "Cheapskate!"
 permalink: /posts/cheapskate/
 ---
 
@@ -120,13 +120,13 @@ In addition, it is entirely "security by obscurity"! Just knowing a family's UUI
 
 You can!
 
-It's reliable and functional; in fact I've been using it myself for almost a year! The data model has had time to bake and I don't expect any more big changes to it or the UI.
+It's reliable and functional; in fact I've been using it myself for almost a year. The data model has had time to bake and I don't expect any more big changes to it or the UI.
 
 That said, there are still quite a few caveats:
 
 * It only supports Google SSO (adding others at such an early stage seemed silly)
 * There is no way to report bugs or feedback (you'd have to [email me](mailto:brandon@willett.io))
-* At the end of the day, it's your real financial numbers sitting in some guy's free Supabase account. Like, I promise to not snoop, but that's such a weak gesture towards privacy to ask people to accept. This whole time I've been searching for something better, but this is what it is (for now).
+* At the end of the day, it's your real financial numbers sitting in some guy's free Supabase account. Like, I promise to not snoop, but that's such a weak gesture towards privacy to ask people to accept. This whole time I've been searching for something better, but this is what it is (for now)
 
 For what it's worth, I do have a plan to address these shortcomings! But that is longer-term.
 
@@ -138,7 +138,7 @@ I am excited to continue developing Cheapskate! This is just v1 / the first iter
 
 Ultimately, in line with my goal of this being a kind of pseudo-robo-advisor, I'd like to take the "portfolio rebalancing" aspect one small step further than it is today, and enable Cheapskate to make **suggestions** around what assets you could buy or sell in order to achieve a portfolio composition that's more in line with your goals.
 
-To make these suggestions actionable / not annoying, we'll need to pull in some external data -- namely, ticker prices for publicly-traded assets, probably daily. Then, a suggestion won't just be "you need to sell some DDOG", it'll be "you need to sell some DDOG, and it's at its highest price today of the last 6 months", which is a lot easier to take action on.
+To make these suggestions actionable / not annoying, we'll need to pull in some external data -- namely, ticker prices for publicly-traded assets, probably daily. Then, a suggestion won't just be "you need to sell some DDOG", it'll be "you need to sell some DDOG, and it's at its highest price today of the last 6 months", which might make deciding to rebalance easier.
 
 <figure>
     <img src="/assets/cheapskate/ddog.png" class="halfwidthimage">
